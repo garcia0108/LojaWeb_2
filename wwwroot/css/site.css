@@ -54,18 +54,21 @@ footer {
 }
 
 .login-logo {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background: #0d6efd;
-    color: white;
-    font-size: 32px;
-    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.25);
 }
+
+    .login-logo img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
 
 .login-title {
     margin-top: 18px;
