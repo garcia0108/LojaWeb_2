@@ -1,0 +1,436 @@
+﻿@model IEnumerable<LojaWeb_2.Models.FechamentoCaixa>
+
+@{
+    ViewData["Title"] = "Fechamento de Caixa";
+}
+
+<div class="container-fluid mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-lock me-2"></i>
+
+                Fechamento de Caixa
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Controle de abertura, fechamento e conferência do caixa.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            <a asp-controller="Financeiro"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Financeiro
+
+            </a>
+
+
+            <a asp-action="Create"
+               class="btn btn-success">
+
+                <i class="bi bi-unlock me-1"></i>
+
+                Abrir Caixa
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENSAGENS -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert"
+             id="alertSucesso">
+
+            <i class="bi bi-check-circle me-2"></i>
+
+            @TempData["Sucesso"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert"
+             id="alertErro">
+
+            <i class="bi bi-exclamation-circle me-2"></i>
+
+            @TempData["Erro"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- HISTÓRICO -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-clock-history me-2"></i>
+
+                    Histórico de Caixas
+
+                </h5>
+
+                <span class="text-muted">
+
+                    @Model.Count() registro(s)
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Abertura
+                                </th>
+
+                                <th>
+                                    Fechamento
+                                </th>
+
+                                <th>
+                                    Saldo inicial
+                                </th>
+
+                                <th>
+                                    Entradas
+                                </th>
+
+                                <th>
+                                    Saídas
+                                </th>
+
+                                <th>
+                                    Saldo esperado
+                                </th>
+
+                                <th>
+                                    Diferença
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-end"
+                                    style="width: 1%; white-space: nowrap;">
+
+                                    Ações
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var caixa in Model)
+                            {
+                                <tr>
+
+                                    <!-- ABERTURA -->
+
+                                    <td>
+
+                                        @caixa.DataAbertura.ToString("dd/MM/yyyy HH:mm")
+                                        
+
+                                    </td>
+
+
+                                    <!-- FECHAMENTO -->
+
+                                    <td>
+                                        @if (caixa.DataFechamento.HasValue)
+                                        {
+                                            @caixa.DataFechamento.Value.ToString("dd/MM/yyyy HH:mm")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                —
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- SALDO INICIAL -->
+
+                                    <td>
+
+                                        @caixa.SaldoInicial.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- ENTRADAS -->
+
+                                    <td class="text-success fw-semibold">
+
+                                        @caixa.TotalEntradas.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- SAÍDAS -->
+
+                                    <td class="text-danger fw-semibold">
+
+                                        @caixa.TotalSaidas.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- SALDO ESPERADO -->
+
+                                    <td class="fw-semibold">
+
+                                        @caixa.SaldoEsperado.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- DIFERENÇA -->
+
+                                    <td>
+
+                                        @if (caixa.Diferenca.HasValue)
+                                        {
+                                            if (caixa.Diferenca.Value == 0)
+                                            {
+                                                <span class="text-success fw-semibold">
+                                                    R$ 0,00
+                                                </span>
+                                            }
+                                            else if (caixa.Diferenca.Value > 0)
+                                            {
+                                                <span class="text-success fw-semibold">
+
+                                                    + @caixa.Diferenca.Value.ToString("C")
+
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger fw-semibold">
+
+                                                    @caixa.Diferenca.Value.ToString("C")
+
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                —
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (caixa.Status ==
+                                                                        StatusCaixa.Aberto)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+
+                                                <i class="bi bi-unlock me-1"></i>
+
+                                                Aberto
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+
+                                                <i class="bi bi-lock me-1"></i>
+
+                                                Fechado
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- AÇÕES -->
+
+                                    <td class="text-end"
+                                        style="white-space: nowrap;">
+
+                                        <div class="d-flex justify-content-end gap-1">
+
+                                            <a asp-action="Details"
+                                               asp-route-id="@caixa.Id"
+                                               class="btn btn-outline-info btn-sm"
+                                               title="Detalhes">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+
+                                            @if (caixa.Status ==
+                                                                                StatusCaixa.Aberto)
+                                            {
+                                                <a asp-action="Fechar"
+                                                   asp-route-id="@caixa.Id"
+                                                   class="btn btn-outline-danger btn-sm"
+                                                   title="Fechar caixa">
+
+                                                    <i class="bi bi-lock"></i>
+
+                                                </a>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-safe fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+
+                        Nenhum caixa registrado.
+
+                    </h5>
+
+                    <p class="text-muted mb-3">
+
+                        Abra o primeiro caixa para começar o controle.
+
+                    </p>
+
+
+                    <a asp-action="Create"
+                       class="btn btn-success">
+
+                        <i class="bi bi-unlock me-1"></i>
+
+                        Abrir Caixa
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        setTimeout(function () {
+
+            var alertSucesso =
+                document.getElementById("alertSucesso");
+
+            var alertErro =
+                document.getElementById("alertErro");
+
+
+            if (alertSucesso) {
+
+                alertSucesso.classList.remove("show");
+
+                setTimeout(function () {
+                    alertSucesso.remove();
+                }, 500);
+
+            }
+
+
+            if (alertErro) {
+
+                alertErro.classList.remove("show");
+
+                setTimeout(function () {
+                    alertErro.remove();
+                }, 500);
+
+            }
+
+        }, 4000);
+
+    </script>
+}

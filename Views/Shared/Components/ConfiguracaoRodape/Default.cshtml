@@ -1,0 +1,151 @@
+﻿@model LojaWeb_2.Models.ConfiguracaoLoja
+
+@if (Model != null)
+{
+    <div class="row g-4 text-start">
+
+        <!-- LOJA -->
+
+        <div class="col-md-4">
+
+            <h5 class="fw-bold">
+                @Model.NomeLoja
+            </h5>
+
+            @if (!string.IsNullOrWhiteSpace(Model.TextoRodape))
+            {
+                <p class="mb-0">
+                    @Model.TextoRodape
+                </p>
+            }
+
+        </div>
+
+
+        <!-- CONTATO -->
+
+        <div class="col-md-4">
+
+            <h6 class="fw-bold">
+                Contato
+            </h6>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Email))
+            {
+                <div>
+                    <i class="bi bi-envelope me-2"></i>
+                    @Model.Email
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Telefone))
+            {
+                <div>
+                    <i class="bi bi-telephone me-2"></i>
+                    @Model.Telefone
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.WhatsApp))
+            {
+                var numeroWhatsApp = new string(
+                Model.WhatsApp
+                .Where(char.IsDigit)
+                .ToArray());
+
+                // Adiciona o código do Brasil caso ainda não exista
+                if (!numeroWhatsApp.StartsWith("55"))
+                {
+                    numeroWhatsApp = "55" + numeroWhatsApp;
+                }
+
+                <div>
+                    <a href="https://wa.me/@numeroWhatsApp"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-white text-decoration-none">
+
+                        <i class="bi bi-whatsapp me-2"></i>
+                        @Model.WhatsApp
+
+                    </a>
+                </div>
+            }
+
+        </div>
+
+
+        <!-- ENDEREÇO -->
+
+        <div class="col-md-4">
+
+            <h6 class="fw-bold">
+                Endereço
+            </h6>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Endereco))
+            {
+                <div>
+                    @Model.Endereco, @Model.Numero
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Bairro))
+            {
+                <div>
+                    @Model.Bairro
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Cidade))
+            {
+                <div>
+                    @Model.Cidade - @Model.Estado
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Cep))
+            {
+                <div>
+                    CEP: @Model.Cep
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- REDES SOCIAIS -->
+    @if (!string.IsNullOrWhiteSpace(Model.Instagram) ||
+             !string.IsNullOrWhiteSpace(Model.Facebook))
+    {
+        <div class="text-center mt-4">
+
+            @if (!string.IsNullOrWhiteSpace(Model.Instagram))
+            {
+                <a href="@Model.Instagram"
+                   target="_blank"
+                   class="text-white me-3 text-decoration-none">
+
+                    <i class="bi bi-instagram fs-5"></i>
+                    Instagram
+
+                </a>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Facebook))
+            {
+                <a href="@Model.Facebook"
+                   target="_blank"
+                   class="text-white text-decoration-none">
+
+                    <i class="bi bi-facebook fs-5"></i>
+                    Facebook
+
+                </a>
+            }
+
+        </div>
+    }
+}

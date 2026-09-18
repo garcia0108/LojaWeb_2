@@ -1,0 +1,1175 @@
+﻿@model LojaWeb_2.Models.Produto
+
+@{
+    ViewData["Title"] = "Editar Produto";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-pencil-square"></i>
+                Editar Produto
+            </h2>
+
+            <p class="text-muted mb-0">
+                Altere as informações do produto.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+
+            <!-- ========================================= -->
+            <!-- IMAGENS ATUAIS - FORA DO FORM PRINCIPAL -->
+            <!-- ========================================= -->
+
+            <div class="mb-5">
+
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-images"></i>
+                    Imagens atuais
+                </h5>
+
+                @if (Model.Imagens != null && Model.Imagens.Any())
+                {
+                    <div class="d-flex flex-wrap gap-4">
+
+                        @foreach (var imagem in Model.Imagens)
+                        {
+                            <div class="text-center"
+                                 style="width: 180px;">
+
+                                <img src="@imagem.Caminho"
+                                     width="150"
+                                     height="150"
+                                     class="img-thumbnail mb-2"
+                                     style="object-fit: cover;"
+                                     alt="@Model.Nome" />
+
+
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <!-- IMAGEM PRINCIPAL -->
+                                    @if (string.Equals(
+                                                                imagem.Caminho?.Trim(),
+                                                                Model.Imagem?.Trim(),
+                                                                StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge bg-success p-2"
+                                              title="Imagem Principal">
+
+                                            <i class="bi bi-star-fill"></i>
+                                            
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="DefinirImagemPrincipal"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@imagem.Id" />
+
+                                            <input type="hidden"
+                                                   name="produtoId"
+                                                   value="@Model.Id" />
+
+                                            <button type="submit"
+                                                    class="btn btn-outline-warning btn-sm"
+                                                    title="Definir como principal">
+
+                                                <i class="bi bi-star"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+
+                                    <!--EXCLUIR-->
+                                    <form asp-action="ExcluirImagem"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@imagem.Id" />
+
+                                        <input type="hidden"
+                                               name="produtoId"
+                                               value="@Model.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                title="Excluir imagem"
+                                                onclick="return confirm('Deseja realmente excluir esta imagem?');">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">
+                        Nenhuma imagem cadastrada.
+                    </p>
+                }
+
+            </div>
+
+
+            <hr class="mb-4" />
+            <!-- =========================================================
+             CORES E IMAGENS DO PRODUTO
+             ========================================================= -->
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-white border-bottom py-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+
+            <div>
+                <h5 class="mb-1 fw-bold">
+                    <i class="bi bi-palette me-2"></i>
+                    Cores e imagens
+                </h5>
+
+                <small class="text-muted">
+                    Cadastre as cores disponíveis e as imagens específicas de cada cor.
+                </small>
+            </div>
+
+            <button type="button"
+                    class="btn btn-primary"
+                    id="btnAdicionarCorEdit">
+                <i class="bi bi-plus-lg me-1"></i>
+                Adicionar nova cor
+            </button>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        @if (Model.Cores != null && Model.Cores.Any())
+        {
+            <div class="row g-4">
+
+                @foreach (var cor in Model.Cores)
+                {
+                    <div class="col-12 col-md-6 col-xl-4">
+
+                        <div class="card h-100 border shadow-sm">
+
+                            <!-- Cabeçalho da cor -->
+                            <div class="card-header bg-light border-bottom">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <span class="rounded-circle border bg-white"
+                                              style="width:18px;height:18px;display:inline-block;">
+                                        </span>
+
+                                        <strong class="text-dark">
+                                            @cor.Nome
+                                        </strong>
+
+                                    </div>
+
+                                    <span class="badge bg-secondary">
+                                        @(cor.Imagens?.Count ?? 0)
+                                        @(cor.Imagens?.Count == 1 ? "imagem" : "imagens")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Imagens da cor -->
+                            <div class="card-body">
+
+                                @if (cor.Imagens != null && cor.Imagens.Any())
+                                {
+                                    <div class="row g-2 mb-3">
+
+                                        @foreach (var imagem in cor.Imagens.OrderBy(i => i.Id))
+                                        {
+                                            var ehPrincipal = cor.ImagemPrincipalId == imagem.Id;
+
+                                            <div class="col-6">
+
+                                                <div class="position-relative border rounded overflow-hidden bg-light
+                                                            @(ehPrincipal ? "border-success border-3" : "")"
+                                                     style="height:150px;">
+             
+                                                    <img src="@imagem.Caminho"
+                                                         alt="@cor.Nome"
+                                                         class="w-100 h-100"
+                                                         style="object-fit:cover; cursor:pointer;"
+                                                         onclick="abrirImagemCor('@imagem.Caminho')" />
+
+
+                                                    <!-- Indicador de imagem principal -->
+                                                    @if (ehPrincipal)
+                                                    {
+                                                        <div class="position-absolute top-0 start-0 p-2">
+
+                                                            <span class="badge bg-success">
+                                                                <i class="bi bi-star-fill me-1"></i>
+                                                                
+                                                            </span>
+
+                                                        </div>
+                                                    }
+
+
+                                                    <!-- Botão excluir -->
+                                                    <div class="position-absolute top-0 end-0 p-1">
+
+                                                        <form asp-action="ExcluirImagemCor"
+                                                              method="post"
+                                                              onsubmit="return confirm('Deseja realmente excluir esta imagem?');">
+
+                                                            @Html.AntiForgeryToken()
+
+                                                            <input type="hidden"
+                                                                   name="id"
+                                                                   value="@imagem.Id" />
+
+                                                            <input type="hidden"
+                                                                   name="produtoId"
+                                                                   value="@Model.Id" />
+
+                                                            <button type="submit"
+                                                                    class="btn btn-danger btn-sm rounded-circle"
+                                                                    title="Excluir imagem"
+                                                                    style="width:32px;height:32px;padding:0;">
+
+                                                                <i class="bi bi-trash"></i>
+
+                                                            </button>
+
+                                                        </form>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Botão definir principal -->
+                                                <div class="mt-2">
+
+                                                    @if (ehPrincipal)
+                                                    {
+                                                        <button type="button"
+                                                                class="btn btn-success btn-sm w-100"
+                                                                title="Imagem Principal">
+
+                                                            <i class="bi bi-star-fill me-1"></i>
+                                                            
+
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form asp-action="DefinirImagemPrincipalCor"
+                                                              method="post">
+
+                                                            @Html.AntiForgeryToken()
+
+                                                            <input type="hidden"
+                                                                   name="id"
+                                                                   value="@imagem.Id" />
+
+                                                            <input type="hidden"
+                                                                   name="produtoId"
+                                                                   value="@Model.Id" />
+
+                                                            <input type="hidden"
+                                                                   name="produtoCorId"
+                                                                   value="@cor.Id" />
+
+                                                            <button type="submit"
+                                                                    class="btn btn-outline-warning btn-sm w-100"
+                                                                    title="Definir Imagem Principal">
+
+                                                                <i class="bi bi-star me-1"></i>
+                                                                
+                                                            </button>
+
+                                                        </form>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-center py-4 text-muted border rounded bg-light mb-3">
+
+                                        <i class="bi bi-images fs-2 d-block mb-2"></i>
+
+                                        <span>
+                                            Nenhuma imagem cadastrada para esta cor.
+                                        </span>
+
+                                    </div>
+                                }
+
+
+                                <!-- Adicionar imagens -->
+                                <form asp-action="AdicionarImagensCor"
+                                      method="post"
+                                      enctype="multipart/form-data">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="produtoId"
+                                           value="@Model.Id" />
+
+                                    <input type="hidden"
+                                           name="produtoCorId"
+                                           value="@cor.Id" />
+
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-camera me-1"></i>
+                                        Adicionar imagens
+                                    </label>
+
+                                    <input type="file"
+                                           name="imagens"
+                                           class="form-control form-control-sm"
+                                           accept="image/*"
+                                           multiple />
+
+                                    <div class="form-text mb-3">
+                                        Você pode selecionar várias imagens.
+                                    </div>
+
+                                    <button type="submit"
+                                            class="btn btn-outline-primary btn-sm w-100">
+
+                                        <i class="bi bi-upload me-1"></i>
+                                        Adicionar imagens
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="bi bi-palette fs-1 text-muted"></i>
+
+                <h6 class="mt-3 fw-bold">
+                    Nenhuma cor cadastrada
+                </h6>
+
+                <p class="text-muted mb-0">
+                    Adicione uma cor para começar a cadastrar as imagens.
+                </p>
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             FORMULÁRIO DE NOVA COR
+             ===================================================== -->
+        <div id="formNovaCorEdit"
+             class="border rounded p-4 mt-4 bg-light"
+             style="display:none;">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+                    <h6 class="fw-bold mb-1">
+                        <i class="bi bi-plus-circle me-1"></i>
+                        Nova cor
+                    </h6>
+
+                    <small class="text-muted">
+                        Informe o nome da cor e selecione as imagens correspondentes.
+                    </small>
+                </div>
+
+            </div>
+
+            <form asp-action="AdicionarCor"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="produtoId"
+                       value="@Model.Id" />
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-5">
+
+                        <label class="form-label fw-semibold">
+                            Nome da cor
+                        </label>
+
+                        <input type="text"
+                               name="nome"
+                               class="form-control"
+                               placeholder="Ex.: Preto, Azul Marinho, Verde Olive..."
+                               required />
+
+                    </div>
+
+                    <div class="col-12 col-md-7">
+
+                        <label class="form-label fw-semibold">
+                            Imagens da cor
+                        </label>
+
+                        <input type="file"
+                               name="imagens"
+                               class="form-control"
+                               accept="image/*"
+                               multiple />
+
+                        <div class="form-text">
+                            Selecione várias imagens, se desejar.
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            id="btnCancelarNovaCorEdit">
+
+                        <i class="bi bi-x-lg me-1"></i>
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Adicionar cor
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL PARA VISUALIZAR IMAGEM
+     ========================================================= -->
+<div class="modal fade"
+     id="modalImagemCor"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content border-0">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Visualização da imagem
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar">
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center p-2">
+
+                <img id="imagemCorModal"
+                     src=""
+                     alt="Imagem do produto"
+                     class="img-fluid rounded"
+                     style="max-height:75vh; object-fit:contain;" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <hr class="mb-4" />
+
+            <!-- ========================================= -->
+            <!-- FORMULÁRIO PRINCIPAL -->
+            <!-- ========================================= -->
+
+            <form asp-action="Edit"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+
+                <!-- VALIDAÇÃO -->
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+
+                <!-- NOME -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Nome"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="Nome"
+                           class="form-control" />
+
+                    <span asp-validation-for="Nome"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- CATEGORIA E MARCA -->
+
+                <div class="row">
+
+                    <!-- CATEGORIA -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="CategoriaId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="CategoriaId"
+                                asp-items="ViewBag.CategoriaId"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione uma categoria
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="CategoriaId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!--PÚBLICO-->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Publico" class="form-label"></label>
+
+                        <select asp-for="Publico" class="form-select">
+
+                            <option value="">Selecione...</option>
+
+                            <option value="Masculino">Masculino</option>
+
+                            <option value="Feminino">Feminino</option>
+
+                            <option value="Unissex">Unissex</option>
+
+                        </select>
+
+                        <span asp-validation-for="Publico" class="text-danger"></span>
+
+                    </div>
+
+                    <!-- MARCA -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="MarcaId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="MarcaId"
+                                asp-items="ViewBag.MarcaId"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione uma marca
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="MarcaId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORNECEDOR -->
+
+                <div class="mb-3">
+
+                    <label asp-for="FornecedorId"
+                           class="form-label fw-semibold">
+                        Fornecedor
+                    </label>
+
+                    <select asp-for="FornecedorId"
+                            asp-items="ViewBag.FornecedorId"
+                            class="form-select">
+
+                        <option value="">
+                            Selecione um fornecedor
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="FornecedorId"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- TAMANHO -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Tamanho"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="Tamanho"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione o tamanho
+                            </option>
+
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+
+                        </select>
+
+                        <span asp-validation-for="Tamanho"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PREÇO -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Preco"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="Preco"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01" />
+
+                    <span asp-validation-for="Preco"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- ========================================= -->
+                <!-- DIMENSÕES PARA CÁLCULO DE FRETE -->
+                <!-- ========================================= -->
+
+                <div class="card bg-light border-0 p-3 mb-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-truck me-2"></i>
+
+                        Informações para envio
+
+                    </h5>
+
+                    <p class="text-muted small">
+                        Informe o peso e as dimensões do produto para o cálculo do frete.
+                    </p>
+
+                    <div class="row">
+
+                        <!-- PESO -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Peso"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Peso"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.001"
+                                   min="0.001" />
+
+                            <span asp-validation-for="Peso"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ALTURA -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Altura"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Altura"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1" />
+
+                            <span asp-validation-for="Altura"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- LARGURA -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Largura"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Largura"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1" />
+
+                            <span asp-validation-for="Largura"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- COMPRIMENTO -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Comprimento"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Comprimento"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1" />
+
+                            <span asp-validation-for="Comprimento"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- PROMOÇÃO -->
+
+                <div class="form-check mb-3">
+
+                    <input asp-for="EmPromocao"
+                           class="form-check-input"
+                           id="EmPromocao" />
+
+                    <label asp-for="EmPromocao"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+
+                <div class="mb-3" id="campoPrecoPromocional">
+
+                    <label asp-for="PrecoPromocional"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="PrecoPromocional"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="Ex: 79,90" />
+
+                    <span asp-validation-for="PrecoPromocional"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!--TOP DE PROMOÇÃO-->
+                <div class="mb-3">
+
+                    <label asp-for="TipoPromocao" class="form-label"></label>
+
+                    <select asp-for="TipoPromocao"
+                            class="form-select"
+                            id="TipoPromocao">
+
+                        <option value="Unitario">Unitário</option>
+                        <option value="Quantidade">Quantidade</option>
+                        <option value="Combo">Combo</option>
+
+                    </select>
+
+                </div>
+
+
+                <div id="camposQuantidadePromocao">
+
+                    <div class="mb-3">
+
+                        <label asp-for="QuantidadeMinimaPromocao"
+                               class="form-label"></label>
+
+                        <input asp-for="QuantidadeMinimaPromocao"
+                               class="form-control"
+                               type="number"
+                               min="2"
+                               placeholder="Ex: 10" />
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label asp-for="PrecoQuantidadePromocional"
+                               class="form-label"></label>
+
+                        <input asp-for="PrecoQuantidadePromocional"
+                               class="form-control"
+                               type="number"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Ex: 50,00" />
+
+                    </div>
+
+                </div>
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Descricao"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control"
+                              rows="5">
+                    </textarea>
+
+                    <span asp-validation-for="Descricao"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- ADICIONAR NOVAS IMAGENS -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-plus-circle"></i>
+                        Adicionar novas imagens
+                    </label>
+
+                    <input type="file"
+                           name="imagens"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.webp"
+                           multiple />
+
+                    <div class="form-text">
+
+                        Você pode selecionar uma ou várias imagens.
+                        Deixe vazio para manter as imagens atuais.
+
+                    </div>
+
+                </div>
+
+                <!--Destaques-->
+                <div class="form-check mb-3">
+
+                    <input asp-for="Destaque" class="form-check-input" />
+
+                    <label asp-for="Destaque" class="form-check-label"></label>
+
+                </div>
+                <!-- STATUS -->
+
+                <div class="form-check mb-4">
+
+                    <input asp-for="Ativo"
+                           class="form-check-input" />
+
+                    <label asp-for="Ativo"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="bi bi-save"></i>
+                        Salvar Alterações
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const emPromocao =
+                document.getElementById("EmPromocao");
+
+            const campoPrecoPromocional =
+                document.getElementById("campoPrecoPromocional");
+
+            const tipoPromocao =
+                document.getElementById("TipoPromocao");
+
+            const camposQuantidade =
+                document.getElementById("camposQuantidadePromocao");
+
+
+            function atualizarPromocao() {
+
+                if (emPromocao.checked) {
+
+                    campoPrecoPromocional.style.display = "block";
+
+                } else {
+
+                    campoPrecoPromocional.style.display = "none";
+                    camposQuantidade.style.display = "none";
+
+                    return;
+                }
+
+
+                if (tipoPromocao.value === "Quantidade") {
+
+                    camposQuantidade.style.display = "block";
+
+                } else {
+
+                    camposQuantidade.style.display = "none";
+                }
+            }
+
+
+            atualizarPromocao();
+
+
+            emPromocao.addEventListener(
+                "change",
+                atualizarPromocao
+            );
+
+
+            tipoPromocao.addEventListener(
+                "change",
+                atualizarPromocao
+            );
+
+        });
+
+        //NOVA IMAGEM COR
+              
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const btnAdicionarCor = document.getElementById("btnAdicionarCorEdit");
+        const btnCancelarCor = document.getElementById("btnCancelarNovaCorEdit");
+        const formNovaCor = document.getElementById("formNovaCorEdit");
+
+        if (btnAdicionarCor && formNovaCor) {
+
+            btnAdicionarCor.addEventListener("click", function () {
+
+                formNovaCor.style.display = "block";
+
+                formNovaCor.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            });
+
+        }
+
+        if (btnCancelarCor && formNovaCor) {
+
+            btnCancelarCor.addEventListener("click", function () {
+
+                formNovaCor.style.display = "none";
+
+            });
+
+        }
+
+    });
+
+
+    function abrirImagemCor(caminho) {
+
+        const imagem = document.getElementById("imagemCorModal");
+
+        if (!imagem) {
+            return;
+        }
+
+        imagem.src = caminho;
+
+        const modalElement = document.getElementById("modalImagemCor");
+
+        if (!modalElement) {
+            return;
+        }
+
+        const modal = new bootstrap.Modal(modalElement);
+
+        modal.show();
+    }
+
+
+    </script>
+}

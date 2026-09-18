@@ -1,0 +1,269 @@
+﻿@model IEnumerable<LojaWeb_2.Models.CampanhaNewsletter>
+
+@{
+    ViewData["Title"] = "Campanhas e Promoções";
+}
+
+<div class="container-fluid">
+
+    <!--MENSAGENS-->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Sucesso"]
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Erro"]
+        </div>
+    }
+
+    
+    <!-- CABEÇALHO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="mb-1">
+                Campanhas Newsletter
+            </h2>
+
+            <p class="text-muted mb-0">
+                Crie e gerencie as campanhas enviadas aos inscritos.
+            </p>
+
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="CriarCampanha"
+               class="btn btn-success">
+
+                <i class="bi bi-plus-circle"></i>
+                Nova Campanha
+
+            </a>
+
+        </div>
+        
+    </div>
+
+    
+
+
+    <!-- TABELA -->
+    <div class="card shadow-sm">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>
+                                Assunto
+                            </th>
+
+                            <th>
+                                Data de criação
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Data de envio
+                            </th>
+
+                            <th class="text-end">
+                                Ações
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var campanha in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <i class="bi bi-envelope-paper me-2"></i>
+                                        @campanha.Assunto
+                                    </td>
+
+                                    <td>
+                                        @campanha.DataCriacao.ToString("dd/MM/yyyy HH:mm")
+                                        
+                                    </td>
+
+                                    <td>
+
+                                        @if (campanha.Enviada)
+                                        {
+                                            <span class="badge bg-success">
+                                                Enviada
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Rascunho
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (campanha.DataEnvio.HasValue)
+                                        {
+                                            @campanha.DataEnvio.Value.ToString("dd/MM/yyyy HH:mm")
+                                                                
+                                                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Não enviada
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <!--Botões-->
+                                    <td class="text-end">
+
+                                        <!-- VISUALIZAR -->
+                                        <a asp-action="DetalhesCampanha"
+                                           asp-route-id="@campanha.Id"
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="Visualizar campanha">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+
+                                        @if (!campanha.Enviada)
+                                        {
+                                            <!-- EDITAR -->
+                                            <a asp-action="EditarCampanha"
+                                               asp-route-id="@campanha.Id"
+                                               class="btn btn-sm btn-outline-warning"
+                                               title="Editar campanha">
+
+                                                <i class="bi bi-pencil"></i>
+
+                                            </a>
+
+
+                                            <!-- ENVIAR -->
+                                            <form asp-action="EnviarCampanha"
+                                                  method="post"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Tem certeza que deseja enviar esta campanha para todos os inscritos ativos?');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@campanha.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-success"
+                                                        title="Enviar campanha">
+
+                                                    <i class="bi bi-send"></i>
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- EXCLUIR -->
+                                            <form asp-action="ExcluirCampanha"
+                                                  method="post"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Tem certeza que deseja excluir esta campanha?');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@campanha.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        title="Excluir campanha">
+
+                                                    <i class="bi bi-trash"></i>
+
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="5"
+                                    class="text-center text-muted py-4">
+
+                                    <i class="bi bi-envelope fs-3 d-block mb-2"></i>
+
+                                    Nenhuma campanha criada ainda.
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+
+            const mensagens = document.querySelectorAll('.mensagem-temporaria');
+
+            mensagens.forEach(function (mensagem) {
+
+                mensagem.style.transition = 'opacity 0.5s ease';
+                mensagem.style.opacity = '0';
+
+                setTimeout(function () {
+                    mensagem.remove();
+                }, 500);
+
+            });
+
+        }, 4000);
+    </script>
+}

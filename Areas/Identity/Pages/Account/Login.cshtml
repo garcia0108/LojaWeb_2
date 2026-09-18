@@ -1,0 +1,185 @@
+﻿@page
+@model LojaWeb_2.Areas.Identity.Pages.Account.LoginModel
+
+@{
+
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <!-- LOGO -->
+
+        <div class="text-center mb-4">
+
+            <div class="login-logo">
+                <i class="bi bi-shop"></i>
+            </div>
+
+            <h1 class="login-title">
+                LojaWeb
+            </h1>
+
+            <p class="login-subtitle">
+                Bem-vindo de volta!
+            </p>
+
+            <p class="text-muted small">
+                Acesse sua conta para continuar
+            </p>
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   asp-for="ReturnUrl" />
+
+
+            <!-- ERROS -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"
+                 role="alert">
+            </div>
+
+
+            <!-- E-MAIL -->
+
+            <div class="mb-3">
+
+                <label asp-for="Input.Email"
+                       class="form-label fw-semibold">
+
+                    <i class="bi bi-envelope me-1"></i>
+                    E-mail
+
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+
+                    <input asp-for="Input.Email"
+                           class="form-control"
+                           placeholder="seu@email.com"
+                           autocomplete="email" />
+
+                </div>
+
+                <span asp-validation-for="Input.Email"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <!-- SENHA -->
+
+            <div class="mb-3">
+
+                <label asp-for="Input.Password"
+                       class="form-label fw-semibold">
+
+                    <i class="bi bi-lock me-1"></i>
+                    Senha
+
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </span>
+
+                    <input asp-for="Input.Password"
+                           class="form-control"
+                           placeholder="Digite sua senha"
+                           autocomplete="current-password" />
+
+                </div>
+
+                <span asp-validation-for="Input.Password"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <!-- LEMBRAR -->
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div class="form-check">
+
+                    <input asp-for="Input.RememberMe"
+                           class="form-check-input" />
+
+                    <label asp-for="Input.RememberMe"
+                           class="form-check-label">
+
+                        Lembrar de mim
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÃO -->
+
+            <div class="d-grid">
+
+                <button type="submit"
+                        class="btn btn-primary btn-lg login-button">
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                    Entrar
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- REGISTRO -->
+
+        <div class="text-center mt-4 pt-3 border-top">
+
+            <p class="text-muted mb-1">
+                Ainda não possui uma conta?
+            </p>
+
+            <a asp-page="/Account/Register"
+               class="login-register-link">
+
+                <i class="bi bi-person-plus me-1"></i>
+
+                Criar conta
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

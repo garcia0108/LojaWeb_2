@@ -1,0 +1,679 @@
+﻿@model LojaWeb_2.Models.Venda
+
+@{
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-receipt me-2"></i>
+
+                Pedido #@Model.Id
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Detalhes do seu pedido.
+            </p>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <a asp-action="ComprovantePdf"
+               asp-route-id="@Model.Id"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf me-1"></i>
+                Comprovante PDF
+
+            </a>
+
+            <a asp-action="Pedidos"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMAÇÕES DO PEDIDO -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- DATA -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Data do pedido
+                    </small>
+
+                    <div class="fw-semibold mt-1">
+
+                        @Model.DataVenda.ToString(
+                        "dd/MM/yyyy HH:mm")
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAGAMENTO -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Forma de pagamento
+                    </small>
+
+                    <div class="fw-semibold mt-1">
+
+                        @Model.FormaPagamento
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Status
+                    </small>
+
+                    <div class="mt-1">
+
+                        @if (Model.Status == "Concluída")
+                        {
+                            <span class="badge bg-success">
+
+                                <i class="bi bi-check-circle me-1"></i>
+
+                                Concluída
+
+                            </span>
+                        }
+                        else if (Model.Status == "Cancelada")
+                        {
+                            <span class="badge bg-danger">
+
+                                <i class="bi bi-x-circle me-1"></i>
+
+                                Cancelada
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+
+                                @Model.Status
+
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Total
+                    </small>
+
+                    <div class="fw-bold fs-5 text-primary mt-1">
+
+                        @Model.Total.ToString("C")
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- INFORMAÇÕES DE ENTREGA -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-truck me-2"></i>
+
+                Informações de entrega
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- MODALIDADE -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Modalidade
+                    </small>
+
+                    <div class="fw-semibold mt-1">
+
+                        @(Model.TipoFrete ?? "Não informado")
+
+                    </div>
+
+                </div>
+
+
+                <!-- CEP -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        CEP de entrega
+                    </small>
+
+                    <div class="fw-semibold mt-1">
+
+                        @(Model.CepEntrega ?? "Não informado")
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRAZO -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Prazo de entrega
+                    </small>
+
+                    <div class="fw-semibold mt-1">
+
+                        @if (Model.PrazoEntregaDias.HasValue)
+                        {
+                            <span>
+                                Até @Model.PrazoEntregaDias dias úteis
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                Não informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- FRETE -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        Valor do frete
+                    </small>
+
+                    <div class="fw-bold text-success mt-1">
+
+                        @Model.ValorFrete.ToString("C2")
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- ACOMPANHAMENTO DO PEDIDO -->
+    <!-- ================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex align-items-center mb-4">
+
+                <div class="status-icon">
+
+                    <i class="bi bi-truck"></i>
+
+                </div>
+
+                <div class="ms-3">
+
+                    <h5 class="fw-bold mb-1">
+
+                        Acompanhamento do pedido
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Acompanhe o andamento do seu pedido.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @{
+                int etapaAtual = Model.Status switch
+                {
+                    "Pedido realizado" => 1,
+                    "Pagamento aprovado" => 2,
+                    "Em preparação" => 3,
+                    "Enviado" => 4,
+                    "Entregue" => 5,
+
+                    // Compatibilidade com pedidos antigos
+                    "Concluída" => 5,
+
+                    _ => 1
+                };
+            }
+
+
+            @if (Model.Status == "Cancelado" || Model.Status == "Cancelada")
+            {
+                <div class="alert alert-danger mb-0">
+
+                    <i class="bi bi-x-circle-fill me-2"></i>
+
+                    <strong>Pedido cancelado.</strong>
+
+                    Este pedido foi cancelado.
+
+                </div>
+            }
+            else
+            {
+                <div class="pedido-timeline">
+
+                    <!-- PEDIDO REALIZADO -->
+
+                    <div class="timeline-item @(etapaAtual >= 1 ? "concluido" : "")">
+
+                        <div class="timeline-marker">
+
+                            <i class="bi bi-check-lg"></i>
+
+                        </div>
+
+                        <div class="timeline-content">
+
+                            <h6 class="fw-bold mb-1">
+
+                                Pedido realizado
+
+                                @if (etapaAtual == 1)
+                                {
+                                    <span class="badge bg-primary ms-2">
+                                        Atual
+                                    </span>
+                                }
+
+                            </h6>
+
+                            <p class="text-muted mb-0">
+
+                                Seu pedido foi registrado com sucesso.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAGAMENTO APROVADO -->
+
+                    <div class="timeline-item @(etapaAtual >= 2 ? "concluido" : "")">
+
+                        <div class="timeline-marker">
+
+                            <i class="bi bi-credit-card"></i>
+
+                        </div>
+
+                        <div class="timeline-content">
+
+                            <h6 class="fw-bold mb-1">
+
+                                Pagamento aprovado
+
+                                @if (etapaAtual == 2)
+                                {
+                                    <span class="badge bg-primary ms-2">
+                                        Atual
+                                    </span>
+                                }
+
+                            </h6>
+
+                            <p class="text-muted mb-0">
+
+                                O pagamento do pedido foi confirmado.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EM PREPARAÇÃO -->
+
+                    <div class="timeline-item @(etapaAtual >= 3 ? "concluido" : "")">
+
+                        <div class="timeline-marker">
+
+                            <i class="bi bi-box-seam"></i>
+
+                        </div>
+
+                        <div class="timeline-content">
+
+                            <h6 class="fw-bold mb-1">
+
+                                Em preparação
+
+                                @if (etapaAtual == 3)
+                                {
+                                    <span class="badge bg-primary ms-2">
+                                        Atual
+                                    </span>
+                                }
+
+                            </h6>
+
+                            <p class="text-muted mb-0">
+
+                                Seus produtos estão sendo separados e preparados.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ENVIADO -->
+
+                    <div class="timeline-item @(etapaAtual >= 4 ? "concluido" : "")">
+
+                        <div class="timeline-marker">
+
+                            <i class="bi bi-truck"></i>
+
+                        </div>
+
+                        <div class="timeline-content">
+
+                            <h6 class="fw-bold mb-1">
+
+                                Pedido enviado
+
+                                @if (etapaAtual == 4)
+                                {
+                                    <span class="badge bg-primary ms-2">
+                                        Atual
+                                    </span>
+                                }
+
+                            </h6>
+
+                            <p class="text-muted mb-0">
+
+                                Seu pedido foi enviado para o endereço informado.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ENTREGUE -->
+
+                    <div class="timeline-item ultimo @(etapaAtual >= 5 ? "concluido" : "")">
+
+                        <div class="timeline-marker">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+                        <div class="timeline-content">
+
+                            <h6 class="fw-bold mb-1">
+
+                                Pedido entregue
+
+                                @if (etapaAtual == 5)
+                                {
+                                    <span class="badge bg-success ms-2">
+                                        Concluído
+                                    </span>
+                                }
+
+                            </h6>
+
+                            <p class="text-muted mb-0">
+
+                                Seu pedido foi entregue com sucesso.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- PRODUTOS -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-box-seam me-2"></i>
+
+                Produtos do pedido
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Produto</th>
+
+                            <th>Tamanho</th>
+
+                            <th>Cor</th>
+
+                            <th class="text-center">
+                                Quantidade
+                            </th>
+
+                            <th>Preço unitário</th>
+
+                            <th>Subtotal</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model.Itens)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+
+                                        @(item.Produto?.Nome
+                                                                            ?? "Produto não encontrado")
+
+                                </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="badge bg-primary">
+
+                                        @item.Tamanho
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    @item.Cor
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    @item.Quantidade
+
+                                </td>
+
+
+                                <td>
+
+                                    @item.PrecoUnitario.ToString("C")
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+
+                                        @item.Subtotal.ToString("C")
+
+                                    </strong>
+
+                                </td>
+
+                            </tr>
+                                                }
+
+                    </tbody>
+
+
+                    <tfoot>
+
+                        <tr>
+
+                            <td colspan="5"
+                                class="text-end fw-bold">
+
+                                Total do pedido:
+
+                            </td>
+
+                            <td class="fw-bold fs-5 text-primary">
+
+                                @Model.Total.ToString("C")
+
+                            </td>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VOLTAR -->
+
+    <div class="mt-4">
+
+        <a asp-action="Pedidos"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Voltar para meus pedidos
+
+        </a>
+
+    </div>
+
+</div>

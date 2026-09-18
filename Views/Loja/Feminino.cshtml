@@ -1,0 +1,847 @@
+﻿@model IEnumerable<LojaWeb_2.ViewModels.ProdutoCatalogoViewModel>
+@{
+    ViewData["Title"] = "Feminino";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+            Moda Feminina
+        </h1>
+
+        <p class="text-muted">
+            Encontre os melhores produtos masculinos da nossa loja.
+        </p>
+
+    </div>
+
+
+    <!-- PRODUTOS -->
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+
+            @foreach (var item in Model)
+            {
+                var produto = item.Produto;
+                var cor = item.Cor;
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                    <div class="card produto-card h-100"
+                         data-detalhes-url="@Url.Action("Detalhes", "Loja", new { id = produto.Id, cor = cor?.Nome })">
+
+                        <!-- IMAGEM -->
+
+                        <div class="produto-imagem-container">
+
+                            @if (!string.IsNullOrEmpty(item.Imagem))
+                            {
+                                <img src="@item.Imagem"
+                                     class="produto-imagem"
+                                     alt="@produto.Nome @(cor != null ? "- " + cor.Nome : "")" />
+                            }
+                            else
+                            {
+                                <div class="produto-sem-imagem">
+
+                                    <i class="bi bi-image"></i>
+
+                                </div>
+                            }
+
+
+                            <!-- PROMOÇÃO -->
+                            @if (produto.EmPromocao &&
+                                                                         produto.PrecoPromocional.HasValue &&
+                                                                         produto.PrecoPromocional.Value > 0 &&
+                                                                         produto.PrecoPromocional.Value < produto.Preco)
+                            {
+                                decimal desconto =
+                                    ((produto.Preco - produto.PrecoPromocional.Value)
+                                    / produto.Preco) * 100;
+
+                                <span class="produto-badge-promocao">
+
+                                    -@Math.Round(desconto)% OFF
+
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- INFORMAÇÕES -->
+
+                        <div class="card-body produto-card-body">
+
+                            <!-- CATEGORIA -->
+
+                            <div class="produto-categoria">
+
+                                @(produto.Categoria?.Nome ?? "Sem categoria")
+
+                            </div>
+
+
+                            <!-- MARCA -->
+                            @if (produto.Marca != null)
+                            {
+                                <div class="produto-marca">
+
+                                    @produto.Marca.Nome
+
+                                </div>
+                            }
+
+
+                            <!-- COR -->
+                            @if (cor != null)
+                            {
+                                <div class="produto-cor">
+
+                                    <span class="produto-cor-indicador"></span>
+
+                                    @cor.Nome
+
+                                </div>
+                            }
+
+
+                            <!-- NOME -->
+
+                            <h5 class="produto-nome">
+
+                                @produto.Nome
+
+                            </h5>
+
+
+                            <!-- PREÇO -->
+                            @if (produto.EmPromocao &&
+                                                                         produto.PrecoPromocional.HasValue &&
+                                                                         produto.PrecoPromocional.Value > 0 &&
+                                                                         produto.PrecoPromocional.Value < produto.Preco)
+                            {
+                                <div class="produto-preco">
+
+                                    <span class="produto-preco-antigo">
+
+                                        @produto.Preco.ToString("C2")
+
+                                    </span>
+
+                                    <span class="produto-preco-promocional">
+
+                                        @produto.PrecoPromocional.Value.ToString("C2")
+
+                                    </span>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="produto-preco">
+
+                                    <span class="produto-preco-normal">
+
+                                        @produto.Preco.ToString("C2")
+
+                                    </span>
+
+                                </div>
+                            }
+
+
+                            <!-- AVALIAÇÕES -->
+
+                            <div class="produto-avaliacoes-cupom">
+
+                                <div class="produto-avaliacoes">
+
+                                    <span class="estrelas">
+                                        ★★★★★
+                                    </span>
+
+                                    <span class="quantidade-avaliacoes">
+                                        (0)
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- TAMANHOS -->
+                            @{
+                                var tamanhosPadrao =
+                                    new[] { "PP", "P", "M", "G", "GG", "XGG" };
+
+                                var tamanhosDisponiveis =
+                                    produto.Estoques?
+                                        .Where(e =>
+                                            e.Quantidade > 0 &&
+                                            (cor == null || e.Cor == cor.Nome))
+                                        .Select(e => e.Tamanho)
+                                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                                        .Distinct()
+                                        .ToList()
+                                    ?? new List<string>();
+                            }
+
+
+                            <div class="produto-tamanhos">
+
+                                @foreach (var tamanho in tamanhosPadrao)
+                                {
+                                    var disponivel =
+                                        tamanhosDisponiveis.Any(t =>
+                                            string.Equals(
+                                                t,
+                                                tamanho,
+                                                StringComparison.OrdinalIgnoreCase));
+
+                                    <button type="button"
+                                            class="produto-tamanho @(disponivel ? "disponivel" : "indisponivel")"
+                                            data-tamanho="@tamanho"
+                                        @(disponivel ? "" : "disabled")>
+
+                                        @tamanho
+
+                                    </button>
+                                }
+
+                            </div>
+
+
+                            <!-- COMPRA RÁPIDA -->
+
+                            <button type="button"
+                                    class="btn btn-dark produto-btn btn-compra-rapida"
+                                    data-produto-id="@produto.Id"
+                                    data-cor="@(cor?.Nome ?? "")"
+                                    disabled>
+
+                                <i class="bi bi-lightning-charge"></i>
+
+                                Compra rápida
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- PAGINAÇÃO -->
+        @if (ViewBag.TotalPaginas > 1)
+        {
+            <nav aria-label="Navegação dos produtos"
+                 class="mt-5">
+
+                <ul class="pagination justify-content-center">
+
+                    <!-- ANTERIOR -->
+                    @if (ViewBag.PaginaAtual > 1)
+                    {
+                        <li class="page-item">
+
+                            <a class="page-link"
+                               asp-action="Feminino"
+                               asp-route-categoriaId="@ViewBag.CategoriaId"
+                               asp-route-pagina="@(ViewBag.PaginaAtual - 1)">
+
+                                <i class="bi bi-chevron-left"></i>
+
+                            </a>
+
+                        </li>
+                    }
+
+
+                    <!-- NÚMEROS -->
+                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                    {
+                        if (i == ViewBag.PaginaAtual)
+                        {
+                            <li class="page-item active">
+
+                                <span class="page-link">
+
+                                    @i
+
+                                </span>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   asp-action="Feminino"
+                                   asp-route-categoriaId="@ViewBag.CategoriaId"
+                                   asp-route-pagina="@i">
+
+                                    @i
+
+                                </a>
+
+                            </li>
+                        }
+                    }
+
+
+                    <!-- PRÓXIMA -->
+                    @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+                    {
+                        <li class="page-item">
+
+                            <a class="page-link"
+                               asp-action="Feminino"
+                               asp-route-categoriaId="@ViewBag.CategoriaId"
+                               asp-route-pagina="@(ViewBag.PaginaAtual + 1)">
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </nav>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="bi bi-person-standing fs-1 text-muted"></i>
+
+            <h4 class="mt-3">
+                Nenhum produto feminino disponível
+            </h4>
+
+            <p class="text-muted">
+                No momento não temos produtos femininos disponíveis.
+            </p>
+
+        </div>
+    }
+
+    <!-- VOLTAR -->
+
+    <div class="text-center mt-5">
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Voltar para a loja
+
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+    /* =========================================
+           CARDS DE PRODUTO
+           ========================================= */
+
+    .produto-card {
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        transition: transform .2s ease, box-shadow .2s ease;
+        cursor: pointer;
+    }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .12);
+        }
+
+
+    /* =========================================
+           IMAGEM
+           ========================================= */
+
+    .produto-imagem-container {
+        position: relative;
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+        background: #f8f9fa;
+    }
+
+    .produto-imagem {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .3s ease;
+    }
+
+    .produto-card:hover .produto-imagem {
+        transform: scale(1.04);
+    }
+
+    .produto-sem-imagem {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        color: #adb5bd;
+    }
+
+
+    /* =========================================
+           PROMOÇÃO
+           ========================================= */
+
+    .produto-badge-promocao {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #dc3545;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+           CORPO
+           ========================================= */
+
+    .produto-card-body {
+        display: flex;
+        flex-direction: column;
+        min-height: 320px;
+    }
+
+    /* =========================================
+           CATEGORIA
+           ========================================= */
+
+    .produto-categoria {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 4px;
+    }
+
+
+    /* =========================================
+           MARCA
+           ========================================= */
+
+    .produto-marca {
+        font-size: 13px;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+
+
+    /* =========================================
+           NOME
+           ========================================= */
+
+    .produto-nome {
+        font-size: 18px;
+        font-weight: 600;
+        min-height: 48px;
+        margin-bottom: 12px;
+    }
+
+
+    /* =========================================
+           PREÇO
+           ========================================= */
+
+    .produto-preco {
+        margin-bottom: 18px;
+    }
+
+    .produto-preco-antigo {
+        display: block;
+        color: #6c757d;
+        text-decoration: line-through;
+        font-size: 14px;
+    }
+
+    .produto-preco-promocional {
+        display: block;
+        font-size: 21px;
+        font-weight: 700;
+        color: #198754;
+    }
+
+    .produto-preco-normal {
+        display: block;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+           TAMANHOS
+           ========================================= */
+
+    .produto-tamanhos {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 4px;
+        margin-bottom: 16px;
+        width: 100%;
+    }
+
+    .produto-tamanho {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        height: 28px;
+        padding: 0 4px;
+        border: 1px solid #adb5bd;
+        border-radius: 4px;
+        background: #fff;
+        color: #212529;
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+        .produto-tamanho.disponivel:hover {
+            border-color: #cfa34a;
+            background: #cfa34a;
+            color: #141414;
+        }
+
+        .produto-tamanho.disponivel.selecionado {
+            background: #cfa34a;
+            border-color: #cfa34a;
+            color: #141414;
+            font-weight: 700;
+        }
+
+        .produto-tamanho.indisponivel {
+            background: #f5f5f5;
+            border-color: #d9d9d9;
+            color: #b5b5b5;
+            cursor: not-allowed;
+            opacity: .65;
+        }
+
+
+    /* =========================================
+           AÇÕES
+           ========================================= */
+
+    .produto-acoes {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .produto-btn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 600;
+        margin-top: auto;
+    }
+
+
+    /* =========================================
+           CELULAR
+           ========================================= */
+
+    @@media (max-width: 767px) {
+
+        .produto-imagem-container {
+            height: 260px;
+        }
+
+        .produto-nome {
+            font-size: 16px;
+        }
+
+        .produto-preco-promocional,
+        .produto-preco-normal {
+            font-size: 19px;
+        }
+    }
+
+    /* =========================================
+               PAGINAÇÃO
+               ========================================= */
+    .pagination {
+        gap: 6px;
+    }
+
+        .pagination .page-link {
+            color: #cfa34a;
+            border-color: #cfa34a;
+            background-color: #fff;
+            font-weight: 400;
+            border-radius: 10px !important;
+            margin: 0;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #cfa34a;
+                border-color: #cfa34a;
+                color: #141414;
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #cfa34a;
+            border-color: #cfa34a;
+            color: #141414;
+            font-weight: 600;
+            border-radius: 10px !important;
+        }
+
+    /* =========================================
+           AVALIAÇÕES
+           ========================================= */
+
+    .produto-avaliacoes-cupom {
+        min-height: 26px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .produto-avaliacoes {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        line-height: 1;
+    }
+
+        .produto-avaliacoes .estrelas {
+            color: #cfa34a;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .produto-avaliacoes .quantidade-avaliacoes {
+            color: #6c757d;
+            font-size: 13px;
+        }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        document.querySelectorAll(".produto-card").forEach(function(card) {
+
+            const urlDetalhes = card.dataset.detalhesUrl;
+
+            const tamanhos =
+                card.querySelectorAll(".produto-tamanho.disponivel");
+
+            const botaoCompraRapida =
+                card.querySelector(".btn-compra-rapida");
+
+
+            // =========================================
+            // CARD → DETALHES
+            // =========================================
+
+            card.addEventListener("click", function(event) {
+
+                // Não abrir detalhes ao clicar no tamanho
+                if (event.target.closest(".produto-tamanho")) {
+                    return;
+                }
+
+                // Não abrir detalhes ao clicar na Compra Rápida
+                if (event.target.closest(".btn-compra-rapida")) {
+                    return;
+                }
+
+                if (urlDetalhes) {
+
+                    window.location.href = urlDetalhes;
+
+                }
+
+            });
+
+
+            // =========================================
+            // SELECIONAR TAMANHO
+            // =========================================
+
+            tamanhos.forEach(function(botaoTamanho) {
+
+                botaoTamanho.addEventListener("click", function(event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+
+                    // Remover seleção anterior
+
+                    tamanhos.forEach(function(item) {
+
+                        item.classList.remove("selecionado");
+
+                    });
+
+
+                    // Selecionar tamanho atual
+
+                    botaoTamanho.classList.add("selecionado");
+
+
+                    // Guardar tamanho no botão Compra Rápida
+
+                    botaoCompraRapida.dataset.tamanho =
+                        botaoTamanho.dataset.tamanho;
+
+
+                    // Liberar Compra Rápida
+
+                    botaoCompraRapida.disabled = false;
+                    botaoCompraRapida.removeAttribute("disabled");
+
+                });
+
+            });
+
+
+            // =========================================
+            // COMPRA RÁPIDA
+            // =========================================
+
+            botaoCompraRapida.addEventListener("click", function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+
+                const produtoId =
+                    botaoCompraRapida.dataset.produtoId;
+
+                const corSelecionada =
+                    botaoCompraRapida.dataset.cor;
+
+                const tamanhoSelecionado =
+                    botaoCompraRapida.dataset.tamanho;
+
+
+                // =========================================
+                // VALIDAR TAMANHO
+                // =========================================
+
+                if (!tamanhoSelecionado) {
+
+                    alert("Selecione um tamanho.");
+
+                    return;
+
+                }
+
+
+                // =========================================
+                // VALIDAR COR
+                // =========================================
+
+                if (!corSelecionada) {
+
+                    alert("Não foi possível identificar a cor.");
+
+                    return;
+
+                }
+
+
+                // =========================================
+                // CRIAR FORMULÁRIO
+                // =========================================
+
+                const formCompraRapida =
+                    document.createElement("form");
+
+                formCompraRapida.method = "POST";
+
+                formCompraRapida.action =
+                    '@Url.Action("CompraRapida", "Carrinho")';
+
+
+                // =========================================
+                // TOKEN ANTI-FORGERY
+                // =========================================
+
+                const token =
+                    document.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    )?.value;
+
+
+                // =========================================
+                // DADOS DA COMPRA
+                // =========================================
+
+                formCompraRapida.innerHTML = `
+
+                            <input type="hidden"
+                                   name="produtoId"
+                                   value="${produtoId}" />
+
+                            <input type="hidden"
+                                   name="cor"
+                                   value="${corSelecionada}" />
+
+                            <input type="hidden"
+                                   name="tamanho"
+                                   value="${tamanhoSelecionado}" />
+
+                            <input type="hidden"
+                                   name="quantidade"
+                                   value="1" />
+
+                            <input type="hidden"
+                                   name="__RequestVerificationToken"
+                                   value="${token || ""}" />
+
+                        `;
+
+
+                // =========================================
+                // ENVIAR
+                // =========================================
+
+                document.body.appendChild(
+                    formCompraRapida
+                );
+
+                formCompraRapida.submit();
+
+            });
+
+        });
+
+    });
+</script>

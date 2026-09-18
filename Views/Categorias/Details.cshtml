@@ -1,0 +1,90 @@
+﻿@model LojaWeb_2.Models.Categoria
+
+@{
+    ViewData["Title"] = "Detalhes da Categoria";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>Detalhes da Categoria</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="fw-bold">
+                    Imagem
+                </dt>
+
+                <dd class="mt-2">
+
+                    @if (!string.IsNullOrEmpty(Model.Imagem))
+                    {
+                        <img src="@Model.Imagem"
+                             alt="@Model.Nome"
+                             style="width: 250px;
+                            height: 250px;
+                            object-fit: cover;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-center bg-light"
+                             style="width: 250px;
+                            height: 250px;
+                            border-radius: 12px;">
+
+                            <i class="bi bi-image fs-1 text-muted"></i>
+
+                        </div>
+                    }
+
+                </dd>
+
+                <dt class="col-sm-3">
+                    Nome
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Nome
+                </dd>
+
+                <dt class="col-sm-3">
+                    Descrição
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Descricao
+                </dd>
+
+            </dl>
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <a asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-warning">
+
+                    <i class="bi bi-pencil"></i>
+                    Editar
+
+                </a>
+            }
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Voltar
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,243 @@
+﻿@model LojaWeb_2.Models.Fornecedor
+
+@{
+    ViewData["Title"] = "Excluir Fornecedor";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger">
+                <i class="bi bi-trash"></i>
+                Excluir Fornecedor
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confirme a exclusão deste fornecedor.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- AVISO -->
+
+    <div class="alert alert-danger">
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        <strong>Atenção!</strong>
+
+        A exclusão deste fornecedor não poderá ser desfeita.
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h5 class="fw-bold mb-4">
+                <i class="bi bi-building"></i>
+                Dados do fornecedor
+            </h5>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Nome / Razão Social
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.Nome
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Nome Fantasia
+                    </label>
+
+                    <div class="form-control bg-light">
+
+                        @(string.IsNullOrWhiteSpace(Model.NomeFantasia)
+                                                ? "Não informado"
+                                                : Model.NomeFantasia)
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        CNPJ
+                    </label>
+
+                    <div class="form-control bg-light">
+
+                        @(string.IsNullOrWhiteSpace(Model.Cnpj)
+                                                ? "Não informado"
+                                                : Model.Cnpj)
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Telefone
+                    </label>
+
+                    <div class="form-control bg-light">
+
+                        @(string.IsNullOrWhiteSpace(Model.Telefone)
+                                                ? "Não informado"
+                                                : Model.Telefone)
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        E-mail
+                    </label>
+
+                    <div class="form-control bg-light">
+
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                                                ? "Não informado"
+                                                : Model.Email)
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <div class="row">
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Cidade
+                    </label>
+
+                    <div class="form-control bg-light">
+
+                        @(string.IsNullOrWhiteSpace(Model.Cidade)
+                                                ? "Não informado"
+                                                : Model.Cidade)
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Estado))
+                        {
+                            <span>
+                                / @Model.Estado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Status
+                    </label>
+
+                    <div>
+
+                        @if (Model.Ativo)
+                        {
+                            <span class="badge bg-success fs-6">
+                                <i class="bi bi-check-circle"></i>
+                                Ativo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary fs-6">
+                                <i class="bi bi-x-circle"></i>
+                                Inativo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRMAÇÃO -->
+
+            <form asp-action="Delete"
+                  method="post"
+                  class="mt-4">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash"></i>
+                        Confirmar Exclusão
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

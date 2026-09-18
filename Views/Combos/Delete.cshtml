@@ -1,0 +1,140 @@
+﻿@model LojaWeb_2.Models.Combo
+
+@{
+    ViewData["Title"] = "Excluir Combo";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger">
+                <i class="bi bi-trash"></i>
+                Excluir Combo
+            </h2>
+
+            <p class="text-muted">
+                Confirme a exclusão deste combo.
+            </p>
+        </div>
+
+           <div>
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Voltar
+
+            </a>
+           </div>
+    </div>
+
+
+    <div class="alert alert-warning">
+
+        <i class="bi bi-exclamation-triangle"></i>
+
+        <strong>Atenção!</strong>
+
+        Ao excluir este combo, todos os produtos vinculados
+        a ele serão removidos apenas do combo.
+
+        <br />
+
+        <strong>Os produtos cadastrados na loja não serão excluídos.</strong>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-3">
+
+                    @if (!string.IsNullOrEmpty(Model.Imagem))
+                    {
+                        <img src="@Model.Imagem"
+                             class="img-fluid rounded"
+                             style="max-height: 180px; object-fit: cover;"
+                             alt="@Model.Nome" />
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center rounded"
+                             style="height: 180px;">
+
+                            <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <div class="col-md-9">
+
+                    <h3 class="fw-bold">
+                        @Model.Nome
+                    </h3>
+
+                    @if (!string.IsNullOrEmpty(Model.Descricao))
+                    {
+                        <p class="text-muted">
+                            @Model.Descricao
+                        </p>
+                    }
+
+
+                    <p>
+                        <strong>Preço:</strong>
+                        @Model.Preco.ToString("C")
+                    </p>
+
+
+                    <p>
+                        <strong>Produtos no Combo:</strong>
+                        @Model.Itens.Count
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-footer bg-white">
+
+            <form asp-action="Delete"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    <i class="bi bi-trash"></i>
+                    Sim, excluir Combo
+
+                </button>
+
+
+                <a asp-action="Details"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-secondary">
+
+                    Cancelar
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

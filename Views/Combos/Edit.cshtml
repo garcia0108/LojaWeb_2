@@ -1,0 +1,1008 @@
+﻿@model LojaWeb_2.Models.Combo
+
+@{
+    ViewData["Title"] = "Editar Combo";
+}
+
+<div class="container mt-4">
+
+    <!-- ========================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-pencil-square"></i>
+                Editar Combo
+            </h2>
+
+            <p class="text-muted mb-0">
+                Altere as informações, imagem e produtos deste combo.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FORMULÁRIO -->
+    <!-- ========================================= -->
+
+    <form asp-action="Edit"
+          asp-route-id="@Model.Id"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- ID -->
+
+        <input type="hidden"
+               asp-for="Id" />
+
+
+        <!-- ERROS -->
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- INFORMAÇÕES DO COMBO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-4">
+
+                    <i class="bi bi-info-circle"></i>
+                    Informações do Combo
+
+                </h5>
+
+
+                <div class="row">
+
+                    <!-- NOME -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Nome"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Nome"
+                               class="form-control"
+                               placeholder="Ex: Combo 10 Camisas" />
+
+                        <span asp-validation-for="Nome"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PREÇO -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Preco"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Preco"
+                               class="form-control"
+                               type="number"
+                               step="0.01"
+                               min="0.01" />
+
+                        <span asp-validation-for="Preco"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Descricao"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Descreva o que acompanha este combo.">
+                    </textarea>
+
+                    <span asp-validation-for="Descricao"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- IMAGEM -->
+                <!-- ========================================= -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+
+                        <i class="bi bi-image"></i>
+                        Imagem do Combo
+
+                    </label>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Imagem))
+                    {
+                        <div class="mb-3">
+
+                            <p class="text-muted mb-2">
+                                Imagem atual:
+                            </p>
+
+                            <img src="@Model.Imagem"
+                                 alt="@Model.Nome"
+                                 class="img-thumbnail"
+                                 style="
+                                         max-width: 300px;
+                                         max-height: 250px;
+                                         object-fit: contain;
+                                     " />
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border">
+
+                            <i class="bi bi-image"></i>
+
+                            Este combo ainda não possui uma imagem.
+
+                        </div>
+                    }
+
+
+                    <label class="form-label">
+
+                        Nova imagem
+
+                    </label>
+
+                    <input type="file"
+                           name="imagemArquivo"
+                           class="form-control"
+                           accept="image/*" />
+
+                    <div class="form-text">
+
+                        Se não escolher uma nova imagem,
+                        a imagem atual será mantida.
+
+                    </div>
+
+                </div>
+
+
+                <!-- ATIVO -->
+
+                <div class="form-check">
+
+                    <input asp-for="Ativo"
+                           class="form-check-input" />
+
+                    <label asp-for="Ativo"
+                           class="form-check-label">
+
+                        Combo ativo
+
+                    </label>
+
+                </div>
+
+                <!--PROMOÇÃO-->
+                <div class="form-check mt-2">
+
+                    <input asp-for="EmPromocao"
+                           class="form-check-input" />
+
+                    <label asp-for="EmPromocao"
+                           class="form-check-label">
+
+                        Em promoção
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- PRODUTOS DO COMBO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+
+                            <i class="bi bi-box-seam"></i>
+                            Produtos do Combo
+
+                        </h5>
+
+                        <p class="text-muted mb-0">
+
+                            Escolha o produto, cor, tamanho e quantidade.
+
+                        </p>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="btn btn-success"
+                            id="btnAdicionarProduto">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Adicionar produto
+
+                    </button>
+
+                </div>
+
+
+                <div id="listaProdutos">
+
+
+                    @if (Model.Itens != null && Model.Itens.Any())
+                    {
+
+                        @foreach (var item in Model.Itens)
+                        {
+
+                            <div class="row produto-item align-items-end mb-3">
+
+
+                                <!-- PRODUTO -->
+
+                                <div class="col-md-4 mb-3">
+
+                                    <label class="form-label">
+
+                                        Produto
+
+                                    </label>
+
+                                    <select name="produtoIds"
+                                            class="form-select select-produto">
+
+                                        <option value="">
+
+                                            Selecione um produto
+
+                                        </option>
+
+                                        @foreach (var produto in ViewBag.Produtos)
+                                        {
+
+                                            if (produto.Value == item.ProdutoId.ToString())
+                                            {
+
+                                                <option value="@produto.Value"
+                                                        selected>
+
+                                                    @produto.Text
+
+                                                </option>
+
+                                            }
+                                            else
+                                            {
+
+                                                <option value="@produto.Value">
+
+                                                    @produto.Text
+
+                                                </option>
+
+                                            }
+
+                                        }
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- COR -->
+
+                                <div class="col-md-2 mb-3">
+
+                                    <label class="form-label">
+
+                                        Cor
+
+                                    </label>
+
+                                    <select name="cores"
+                                            class="form-select select-cor">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Cor))
+                                        {
+
+                                            <option value="@item.Cor"
+                                                    selected>
+
+                                                @item.Cor
+
+                                            </option>
+
+                                        }
+                                        else
+                                        {
+
+                                            <option value="">
+
+                                                Selecione
+
+                                            </option>
+
+                                        }
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- TAMANHO -->
+
+                                <div class="col-md-2 mb-3">
+
+                                    <label class="form-label">
+
+                                        Tamanho
+
+                                    </label>
+
+                                    <select name="tamanhos"
+                                            class="form-select select-tamanho">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Tamanho))
+                                        {
+
+                                            <option value="@item.Tamanho"
+                                                    selected>
+
+                                                @item.Tamanho
+
+                                            </option>
+
+                                        }
+                                        else
+                                        {
+
+                                            <option value="">
+
+                                                Selecione
+
+                                            </option>
+
+                                        }
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- QUANTIDADE -->
+
+                                <div class="col-md-2 mb-3">
+
+                                    <label class="form-label">
+
+                                        Quantidade
+
+                                    </label>
+
+                                    <input type="number"
+                                           name="quantidades"
+                                           class="form-control"
+                                           min="1"
+                                           value="@item.Quantidade" />
+
+                                </div>
+
+
+                                <!-- REMOVER -->
+
+                                <div class="col-md-2 mb-3">
+
+                                    <button type="button"
+                                            class="btn btn-outline-danger w-100 btn-remover">
+
+                                        <i class="bi bi-trash"></i>
+
+                                        Remover
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    }
+                    else
+                    {
+
+                        <!-- ================================= -->
+                        <!-- PRIMEIRA LINHA -->
+                        <!-- ================================= -->
+
+                        <div class="row produto-item align-items-end mb-3">
+
+
+                            <!-- PRODUTO -->
+
+                            <div class="col-md-4 mb-3">
+
+                                <label class="form-label">
+
+                                    Produto
+
+                                </label>
+
+                                <select name="produtoIds"
+                                        class="form-select select-produto">
+
+                                    <option value="">
+
+                                        Selecione um produto
+
+                                    </option>
+
+                                    @foreach (var produto in ViewBag.Produtos)
+                                    {
+
+                                        <option value="@produto.Value">
+
+                                            @produto.Text
+
+                                        </option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- COR -->
+
+                            <div class="col-md-2 mb-3">
+
+                                <label class="form-label">
+
+                                    Cor
+
+                                </label>
+
+                                <select name="cores"
+                                        class="form-select select-cor"
+                                        disabled>
+
+                                    <option value="">
+
+                                        Selecione
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- TAMANHO -->
+
+                            <div class="col-md-2 mb-3">
+
+                                <label class="form-label">
+
+                                    Tamanho
+
+                                </label>
+
+                                <select name="tamanhos"
+                                        class="form-select select-tamanho"
+                                        disabled>
+
+                                    <option value="">
+
+                                        Selecione
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- QUANTIDADE -->
+
+                            <div class="col-md-2 mb-3">
+
+                                <label class="form-label">
+
+                                    Quantidade
+
+                                </label>
+
+                                <input type="number"
+                                       name="quantidades"
+                                       class="form-control"
+                                       min="1"
+                                       value="1" />
+
+                            </div>
+
+
+                            <!-- REMOVER -->
+
+                            <div class="col-md-2 mb-3">
+
+                                <button type="button"
+                                        class="btn btn-outline-danger w-100 btn-remover">
+
+                                    <i class="bi bi-trash"></i>
+
+                                    Remover
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- BOTÕES -->
+        <!-- ========================================= -->
+
+        <div class="d-flex gap-2 mb-5">
+
+            <button type="submit"
+                    class="btn btn-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                Salvar Alterações
+
+            </button>
+
+
+            <a asp-action="Details"
+               asp-route-id="@Model.Id"
+               class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+            // =========================================
+            // ELEMENTOS
+            // =========================================
+
+            const listaProdutos =
+                document.getElementById("listaProdutos");
+
+            const btnAdicionarProduto =
+                document.getElementById("btnAdicionarProduto");
+
+
+            // =========================================
+            // CARREGAR VARIAÇÕES
+            // =========================================
+
+            async function carregarVariacoes(
+                item,
+                corSelecionada = "",
+                tamanhoSelecionado = "")
+            {
+
+                const selectProduto =
+                    item.querySelector(".select-produto");
+
+                const selectCor =
+                    item.querySelector(".select-cor");
+
+                const selectTamanho =
+                    item.querySelector(".select-tamanho");
+
+
+                const produtoId =
+                    selectProduto.value;
+
+
+                if (!produtoId)
+                {
+
+                    selectCor.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectTamanho.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectCor.disabled = true;
+
+                    selectTamanho.disabled = true;
+
+                    return;
+
+                }
+
+
+                try
+                {
+
+                    const resposta =
+                        await fetch(
+                            `/Combos/VariacoesProduto?produtoId=${produtoId}`
+                        );
+
+
+                    if (!resposta.ok)
+                    {
+
+                        throw new Error(
+                            "Erro ao carregar variações."
+                        );
+
+                    }
+
+
+                    const dados =
+                        await resposta.json();
+
+
+                    // =================================
+                    // CORES
+                    // =================================
+
+                    selectCor.innerHTML =
+                        '<option value="">Selecione</option>';
+
+
+                    dados.cores.forEach(
+                        function (cor)
+                        {
+
+                            const option =
+                                document.createElement("option");
+
+                            option.value = cor;
+
+                            option.textContent = cor;
+
+
+                            if (cor === corSelecionada)
+                            {
+
+                                option.selected = true;
+
+                            }
+
+
+                            selectCor.appendChild(option);
+
+                        }
+                    );
+
+
+                    // =================================
+                    // TAMANHOS
+                    // =================================
+
+                    selectTamanho.innerHTML =
+                        '<option value="">Selecione</option>';
+
+
+                    dados.tamanhos.forEach(
+                        function (tamanho)
+                        {
+
+                            const option =
+                                document.createElement("option");
+
+                            option.value = tamanho;
+
+                            option.textContent = tamanho;
+
+
+                            if (tamanho === tamanhoSelecionado)
+                            {
+
+                                option.selected = true;
+
+                            }
+
+
+                            selectTamanho.appendChild(option);
+
+                        }
+                    );
+
+
+                    selectCor.disabled =
+                        dados.cores.length === 0;
+
+                    selectTamanho.disabled =
+                        dados.tamanhos.length === 0;
+
+                }
+                catch (erro)
+                {
+
+                    console.error(erro);
+
+                    alert(
+                        "Não foi possível carregar as variações do produto."
+                    );
+
+                }
+
+            }
+
+
+            // =========================================
+            // CARREGAR VARIAÇÕES DOS ITENS EXISTENTES
+            // =========================================
+
+            document
+                .querySelectorAll(".produto-item")
+                .forEach(
+                    function (item)
+                    {
+
+                        const selectCor =
+                            item.querySelector(".select-cor");
+
+                        const selectTamanho =
+                            item.querySelector(".select-tamanho");
+
+
+                        const corAtual =
+                            selectCor.value;
+
+                        const tamanhoAtual =
+                            selectTamanho.value;
+
+
+                        carregarVariacoes(
+                            item,
+                            corAtual,
+                            tamanhoAtual
+                        );
+
+                    }
+                );
+
+
+            // =========================================
+            // QUANDO ALTERAR O PRODUTO
+            // =========================================
+
+            listaProdutos.addEventListener(
+                "change",
+                function (event)
+                {
+
+                    if (
+                        event.target.classList.contains(
+                            "select-produto"
+                        )
+                    )
+                    {
+
+                        const item =
+                            event.target.closest(
+                                ".produto-item"
+                            );
+
+
+                        carregarVariacoes(item);
+
+                    }
+
+                }
+            );
+
+
+            // =========================================
+            // ADICIONAR NOVO PRODUTO
+            // =========================================
+
+            btnAdicionarProduto.addEventListener(
+                "click",
+                function ()
+                {
+
+                    const primeiroItem =
+                        document.querySelector(
+                            ".produto-item"
+                        );
+
+
+                    const novoItem =
+                        primeiroItem.cloneNode(true);
+
+
+                    // Produto
+
+                    const selectProduto =
+                        novoItem.querySelector(
+                            ".select-produto"
+                        );
+
+                    selectProduto.value = "";
+
+
+                    // Cor
+
+                    const selectCor =
+                        novoItem.querySelector(
+                            ".select-cor"
+                        );
+
+                    selectCor.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectCor.value = "";
+
+                    selectCor.disabled = true;
+
+
+                    // Tamanho
+
+                    const selectTamanho =
+                        novoItem.querySelector(
+                            ".select-tamanho"
+                        );
+
+                    selectTamanho.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectTamanho.value = "";
+
+                    selectTamanho.disabled = true;
+
+
+                    // Quantidade
+
+                    const quantidade =
+                        novoItem.querySelector(
+                            'input[name="quantidades"]'
+                        );
+
+                    quantidade.value = 1;
+
+
+                    listaProdutos.appendChild(
+                        novoItem
+                    );
+
+                }
+            );
+
+
+            // =========================================
+            // REMOVER PRODUTO
+            // =========================================
+
+            listaProdutos.addEventListener(
+                "click",
+                function (event)
+                {
+
+                    const botaoRemover =
+                        event.target.closest(
+                            ".btn-remover"
+                        );
+
+
+                    if (!botaoRemover)
+                    {
+                        return;
+                    }
+
+
+                    const itens =
+                        document.querySelectorAll(
+                            ".produto-item"
+                        );
+
+
+                    if (itens.length === 1)
+                    {
+
+                        alert(
+                            "O combo deve possuir pelo menos um produto."
+                        );
+
+                        return;
+
+                    }
+
+
+                    botaoRemover
+                        .closest(".produto-item")
+                        .remove();
+
+                }
+            );
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,749 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Estoque>
+
+@{
+    ViewData["Title"] = "Relatório de Estoque";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-box-seam"></i>
+
+                Relatório de Estoque
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Consulte a situação atual do estoque da loja.
+
+            </p>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <!-- EXCEL -->
+
+            <a asp-action="ExportarEstoqueExcel"
+               asp-route-pesquisa="@ViewBag.Pesquisa"
+               asp-route-produtoId="@ViewBag.ProdutoId"
+               asp-route-marcaId="@ViewBag.MarcaId"
+               asp-route-tamanho="@ViewBag.Tamanho"
+               asp-route-cor="@ViewBag.Cor"
+               asp-route-situacao="@ViewBag.Situacao"
+               class="btn btn-success">
+
+                <i class="bi bi-file-earmark-excel me-1"></i>
+
+                Exportar Excel
+
+            </a>
+
+
+            <!-- PDF -->
+
+            <a asp-action="ExportarEstoquePdf"
+               asp-route-pesquisa="@ViewBag.Pesquisa"
+               asp-route-produtoId="@ViewBag.ProdutoId"
+               asp-route-marcaId="@ViewBag.MarcaId"
+               asp-route-tamanho="@ViewBag.Tamanho"
+               asp-route-cor="@ViewBag.Cor"
+               asp-route-situacao="@ViewBag.Situacao"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf me-1"></i>
+
+                Exportar PDF
+
+            </a>
+
+
+            <!-- VOLTAR -->
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FILTROS -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-funnel"></i>
+
+                Filtros
+
+            </h5>
+
+
+            <form asp-action="Estoque" method="get">
+
+                <div class="row g-3">
+
+
+                    <!-- PESQUISA -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Pesquisa
+                        </label>
+
+                        <input type="text"
+                               name="pesquisa"
+                               value="@ViewBag.Pesquisa"
+                               class="form-control"
+                               placeholder="Produto, marca, tamanho ou cor..." />
+
+                    </div>
+
+
+                    <!-- PRODUTO -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Produto
+                        </label>
+
+                        <select name="produtoId"
+                                class="form-select">
+
+                            <option value="">
+                                Todos os produtos
+                            </option>
+
+                            @foreach (var produto in ViewBag.Produtos)
+                            {
+                                if (ViewBag.ProdutoId == produto.Id)
+                                {
+                                    <option value="@produto.Id" selected>
+                                        @produto.Nome
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@produto.Id">
+                                        @produto.Nome
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MARCA -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Marca
+                        </label>
+
+                        <select name="marcaId"
+                                class="form-select">
+
+                            <option value="">
+                                Todas as marcas
+                            </option>
+
+                            @foreach (var marca in ViewBag.Marcas)
+                            {
+                                if (ViewBag.MarcaId == marca.Id)
+                                {
+                                    <option value="@marca.Id" selected>
+                                        @marca.Nome
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@marca.Id">
+                                        @marca.Nome
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TAMANHO -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Tamanho
+                        </label>
+
+                        <select name="tamanho"
+                                class="form-select">
+
+                            @if (string.IsNullOrEmpty(ViewBag.Tamanho))
+                            {
+                                <option value="" selected>
+                                    Todos
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    Todos
+                                </option>
+                            }
+
+                            @foreach (var tamanhoItem in ViewBag.Tamanhos)
+                            {
+                                if (ViewBag.Tamanho == tamanhoItem)
+                                {
+                                    <option value="@tamanhoItem" selected>
+                                        @tamanhoItem
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@tamanhoItem">
+                                        @tamanhoItem
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- COR -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Cor
+                        </label>
+
+                        <select name="cor"
+                                class="form-select">
+
+                            @if (string.IsNullOrEmpty(ViewBag.Cor))
+                            {
+                                <option value="" selected>
+                                    Todas
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    Todas
+                                </option>
+                            }
+
+                            @foreach (var corItem in ViewBag.Cores)
+                            {
+                                if (ViewBag.Cor == corItem)
+                                {
+                                    <option value="@corItem" selected>
+                                        @corItem
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@corItem">
+                                        @corItem
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SITUAÇÃO -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Situação
+                        </label>
+
+                        <select name="situacao"
+                                class="form-select">
+
+                            @if (string.IsNullOrEmpty(ViewBag.Situacao))
+                            {
+                                <option value="" selected>
+                                    Todas
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    Todas
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Situacao == "EmEstoque")
+                            {
+                                <option value="EmEstoque" selected>
+                                    Em estoque
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="EmEstoque">
+                                    Em estoque
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Situacao == "EstoqueBaixo")
+                            {
+                                <option value="EstoqueBaixo" selected>
+                                    Estoque baixo
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="EstoqueBaixo">
+                                    Estoque baixo
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Situacao == "Esgotado")
+                            {
+                                <option value="Esgotado" selected>
+                                    Esgotado
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Esgotado">
+                                    Esgotado
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+
+                    <div class="col-md-3 d-flex align-items-end">
+
+                        <div>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-search"></i>
+
+                                Filtrar
+
+                            </button>
+
+
+                            <a asp-action="Estoque"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-x-circle"></i>
+
+                                Limpar
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INDICADORES -->
+    <!-- ========================================= -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- PRODUTOS -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Produtos
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+                        @ViewBag.TotalProdutos
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VARIAÇÕES -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Variações
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+                        @ViewBag.TotalVariacoes
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIDADES -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Unidades
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+                        @ViewBag.TotalUnidades
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTOQUE BAIXO -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Estoque baixo
+                    </small>
+
+                    <h3 class="fw-bold text-warning mt-2">
+                        @ViewBag.EstoqueBaixo
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESGOTADOS -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Esgotados
+                    </small>
+
+                    <h3 class="fw-bold text-danger mt-2">
+                        @ViewBag.Esgotados
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VALOR -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Valor do estoque
+                    </small>
+
+                    <h5 class="fw-bold text-primary mt-2">
+
+                        @(((decimal)ViewBag.ValorEstoque).ToString("C"))
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- TABELA -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    Marca
+                                </th>
+
+                                <th>
+                                    Tamanho
+                                </th>
+
+                                <th>
+                                    Cor
+                                </th>
+
+                                <th>
+                                    Quantidade
+                                </th>
+
+                                <th>
+                                    Custo médio
+                                </th>
+
+                                <th>
+                                    Valor estoque
+                                </th>
+
+                                <th>
+                                    Situação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                decimal valorItem =
+                                item.Quantidade *
+                                item.CustoMedio;
+
+
+                                <tr>
+
+                                    <!-- PRODUTO -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            @(item.Produto?.Nome
+                                                                                ?? "Produto não encontrado")
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- MARCA -->
+
+                                    <td>
+
+                                        @(item.Marca?.Nome
+                                                                        ?? "Marca não encontrada")
+
+                            </td>
+
+
+                                    <!-- TAMANHO -->
+
+                                    <td>
+
+                                        <span class="badge bg-primary">
+
+                                            @item.Tamanho
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- COR -->
+
+                                    <td>
+                                        @item.Cor
+                                    </td>
+
+
+                                    <!-- QUANTIDADE -->
+
+                                    <td>
+
+                                        <strong>
+                                            @item.Quantidade
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- CUSTO -->
+
+                                    <td>
+
+                                        @item.CustoMedio.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- VALOR -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            @valorItem.ToString("C")
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- SITUAÇÃO -->
+
+                                    <td>
+
+                                @if (item.Quantidade == 0)
+                                        {
+                                            <span class="badge bg-danger">
+
+                                                Esgotado
+
+                                            </span>
+                                        }
+                                        else if (item.Quantidade <= 5)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+
+                                                Estoque baixo
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+
+                                                Em estoque
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        Nenhum item encontrado
+                    </h5>
+
+                    <p class="text-muted">
+                        Não existem itens para os filtros selecionados.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

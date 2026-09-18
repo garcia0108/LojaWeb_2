@@ -1,0 +1,173 @@
+﻿@model LojaWeb_2.Models.UsuarioAlterarSenhaViewModel
+
+@{
+    ViewData["Title"] = "Alterar Senha";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+
+                <i class="bi bi-key"></i>
+
+                Alterar Senha
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Defina uma nova senha para o usuário.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-action="AlterarSenha"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id"
+                       type="hidden" />
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+                <!-- USUÁRIO -->
+
+                <div class="mb-4">
+
+                    <label asp-for="UserName"
+                           class="form-label fw-semibold">
+
+                        Usuário
+
+                    </label>
+
+                    <input asp-for="UserName"
+                           class="form-control"
+                           readonly />
+
+                </div>
+
+
+                <!-- E-MAIL -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Email"
+                           class="form-label fw-semibold">
+
+                        E-mail
+
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           readonly />
+
+                </div>
+
+
+                <!-- NOVA SENHA -->
+
+                <div class="mb-4">
+
+                    <label asp-for="NovaSenha"
+                           class="form-label fw-semibold">
+
+                        Nova senha
+
+                    </label>
+
+                    <input asp-for="NovaSenha"
+                           class="form-control"
+                           placeholder="Digite a nova senha"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="NovaSenha"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- CONFIRMAR SENHA -->
+
+                <div class="mb-4">
+
+                    <label asp-for="ConfirmarSenha"
+                           class="form-label fw-semibold">
+
+                        Confirmar nova senha
+
+                    </label>
+
+                    <input asp-for="ConfirmarSenha"
+                           class="form-control"
+                           placeholder="Digite novamente a nova senha"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="ConfirmarSenha"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-key"></i>
+
+                        Alterar Senha
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

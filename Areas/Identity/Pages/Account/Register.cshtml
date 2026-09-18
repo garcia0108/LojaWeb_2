@@ -1,0 +1,199 @@
+﻿@page
+@model LojaWeb_2.Areas.Identity.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Criar conta";
+}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <div class="text-center">
+
+            <div class="login-logo">
+                <i class="bi bi-shop"></i>
+            </div>
+
+            <h1 class="login-title">
+                Criar conta
+            </h1>
+
+            <p class="login-subtitle">
+                Faça seu cadastro na LojaWeb
+            </p>
+
+            <p class="text-muted">
+                Preencha os dados abaixo para começar.
+            </p>
+
+        </div>
+
+        <form method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <!-- NOME DE USUÁRIO -->
+
+            <div class="mb-3">
+
+                <label asp-for="Input.UserName"
+                       class="form-label fw-semibold">
+                    Nome de usuário
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-person"></i>
+                    </span>
+
+                    <input asp-for="Input.UserName"
+                           class="form-control"
+                           autocomplete="username"
+                           placeholder="Digite seu nome de usuário" />
+
+                </div>
+
+                <span asp-validation-for="Input.UserName"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <!-- E-MAIL -->
+
+            <div class="mb-3">
+
+                <label asp-for="Input.Email"
+                       class="form-label fw-semibold">
+                    E-mail
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+
+                    <input asp-for="Input.Email"
+                           class="form-control"
+                           autocomplete="username"
+                           placeholder="seu@email.com" />
+
+                </div>
+
+                <span asp-validation-for="Input.Email"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- SENHA -->
+
+            <div class="mb-3">
+
+                <label asp-for="Input.Password"
+                       class="form-label fw-semibold">
+                    Senha
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </span>
+
+                    <input asp-for="Input.Password"
+                           class="form-control"
+                           autocomplete="new-password"
+                           placeholder="Digite sua senha" />
+
+                </div>
+
+                <span asp-validation-for="Input.Password"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- CONFIRMAR SENHA -->
+
+            <div class="mb-4">
+
+                <label asp-for="Input.ConfirmPassword"
+                       class="form-label fw-semibold">
+                    Confirmar senha
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-lock-fill"></i>
+                    </span>
+
+                    <input asp-for="Input.ConfirmPassword"
+                           class="form-control"
+                           autocomplete="new-password"
+                           placeholder="Digite a senha novamente" />
+
+                </div>
+
+                <span asp-validation-for="Input.ConfirmPassword"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- BOTÃO -->
+
+            <div class="d-grid">
+
+                <button type="submit"
+                        class="btn btn-primary login-button">
+
+                    <i class="bi bi-person-plus me-2"></i>
+
+                    Criar conta
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- LOGIN -->
+
+        <div class="text-center mt-4">
+
+            <span class="text-muted">
+                Já possui uma conta?
+            </span>
+
+            <br />
+
+            <a asp-page="/Account/Login"
+               class="login-register-link">
+
+                Entrar na LojaWeb
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

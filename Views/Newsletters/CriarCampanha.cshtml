@@ -1,0 +1,117 @@
+﻿@model LojaWeb_2.Models.CampanhaNewsletter
+
+@{
+    ViewData["Title"] = "Criar Campanha";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="mb-1">
+                Nova Campanha
+            </h2>
+
+            <p class="text-muted mb-0">
+                Crie uma nova mensagem para enviar aos inscritos da newsletter.
+            </p>
+        </div>
+
+        <a asp-action="Campanhas"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form asp-action="CriarCampanha"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+
+                <!-- ASSUNTO -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Assunto"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Assunto"
+                           class="form-control"
+                           placeholder="Ex: Nova coleção chegou!" />
+
+                    <span asp-validation-for="Assunto"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- MENSAGEM -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Mensagem"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Mensagem"
+                              class="form-control"
+                              rows="10"
+                              placeholder="Escreva a mensagem que será enviada aos inscritos...">
+                    </textarea>
+
+                    <span asp-validation-for="Mensagem"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-save"></i>
+                        Salvar campanha
+
+                    </button>
+
+                    <a asp-action="Campanhas"
+                       class="btn btn-secondary">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

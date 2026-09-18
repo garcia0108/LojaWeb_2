@@ -1,0 +1,364 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Venda>
+
+@{
+    ViewData["Title"] = "Meus Pedidos";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- ================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                <i class="bi bi-box-seam me-2"></i>
+
+                Meus Pedidos
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Acompanhe todos os seus pedidos realizados.
+
+            </p>
+
+        </div>
+
+        <a asp-controller="Loja"
+           asp-action="Index"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-bag me-2"></i>
+
+            Continuar comprando
+
+        </a>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- MENSAGEM DE ERRO -->
+    <!-- ================================= -->
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger shadow-sm">
+
+            <i class="bi bi-exclamation-circle me-2"></i>
+
+            @TempData["Erro"]
+
+        </div>
+    }
+
+
+    <!-- ================================= -->
+    <!-- LISTA DE PEDIDOS -->
+    <!-- ================================= -->
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+
+            @foreach (var pedido in Model)
+            {
+                <div class="col-12">
+
+                    <div class="card shadow-sm border-0 pedido-card">
+
+                        <div class="card-body p-4">
+
+                            <div class="row align-items-center g-3">
+
+
+                                <!-- ================= -->
+                                <!-- PEDIDO -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-3 col-md-6">
+
+                                    <small class="text-muted">
+
+                                        Número do pedido
+
+                                    </small>
+
+                                    <h5 class="fw-bold mb-0">
+
+                                        <i class="bi bi-receipt me-1"></i>
+
+                                        #@pedido.Id
+
+                                    </h5>
+
+                                </div>
+
+
+                                <!-- ================= -->
+                                <!-- DATA -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-2 col-md-6">
+
+                                    <small class="text-muted">
+
+                                        Data do pedido
+
+                                    </small>
+
+                                    <div class="fw-semibold">
+
+                                        <i class="bi bi-calendar3 me-1"></i>
+
+                                        @pedido.DataVenda.ToString("dd/MM/yyyy")
+
+                                    </div>
+
+                                    <small class="text-muted">
+
+                                        @pedido.DataVenda.ToString("HH:mm")
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- ================= -->
+                                <!-- PAGAMENTO -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-2 col-md-6">
+
+                                    <small class="text-muted">
+
+                                        Pagamento
+
+                                    </small>
+
+                                    <div class="fw-semibold">
+
+                                        <i class="bi bi-credit-card me-1"></i>
+
+                                        @pedido.FormaPagamento
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ================= -->
+                                <!-- STATUS -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-2 col-md-6">
+
+                                    <small class="text-muted d-block mb-1">
+
+                                        Status
+
+                                    </small>
+
+                                    @if (pedido.Status == "Pedido realizado")
+                                    {
+                                        <span class="badge bg-warning text-dark px-3 py-2">
+
+                                            <i class="bi bi-receipt me-1"></i>
+
+                                            Pedido realizado
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Pagamento aprovado")
+                                    {
+                                        <span class="badge bg-primary px-3 py-2">
+
+                                            <i class="bi bi-credit-card me-1"></i>
+
+                                            Pagamento aprovado
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Em preparação")
+                                    {
+                                        <span class="badge bg-purple px-3 py-2">
+
+                                            <i class="bi bi-box-seam me-1"></i>
+
+                                            Em preparação
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Enviado")
+                                    {
+                                        <span class="badge bg-info text-dark px-3 py-2">
+
+                                            <i class="bi bi-truck me-1"></i>
+
+                                            Enviado
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Entregue")
+                                    {
+                                        <span class="badge bg-success px-3 py-2">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Entregue
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Cancelado" ||
+                                    pedido.Status == "Cancelada")
+                                    {
+                                        <span class="badge bg-danger px-3 py-2">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            Cancelado
+
+                                        </span>
+                                    }
+                                    else if (pedido.Status == "Concluída")
+                                    {
+                                        <!-- Compatibilidade com pedidos antigos -->
+
+                                        <span class="badge bg-success px-3 py-2">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Concluída
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary px-3 py-2">
+
+                                            @pedido.Status
+
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <!-- ================= -->
+                                <!-- TOTAL -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-1 col-md-6">
+
+                                    <small class="text-muted">
+
+                                        Total
+
+                                    </small>
+
+                                    <div class="fw-bold text-success">
+
+                                        @pedido.Total.ToString("C")
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ================= -->
+                                <!-- AÇÕES -->
+                                <!-- ================= -->
+
+                                <div class="col-lg-2 text-lg-end">
+
+                                    <a asp-action="Pedido"
+                                       asp-route-id="@pedido.Id"
+                                       class="btn btn-primary">
+
+                                        <i class="bi bi-eye me-2"></i>
+
+                                        Ver detalhes
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <!-- ================================= -->
+        <!-- SEM PEDIDOS -->
+        <!-- ================================= -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <div class="mb-3">
+
+                    <i class="bi bi-bag-x display-3 text-muted"></i>
+
+                </div>
+
+                <h4 class="fw-bold">
+
+                    Você ainda não realizou nenhum pedido.
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Explore nossa loja e encontre seus produtos favoritos.
+
+                </p>
+
+                <a asp-controller="Loja"
+                   asp-action="Index"
+                   class="btn btn-success px-4">
+
+                    <i class="bi bi-shop me-2"></i>
+
+                    Começar a comprar
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+<style>
+
+    .bg-purple {
+        background-color: #6f42c1 !important;
+        color: white !important;
+    }
+
+    .pedido-card {
+        transition: all 0.2s ease;
+        border-radius: 14px;
+    }
+
+        .pedido-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.12) !important;
+        }
+
+</style>

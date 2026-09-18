@@ -1,0 +1,394 @@
+﻿@model LojaWeb_2.Models.Venda
+
+@{
+    ViewData["Title"] = "Alterar Status do Pedido";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- ================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-arrow-repeat me-2"></i>
+
+                Alterar Status
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Atualize o andamento do pedido #@Model.Id.
+
+            </p>
+
+        </div>
+
+        <a asp-action="Details"
+           asp-route-id="@Model.Id"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- INFORMAÇÕES DO PEDIDO -->
+    <!-- ================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="row g-4">
+
+                <!-- PEDIDO -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+
+                        Número do pedido
+
+                    </small>
+
+                    <div class="fw-bold fs-5">
+
+                        #@Model.Id
+
+                    </div>
+
+                </div>
+
+
+                <!-- CLIENTE -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+
+                        Cliente
+
+                    </small>
+
+                    <div class="fw-semibold">
+
+                        @(Model.Cliente?.Nome ?? "Cliente não encontrado")
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATA -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+
+                        Data da venda
+
+                    </small>
+
+                    <div class="fw-semibold">
+
+                        @Model.DataVenda.ToString("dd/MM/yyyy HH:mm")
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+
+                        Total
+
+                    </small>
+
+                    <div class="fw-bold fs-5 text-success">
+
+                        @Model.Total.ToString("C")
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- FORMULÁRIO -->
+    <!-- ================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h5 class="fw-bold mb-4">
+
+                <i class="bi bi-truck me-2"></i>
+
+                Andamento do pedido
+
+            </h5>
+
+
+            <form asp-action="AlterarStatus"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="id"
+                       value="@Model.Id" />
+
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Selecione o novo status
+
+                    </label>
+
+
+                    <select name="status"
+                            class="form-select form-select-lg">
+
+                        <option value="Pedido realizado"
+                                selected="@(Model.Status == "Pedido realizado")">
+
+                            🟡 Pedido realizado
+
+                        </option>
+
+
+                        <option value="Pagamento aprovado"
+                                selected="@(Model.Status == "Pagamento aprovado")">
+
+                            💳 Pagamento aprovado
+
+                        </option>
+
+
+                        <option value="Em preparação"
+                                selected="@(Model.Status == "Em preparação")">
+
+                            📦 Em preparação
+
+                        </option>
+
+
+                        <option value="Enviado"
+                                selected="@(Model.Status == "Enviado")">
+
+                            🚚 Enviado
+
+                        </option>
+
+
+                        <option value="Entregue"
+                                selected="@(Model.Status == "Entregue")">
+
+                            🟢 Entregue
+
+                        </option>
+
+
+                        <option value="Cancelado"
+                                selected="@(Model.Status == "Cancelado")">
+
+                            🔴 Cancelado
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- ================================= -->
+                <!-- INFORMAÇÕES DE ENVIO -->
+                <!-- ================================= -->
+
+                <div id="informacoesEnvio"
+                     class="card bg-light border-0 mt-4 d-none">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-3">
+
+                            <i class="bi bi-truck me-2"></i>
+
+                            Informações de envio
+
+                        </h6>
+
+
+                        <!-- TRANSPORTADORA -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Transportadora
+
+                            </label>
+
+                            <input type="text"
+                                   name="transportadora"
+                                   id="transportadora"
+                                   value="@Model.Transportadora"
+                                   class="form-control"
+                                   placeholder="Ex: Correios" />
+
+                        </div>
+
+
+                        <!-- CÓDIGO DE RASTREAMENTO -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Código de rastreamento
+
+                            </label>
+
+                            <input type="text"
+                                   name="codigoRastreamento"
+                                   id="codigoRastreamento"
+                                   value="@Model.CodigoRastreamento"
+                                   class="form-control"
+                                   placeholder="Ex: AB123456789BR" />
+
+                        </div>
+
+
+                        <!-- DATA DE ENVIO -->
+
+                        <div>
+
+                            <label class="form-label fw-semibold">
+
+                                Data de envio
+
+                            </label>
+
+                            <input type="datetime-local"
+                                   name="dataEnvio"
+                                   id="dataEnvio"
+                                   value="@(Model.DataEnvio?.ToString("yyyy-MM-ddTHH:mm"))"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS ATUAL -->
+
+                <div class="alert alert-light border mb-4">
+
+                    <i class="bi bi-info-circle me-2"></i>
+
+                    Status atual:
+
+                    <strong>
+
+                        @Model.Status
+
+                    </strong>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary px-4">
+
+                        <i class="bi bi-save me-2"></i>
+
+                        Salvar status
+
+                    </button>
+
+
+                    <a asp-action="Details"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-secondary">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const status =
+            document.querySelector('select[name="status"]');
+
+        const informacoesEnvio =
+            document.getElementById("informacoesEnvio");
+
+
+        function atualizarInformacoesEnvio() {
+
+            if (status.value === "Enviado") {
+
+                informacoesEnvio.classList.remove("d-none");
+
+            }
+            else {
+
+                informacoesEnvio.classList.add("d-none");
+
+            }
+
+        }
+
+
+        atualizarInformacoesEnvio();
+
+        status.addEventListener(
+            "change",
+            atualizarInformacoesEnvio
+        );
+
+    });
+
+</script>

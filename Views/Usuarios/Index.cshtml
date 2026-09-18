@@ -1,0 +1,520 @@
+﻿@model IEnumerable<LojaWeb_2.Models.UsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Usuários";
+}
+
+<div class="usuarios-page">
+
+    <!-- CABEÇALHO -->
+
+    <div class="usuarios-header">
+
+        <div>
+            <h2 class="usuarios-title">
+                <i class="bi bi-people"></i>
+                Usuários
+            </h2>
+
+            <p class="usuarios-subtitle">
+                Gerencie os usuários e seus perfis de acesso.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-success usuarios-new-button">
+
+            <i class="bi bi-person-plus"></i>
+
+            Novo Usuário
+
+        </a>
+
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div id="mensagemSucesso"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <strong>@TempData["Sucesso"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div id="mensagemErro"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            <strong>@TempData["Erro"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+    <!-- DESKTOP -->
+
+    <div class="usuarios-card usuarios-desktop">
+
+        <div class="table-responsive">
+
+            <table class="table usuarios-table align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Usuário</th>
+
+                        <th>E-mail</th>
+
+                        <th>Perfil</th>
+
+                        <th>Status</th>
+
+                        <th class="text-end">
+                            Ações
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
+
+                            <!-- USUÁRIO -->
+
+                            <td>
+
+                                <div class="usuario-info">
+
+                                    <div class="usuario-avatar">
+
+                                        <i class="bi bi-person"></i>
+
+                                    </div>
+
+                                    <strong>
+                                        @usuario.UserName
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- E-MAIL -->
+
+                            <td class="usuario-email">
+
+                                @usuario.Email
+
+                            </td>
+
+
+                            <!-- PERFIL -->
+
+                            <td>
+
+                                @if (usuario.Perfil == "Administrador")
+                                {
+                                    <span class="usuario-badge perfil-admin">
+
+                                        <i class="bi bi-shield-check"></i>
+
+                                        Administrador
+
+                                    </span>
+                                }
+                                else if (usuario.Perfil == "Funcionário")
+                                {
+                                    <span class="usuario-badge perfil-funcionario">
+
+                                        <i class="bi bi-person-badge"></i>
+
+                                        Funcionário
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="usuario-badge perfil-sem">
+
+                                        @usuario.Perfil
+
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <form asp-action="AtivarInativar"
+                                      asp-route-id="@usuario.Id"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    @if (usuario.Ativo)
+                                    {
+                                        <button type="submit"
+                                                class="usuario-action deactivate"
+                                                title="Inativar usuário">
+
+                                            <i class="bi bi-person-dash"></i>
+
+                                            <span>Inativar</span>
+
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit"
+                                                class="usuario-action activate"
+                                                title="Ativar usuário">
+
+                                            <i class="bi bi-person-check"></i>
+
+                                            <span>Ativar</span>
+
+                                        </button>
+                                    }
+
+                                </form>
+
+                            </td>
+
+
+                            <!-- AÇÕES -->
+
+                            <td class="text-end">
+
+                                <div class="usuario-actions">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@usuario.Id"
+                                       class="usuario-action edit"
+                                       title="Editar usuário">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                        <span>Editar</span>
+
+                                    </a>
+
+
+                                    <a asp-action="AlterarSenha"
+                                       asp-route-id="@usuario.Id"
+                                       class="usuario-action password"
+                                       title="Alterar senha">
+
+                                        <i class="bi bi-key"></i>
+
+                                        <span>Senha</span>
+
+                                    </a>
+
+
+                                    <form asp-controller="Usuarios"
+                                          asp-action="AtivarInativar"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@usuario.Id" />
+
+                                        @if (usuario.Ativo)
+                                        {
+                                            <button type="submit"
+                                                    class="usuario-action deactivate"
+                                                    title="Inativar usuário">
+
+                                                <i class="bi bi-person-dash"></i>
+
+                                                <span>Inativar</span>
+
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit"
+                                                    class="usuario-action activate"
+                                                    title="Ativar usuário">
+
+                                                <i class="bi bi-person-check"></i>
+
+                                                <span>Ativar</span>
+
+                                            </button>
+                                        }
+
+                                    </form>
+
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@usuario.Id"
+                                       class="usuario-action delete"
+                                       title="Excluir usuário">
+
+                                        <i class="bi bi-trash"></i>
+
+                                        <span>Excluir</span>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- CELULAR -->
+
+    <div class="usuarios-mobile">
+
+        @foreach (var usuario in Model)
+        {
+            <div class="usuario-mobile-card">
+
+                <!-- TOPO -->
+
+                <div class="usuario-mobile-header">
+
+                    <div class="usuario-info">
+
+                        <div class="usuario-avatar">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                @usuario.UserName
+                            </strong>
+
+                            <div class="usuario-mobile-email">
+                                @usuario.Email
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMAÇÕES -->
+
+                <div class="usuario-mobile-info">
+
+                    <div>
+
+                        <small>Perfil</small>
+
+                        @if (usuario.Perfil == "Administrador")
+                        {
+                            <span class="usuario-badge perfil-admin">
+
+                                <i class="bi bi-shield-check"></i>
+
+                                Administrador
+
+                            </span>
+                        }
+                        else if (usuario.Perfil == "Funcionário")
+                        {
+                            <span class="usuario-badge perfil-funcionario">
+
+                                <i class="bi bi-person-badge"></i>
+
+                                Funcionário
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="usuario-badge perfil-sem">
+                                @usuario.Perfil
+                            </span>
+                        }
+
+                    </div>
+
+
+                    <div>
+
+                        <small>Status</small>
+
+                        <form asp-controller="Usuarios"
+                              asp-action="AtivarInativar"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@usuario.Id" />
+
+                            @if (usuario.Ativo)
+                            {
+                                <button type="submit"
+                                        class="usuario-action deactivate w-100">
+
+                                    <i class="bi bi-person-dash"></i>
+
+                                    Inativar
+
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit"
+                                        class="usuario-action activate w-100">
+
+                                    <i class="bi bi-person-check"></i>
+
+                                    Ativar
+
+                                </button>
+                            }
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AÇÕES -->
+
+                <div class="usuario-mobile-actions">
+
+                    <a asp-action="Edit"
+                       asp-route-id="@usuario.Id"
+                       class="usuario-action edit">
+
+                        <i class="bi bi-pencil"></i>
+
+                        Editar
+
+                    </a>
+
+
+                    <a asp-action="AlterarSenha"
+                       asp-route-id="@usuario.Id"
+                       class="usuario-action password">
+
+                        <i class="bi bi-key"></i>
+
+                        Senha
+
+                    </a>
+
+
+                    @if (usuario.Ativo)
+                    {
+                        <a asp-action="Inativar"
+                           asp-route-id="@usuario.Id"
+                           class="usuario-action deactivate">
+
+                            <i class="bi bi-person-dash"></i>
+
+                            Inativar
+
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Ativar"
+                           asp-route-id="@usuario.Id"
+                           class="usuario-action activate">
+
+                            <i class="bi bi-person-check"></i>
+
+                            Ativar
+
+                        </a>
+                    }
+
+
+                    <a asp-action="Delete"
+                       asp-route-id="@usuario.Id"
+                       class="usuario-action delete">
+
+                        <i class="bi bi-trash"></i>
+
+                        Excluir
+
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+
+            const sucesso = document.getElementById("mensagemSucesso");
+
+            if (sucesso) {
+                const alerta = bootstrap.Alert.getOrCreateInstance(sucesso);
+                alerta.close();
+            }
+
+            const erro = document.getElementById("mensagemErro");
+
+            if (erro) {
+                const alerta = bootstrap.Alert.getOrCreateInstance(erro);
+                alerta.close();
+            }
+
+        }, 4000);
+    </script>
+}

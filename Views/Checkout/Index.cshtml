@@ -1,0 +1,1086 @@
+﻿@model LojaWeb_2.Models.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Finalizar compra";
+}
+
+<div class="container mt-5">
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            <i class="bi bi-credit-card"></i>
+            Finalizar compra
+        </h2>
+
+        <p class="text-muted">
+            Confira seus dados antes de finalizar o pedido.
+        </p>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FORMULÁRIO COMPLETO DO CHECKOUT -->
+    <!-- ========================================= -->
+
+    <form asp-action="Confirmar"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               asp-for="ClienteId" />
+
+
+        <div class="row g-4">
+
+
+            <!-- ========================================= -->
+            <!-- DADOS DO CLIENTE -->
+            <!-- ========================================= -->
+
+            <div class="col-lg-7">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h4 class="fw-bold mb-4">
+
+                            <i class="bi bi-person"></i>
+
+                            Dados para entrega
+
+                        </h4>
+
+
+                        <!-- VALIDAÇÕES -->
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger">
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- NOME -->
+                        <!-- ================================= -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Nome"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Nome"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Nome"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- E-MAIL -->
+                        <!-- ================================= -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Email"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- TELEFONE -->
+                        <!-- ================================= -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Telefone"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Telefone"
+                                   class="form-control"
+                                   placeholder="(00) 00000-0000" />
+
+                            <span asp-validation-for="Telefone"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <hr class="my-4" />
+
+
+                        <!-- ================================= -->
+                        <!-- ENDEREÇO -->
+                        <!-- ================================= -->
+
+                        <h5 class="fw-bold mb-3">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            Endereço de entrega
+
+                        </h5>
+
+
+                        <!-- CEP -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Cep"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Cep"
+                                   class="form-control"
+                                   placeholder="00000-000" />
+
+                            <span asp-validation-for="Cep"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ENDEREÇO -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Endereco"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Endereco"
+                                   class="form-control"
+                                   placeholder="Rua, avenida..." />
+
+                            <span asp-validation-for="Endereco"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- NÚMERO -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Numero"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Numero"
+                                   class="form-control"
+                                   placeholder="Número" />
+
+                            <span asp-validation-for="Numero"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- BAIRRO -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Bairro"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Bairro"
+                                   class="form-control"
+                                   placeholder="Bairro" />
+
+                            <span asp-validation-for="Bairro"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- CIDADE + ESTADO -->
+
+                        <div class="row">
+
+                            <div class="col-md-8 mb-3">
+
+                                <label asp-for="Cidade"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Cidade"
+                                       class="form-control"
+                                       placeholder="Cidade" />
+
+                                <span asp-validation-for="Cidade"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="col-md-4 mb-3">
+
+                                <label asp-for="Estado"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Estado"
+                                       class="form-control"
+                                       maxlength="2"
+                                       placeholder="SC" />
+
+                                <span asp-validation-for="Estado"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr class="my-4" />
+
+
+                        <!-- ================================= -->
+                        <!-- PAGAMENTO -->
+                        <!-- ================================= -->
+
+                        <h5 class="fw-bold mb-3">
+
+                            <i class="bi bi-wallet2"></i>
+
+                            Forma de pagamento
+
+                        </h5>
+
+
+                        <div class="mb-3">
+
+                            <label asp-for="FormaPagamento"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <select asp-for="FormaPagamento"
+                                    class="form-select"
+                                    id="formaPagamento">
+
+                                <option value="">
+                                    Selecione uma opção
+                                </option>
+
+                                <option value="Pix">
+                                    Pix
+                                </option>
+
+                                <option value="Cartão de crédito">
+                                    Cartão de crédito
+                                </option>
+
+                                <option value="Cartão de débito">
+                                    Cartão de débito
+                                </option>
+
+                                <option value="Boleto">
+                                    Boleto
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="FormaPagamento"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- RESUMO DO PEDIDO -->
+            <!-- ========================================= -->
+
+            <div class="col-lg-5">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h4 class="fw-bold mb-4">
+
+                            <i class="bi bi-cart3"></i>
+
+                            Resumo do pedido
+
+                        </h4>
+
+
+                        @foreach (var item in Model.Itens)
+                        {
+                            <div class="d-flex
+                                            justify-content-between
+                                            border-bottom
+                                            pb-3
+                                            mb-3">
+
+                                <div>
+
+                                    <strong>
+                                        @item.NomeProduto
+                                    </strong>
+
+                                    <div class="text-muted small mt-1">
+
+                                        Cor:
+                                        <strong>
+                                            @item.Cor
+                                        </strong>
+
+                                        <br />
+
+                                        Tamanho:
+                                        <strong>
+                                            @item.Tamanho
+                                        </strong>
+
+                                        <br />
+
+                                        Quantidade:
+                                        <strong>
+                                            @item.Quantidade
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="text-end">
+
+                                    <strong>
+                                        @item.Subtotal.ToString("C")
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                        }
+
+
+                        <!-- TOTAL DE ITENS -->
+
+                        <div class="d-flex
+                                    justify-content-between
+                                    mb-2">
+
+                            <span>
+                                Quantidade de itens
+                            </span>
+
+                            <strong>
+                                @Model.Itens.Sum(i => i.Quantidade)
+                            </strong>
+
+                        </div>
+
+                        <!-- ========================================= -->
+                        <!-- ENTREGA -->
+                        <!-- ========================================= -->
+                        @if (ViewBag.CotacaoFrete != null)
+                        {
+                            var frete =
+                            ViewBag.CotacaoFrete
+                            as LojaWeb_2.Models.CotacaoFrete;
+
+                            <div class="border rounded-3 p-3 mt-3 mb-3">
+
+                                <div class="d-flex align-items-center mb-3">
+
+                                    <i class="bi bi-truck text-primary fs-5 me-2"></i>
+
+                                    <strong>
+                                        Entrega
+                                    </strong>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span class="text-muted">
+                                        Modalidade
+                                    </span>
+
+                                    <strong>
+                                        @frete!.TipoFrete
+                                    </strong>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span class="text-muted">
+                                        CEP
+                                    </span>
+
+                                    <strong>
+                                        @frete.CepDestino
+                                    </strong>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span class="text-muted">
+                                        Prazo
+                                    </span>
+
+                                    <strong>
+                                        Até @frete.PrazoDias dias úteis
+                                    </strong>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+
+                                    <span class="text-muted">
+                                        Frete
+                                    </span>
+
+                                    <strong class="text-success">
+                                        @frete.Valor.ToString("C2")
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning mt-3">
+
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+
+                                Nenhuma forma de entrega foi selecionada.
+
+                            </div>
+                        }
+
+                        <!-- TOTAL -->
+
+                        <div class="d-flex
+                                    justify-content-between
+                                    align-items-center
+                                    mt-3
+                                    pt-3
+                                    border-top">
+
+                            <span class="fw-bold">
+                                Total
+                            </span>
+
+                            <span class="fw-bold
+                                         text-primary
+                                         fs-4">
+
+                                @Model.Total.ToString("C")
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- CONFIRMAR PEDIDO -->
+                        <!-- ================================= -->
+
+                        <button type="submit"
+                                class="btn btn-success
+                                       btn-lg
+                                       w-100
+                                       mt-4">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Confirmar pedido
+
+                        </button>
+
+
+                        <div class="text-center mt-3">
+
+                            <small class="text-muted">
+
+                                Ao confirmar, seu pedido será
+                                registrado em nossa loja.
+
+                            </small>
+
+                        </div>
+
+
+                        <!-- VOLTAR -->
+
+                        <a asp-controller="Carrinho"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary
+                                  w-100
+                                  mt-3">
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Voltar ao carrinho
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================================= -->
+            <!-- OPÇÕES DINÂMICAS DE PAGAMENTO -->
+            <!-- ================================= -->
+            <!-- PIX -->
+            <div id="pagamentoPix" class="mt-4 d-none">
+
+                <div class="card border-success shadow-sm">
+
+                    <div class="card-body text-center p-4">
+
+                        <!-- TÍTULO -->
+
+                        <div class="mb-3">
+
+                            <div class="bg-success text-white rounded-circle
+                            d-inline-flex align-items-center
+                            justify-content-center"
+                                 style="width: 60px; height: 60px;">
+
+                                <i class="bi bi-qr-code"
+                                   style="font-size: 32px;">
+                                </i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4 class="fw-bold text-success">
+
+                            Pagamento via Pix
+
+                        </h4>
+
+
+                        <p class="text-muted mb-4">
+
+                            Escaneie o QR Code abaixo com o aplicativo
+                            do seu banco para realizar o pagamento.
+
+                        </p>
+
+
+                        <!-- QR CODE -->
+
+                        <div class="bg-white border rounded-4 shadow-sm
+                        p-3 d-inline-block mb-4">
+
+                            <div class="border rounded-3 p-2">
+
+                                <i class="bi bi-qr-code"
+                                   style="font-size: 180px;
+                              line-height: 1;">
+                                </i>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- VALOR -->
+
+                        <div class="mb-4">
+
+                            <small class="text-muted">
+
+                                Valor total a pagar
+
+                            </small>
+
+                            <h3 class="fw-bold text-success mb-0">
+
+                                <span id="valorPix">
+
+                                    R$ 0,00
+
+                                </span>
+
+                            </h3>
+
+                        </div>
+
+
+                        <!-- LINHA -->
+
+                        <hr>
+
+
+                        <!-- INSTRUÇÕES -->
+
+                        <div class="text-start mb-4">
+
+                            <p class="mb-2 fw-semibold">
+
+                                <i class="bi bi-check-circle-fill text-success"></i>
+
+                                Como pagar:
+
+                            </p>
+
+                            <ol class="text-muted small mb-0">
+
+                                <li>Abra o aplicativo do seu banco.</li>
+
+                                <li>Escolha a opção Pix.</li>
+
+                                <li>Escaneie o QR Code.</li>
+
+                                <li>Confirme o pagamento.</li>
+
+                            </ol>
+
+                        </div>
+
+
+                        <!-- CÓDIGO PIX -->
+
+                        <input type="hidden"
+                               id="codigoPix"
+                               value="00020126580014BR.GOV.BCB.PIX0136VESTEARTE-PAGAMENTO-SIMULADO5204000053039865406110.905802BR5920VESTEARTE LOJA ONLINE6009SAO PAULO62070503***6304ABCD" />
+
+
+                        <!-- BOTÃO -->
+
+                        <button type="button"
+                                id="btnCopiarPix"
+                                class="btn btn-success px-4">
+
+                            <i class="bi bi-clipboard"></i>
+
+                            Copiar código Pix
+
+                        </button>
+
+
+                        <!-- MENSAGEM -->
+
+                        <p id="mensagemPix"
+                           class="text-success fw-semibold mt-3 d-none">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Código Pix copiado com sucesso!
+
+                        </p>
+
+
+                        <!-- AVISO -->
+
+                        <p class="text-muted small mt-3 mb-0">
+
+                            <i class="bi bi-shield-check"></i>
+
+                            Ambiente seguro para pagamento.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARTÃO DE CRÉDITO -->
+            <div id="pagamentoCredito"
+                 class="mt-4 d-none">
+
+                <div class="card border-primary">
+
+                    <div class="card-body">
+
+                        <h5 class="text-primary">
+
+                            <i class="bi bi-credit-card"></i>
+
+                            Pagamento com cartão de crédito
+
+                        </h5>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Número de parcelas
+
+                            </label>
+
+                            <select id="numeroParcelas"
+                                    class="form-select">
+
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@i">
+                                        @i x de R$ 0,00
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+                        <div class="alert alert-primary">
+
+                            <strong id="textoParcelamento">
+
+                                Selecione o número de parcelas.
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARTÃO DE DÉBITO -->
+            <div id="pagamentoDebito"
+                 class="mt-4 d-none">
+
+                <div class="card border-info">
+
+                    <div class="card-body text-center">
+
+                        <h5 class="text-info">
+
+                            <i class="bi bi-credit-card-2-front"></i>
+
+                            Pagamento no cartão de débito
+
+                        </h5>
+
+                        <p class="mb-0">
+
+                            Pagamento à vista.
+
+                        </p>
+
+                        <p class="fw-bold mt-2">
+
+                            Valor:
+                            <span id="valorDebito">
+                                R$ 0,00
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOLETO -->
+            <div id="pagamentoBoleto"
+                 class="mt-4 d-none">
+
+                <div class="card border-warning">
+
+                    <div class="card-body text-center">
+
+                        <h5 class="text-warning">
+
+                            <i class="bi bi-upc-scan"></i>
+
+                            Pagamento via boleto
+
+                        </h5>
+
+                        <p>
+
+                            Seu boleto será gerado após a confirmação do pedido.
+
+                        </p>
+
+                        <div class="alert alert-light border">
+
+                            <strong>
+                                34191.79001 01043.510047
+                                91020.150008 8 12345678900000
+                            </strong>
+
+                        </div>
+
+                        <p class="fw-bold">
+
+                            Valor:
+                            <span id="valorBoleto">
+                                R$ 0,00
+                            </span>
+
+                        </p>
+
+                        <small class="text-muted">
+
+                            Vencimento em até 3 dias.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const formaPagamento =
+                document.getElementById("formaPagamento");
+
+            const pagamentoPix =
+                document.getElementById("pagamentoPix");
+
+            const pagamentoCredito =
+                document.getElementById("pagamentoCredito");
+
+            const pagamentoDebito =
+                document.getElementById("pagamentoDebito");
+
+            const pagamentoBoleto =
+                document.getElementById("pagamentoBoleto");
+
+            const numeroParcelas =
+                document.getElementById("numeroParcelas");
+
+            const textoParcelamento =
+                document.getElementById("textoParcelamento");
+
+				//PIX
+        const btnCopiarPix =
+            document.getElementById("btnCopiarPix");
+
+        const codigoPix =
+            document.getElementById("codigoPix");
+
+        const mensagemPix =
+            document.getElementById("mensagemPix");
+
+
+        btnCopiarPix.addEventListener("click", function () {
+
+            navigator.clipboard.writeText(
+                codigoPix.value
+            );
+
+            mensagemPix.classList.remove(
+                "d-none"
+            );
+
+            setTimeout(function () {
+
+                mensagemPix.classList.add(
+                    "d-none"
+                );
+
+            }, 3000);
+
+        });
+
+
+            // VALOR TOTAL DO PEDIDO
+            const totalPedido = @Model.Total.ToString(
+                            System.Globalization.CultureInfo.InvariantCulture);
+
+
+        function esconderPagamentos() {
+
+                pagamentoPix.classList.add("d-none");
+
+                pagamentoCredito.classList.add("d-none");
+
+                pagamentoDebito.classList.add("d-none");
+
+                pagamentoBoleto.classList.add("d-none");
+
+            }
+
+
+            function formatarMoeda(valor) {
+
+                return valor.toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+            }
+
+
+            function atualizarValores() {
+
+                // PIX
+                document.getElementById("valorPix").innerText =
+                    formatarMoeda(totalPedido);
+
+
+                // DÉBITO
+                document.getElementById("valorDebito").innerText =
+                    formatarMoeda(totalPedido);
+
+
+                // BOLETO
+                document.getElementById("valorBoleto").innerText =
+                    formatarMoeda(totalPedido);
+
+            }
+
+
+            function atualizarParcelas() {
+
+                if (!numeroParcelas)
+                    return;
+
+                const parcelas =
+                    parseInt(numeroParcelas.value);
+
+                const valorParcela =
+                    totalPedido / parcelas;
+
+
+                textoParcelamento.innerText =
+                    parcelas + "x de " +
+                    formatarMoeda(valorParcela) +
+                    " sem juros";
+
+
+                // Atualiza todas as opções
+                for (let i = 0; i < numeroParcelas.options.length; i++) {
+
+                    const quantidade =
+                        parseInt(
+                            numeroParcelas.options[i].value
+                        );
+
+                    const valor =
+                        totalPedido / quantidade;
+
+                    numeroParcelas.options[i].text =
+                        quantidade + "x de " +
+                        formatarMoeda(valor);
+
+                }
+
+            }
+
+
+            formaPagamento.addEventListener(
+                "change",
+                function () {
+
+                    esconderPagamentos();
+
+                    if (this.value === "Pix") {
+
+                        pagamentoPix.classList.remove(
+                            "d-none"
+                        );
+
+                    }
+                    else if (
+                        this.value === "Cartão de crédito"
+                    ) {
+
+                        pagamentoCredito.classList.remove(
+                            "d-none"
+                        );
+
+                    }
+                    else if (
+                        this.value === "Cartão de débito"
+                    ) {
+
+                        pagamentoDebito.classList.remove(
+                            "d-none"
+                        );
+
+                    }
+                    else if (
+                        this.value === "Boleto"
+                    ) {
+
+                        pagamentoBoleto.classList.remove(
+                            "d-none"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            numeroParcelas.addEventListener(
+                "change",
+                atualizarParcelas
+            );
+
+
+            // Carrega os valores ao abrir a página
+            atualizarValores();
+
+            atualizarParcelas();
+
+        });
+
+    </script>
+
+}

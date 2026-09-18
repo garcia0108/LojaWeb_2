@@ -1,0 +1,163 @@
+﻿@model LojaWeb_2.Models.UsuarioEditarViewModel
+
+@{
+    ViewData["Title"] = "Editar Usuário";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+
+                <i class="bi bi-person-gear"></i>
+
+                Editar Usuário
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Altere os dados e o perfil do usuário.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-action="Edit"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id"
+                       type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+                <!-- NOME DE USUÁRIO -->
+
+                <div class="mb-4">
+
+                    <label asp-for="UserName"
+                           class="form-label fw-semibold">
+
+                        Nome de usuário
+
+                    </label>
+
+                    <input asp-for="UserName"
+                           class="form-control"
+                           placeholder="Ex: Cleiton" />
+
+                    <span asp-validation-for="UserName"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- E-MAIL -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Email"
+                           class="form-label fw-semibold">
+
+                        E-mail
+
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="usuario@email.com" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- PERFIL -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Perfil"
+                           class="form-label fw-semibold">
+
+                        Perfil
+
+                    </label>
+
+                    <select asp-for="Perfil"
+                            class="form-select">
+
+                        <option value="Funcionário">
+                            Funcionário
+                        </option>
+
+                        <option value="Administrador">
+                            Administrador
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="Perfil"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+                        Salvar Alterações
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

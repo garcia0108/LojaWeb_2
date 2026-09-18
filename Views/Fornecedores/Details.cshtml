@@ -1,0 +1,329 @@
+﻿@model LojaWeb_2.Models.Fornecedor
+
+@{
+    ViewData["Title"] = "Detalhes do Fornecedor";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-truck"></i>
+                Detalhes do Fornecedor
+            </h2>
+
+            <p class="text-muted mb-0">
+                Visualize todas as informações do fornecedor.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <!-- DADOS PRINCIPAIS -->
+
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-building"></i>
+                Dados do fornecedor
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Nome / Razão Social
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.Nome
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Nome Fantasia
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.NomeFantasia)
+                                                ? "Não informado"
+                                                : Model.NomeFantasia)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        CNPJ
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Cnpj)
+                                                ? "Não informado"
+                                                : Model.Cnpj)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Telefone
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Telefone)
+                                                ? "Não informado"
+                                                : Model.Telefone)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        E-mail
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                                                ? "Não informado"
+                                                : Model.Email)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- ENDEREÇO -->
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-geo-alt"></i>
+                Endereço
+
+            </h5>
+
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        CEP
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Cep)
+                                                ? "Não informado"
+                                                : Model.Cep)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-7 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Endereço
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Endereco)
+                                                ? "Não informado"
+                                                : Model.Endereco)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Número
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Numero)
+                                                ? "Não informado"
+                                                : Model.Numero)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Bairro
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Bairro)
+                                                ? "Não informado"
+                                                : Model.Bairro)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Cidade
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Cidade)
+                                                ? "Não informado"
+                                                : Model.Cidade)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Estado
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Estado)
+                                                ? "Não informado"
+                                                : Model.Estado)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- OBSERVAÇÕES -->
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-chat-left-text"></i>
+                Observações
+
+            </h5>
+
+            <div class="mb-4">
+
+                <div class="form-control bg-light"
+                     style="min-height: 100px;">
+
+                    @(string.IsNullOrWhiteSpace(Model.Observacoes)
+                                        ? "Nenhuma observação cadastrada."
+                                        : Model.Observacoes)
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Status
+                </label>
+
+                <div>
+
+                    @if (Model.Ativo)
+                    {
+                        <span class="badge bg-success fs-6">
+
+                            <i class="bi bi-check-circle"></i>
+                            Ativo
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary fs-6">
+
+                            <i class="bi bi-x-circle"></i>
+                            Inativo
+
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="d-flex justify-content-between">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+
+                </a>
+
+
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-warning">
+
+                        <i class="bi bi-pencil"></i>
+                        Editar Fornecedor
+
+                    </a>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

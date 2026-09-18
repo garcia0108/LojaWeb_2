@@ -1,0 +1,146 @@
+﻿@model LojaWeb_2.Models.Categoria
+
+@{
+    ViewData["Title"] = "Nova Categoria";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+            <h3>Nova Categoria</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger"></div>
+
+
+                <!-- NOME -->
+
+                <div class="mb-3">
+                    <label asp-for="Nome"
+                           class="form-label"></label>
+
+                    <input asp-for="Nome"
+                           class="form-control" />
+
+                    <span asp-validation-for="Nome"
+                          class="text-danger"></span>
+                </div>
+
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Descricao"
+                           class="form-label"></label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control"></textarea>
+
+                </div>
+
+
+               <!-- ========================================= -->
+<!-- IMAGENS DA CATEGORIA -->
+<!-- ========================================= -->
+
+<!-- IMAGEM GERAL -->
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Imagem da categoria
+    </label>
+
+    <input type="file"
+           name="imagemArquivo"
+           class="form-control"
+           accept="image/*" />
+
+    <small class="text-muted">
+        Imagem geral da categoria.
+    </small>
+
+</div>
+
+
+<!-- IMAGEM MASCULINA -->
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Imagem masculina
+    </label>
+
+    <input type="file"
+           name="imagemMasculinaArquivo"
+           class="form-control"
+           accept="image/*" />
+
+    <small class="text-muted">
+        Imagem utilizada no carrossel masculino.
+    </small>
+
+</div>
+
+
+<!-- IMAGEM FEMININA -->
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Imagem feminina
+    </label>
+
+    <input type="file"
+           name="imagemFemininaArquivo"
+           class="form-control"
+           accept="image/*" />
+
+    <small class="text-muted">
+        Imagem utilizada no carrossel feminino.
+    </small>
+
+</div>
+
+
+                <!-- BOTÕES -->
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Salvar
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Cancelar
+
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+}

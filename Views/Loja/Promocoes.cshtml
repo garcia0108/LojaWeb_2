@@ -1,0 +1,1513 @@
+﻿@model IEnumerable<LojaWeb_2.Models.PromocaoItemViewModel>
+
+@{
+    ViewData["Title"] = "Promoções";
+
+    var categorias =
+        ViewBag.Categorias as List<LojaWeb_2.Models.Categoria>;
+
+    var cores =
+        ViewBag.Cores as List<string>;
+}
+
+<!-- ========================================= -->
+<!-- FAIXA PROMOÇÃO -->
+<!-- ========================================= -->
+
+<div class="promo-faixa">
+
+    <div class="promo-faixa-conteudo">
+
+        <span>🔥 PROMOÇÃO RELÂMPAGO</span>
+        <span>•</span>
+        <span>ATÉ 40% OFF</span>
+        <span>•</span>
+        <span>🚚 FRETE ESPECIAL</span>
+        <span>•</span>
+        <span>🔥 PROMOÇÃO RELÂMPAGO</span>
+        <span>•</span>
+        <span>ATÉ 40% OFF</span>
+        <span>•</span>
+        <span>🚚 FRETE ESPECIAL</span>
+        <span>•</span>
+        <span>🔥 PROMOÇÃO RELÂMPAGO</span>
+        <span>•</span>
+        <span>ATÉ 40% OFF</span>
+        <span>•</span>
+        <span>🚚 FRETE ESPECIAL</span>
+        <span>•</span>
+        <span>🔥 PROMOÇÃO RELÂMPAGO</span>
+        <span>•</span>
+        <span>ATÉ 40% OFF</span>
+        <span>•</span>
+        <span>🚚 FRETE ESPECIAL</span>
+        <span>•</span>
+
+    </div>
+
+</div>
+
+<!-- ========================================= -->
+<!-- BANNER PROMOÇÕES -->
+<!-- ========================================= -->
+
+<div class="promo-banner mb-5">
+
+    <div class="promo-banner-conteudo">
+
+        <span class="promo-banner-tag">
+            OFERTAS ESPECIAIS
+        </span>
+
+        <h1>
+            Ofertas que você não pode perder!
+        </h1>
+
+        <div class="promo-banner-desconto">
+            <span>ATÉ</span>
+            <strong>40%</strong>
+            <span>OFF</span>
+        </div>
+
+        <p>
+            Aproveite nossas promoções especiais
+            e garanta seus produtos com preços incríveis.
+        </p>
+
+        <div class="promo-frete">
+            <i class="bi bi-truck"></i>
+            Frete especial para compras acima de R$ 250,00
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container py-4">
+
+
+    <!-- ========================================= -->
+    <!-- PESQUISA E FILTROS -->
+    <!-- ========================================= -->
+
+    <form method="get"
+          asp-action="Promocoes"
+          class="mb-5">
+
+        <div class="row g-3">
+
+
+            <!-- ========================================= -->
+            <!-- PESQUISA -->
+            <!-- ========================================= -->
+
+            <div class="col-md-12">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input type="text"
+                           name="pesquisa"
+                           value="@Context.Request.Query["pesquisa"]"
+                           class="form-control"
+                           placeholder="Pesquisar produto ou combo..." />
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- GÊNERO -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2">
+
+                <select name="publico"
+                        class="form-select">
+
+                    <option value="">
+                        Gênero
+                    </option>
+
+                    <option value="Masculino"
+                            selected="@(Context.Request.Query["publico"] == "Masculino")">
+                        Masculino
+                    </option>
+
+                    <option value="Feminino"
+                            selected="@(Context.Request.Query["publico"] == "Feminino")">
+                        Feminino
+                    </option>
+
+                    <option value="Infantil"
+                            selected="@(Context.Request.Query["publico"] == "Infantil")">
+                        Infantil
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- CATEGORIA -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2">
+
+                <select name="categoriaId"
+                        class="form-select">
+
+                    <option value="">
+                        Categoria
+                    </option>
+
+                    @if (categorias != null)
+                    {
+                        foreach (var categoria in categorias)
+                        {
+                            <option value="@categoria.Id"
+                                    selected="@(Context.Request.Query["categoriaId"] == categoria.Id.ToString())">
+                                @categoria.Nome
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- COR -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2">
+
+                <select name="cor"
+                        class="form-select">
+
+                    <option value="">
+                        Cor
+                    </option>
+
+                    @if (cores != null)
+                    {
+                        foreach (var cor in cores)
+                        {
+                            <option value="@cor"
+                                    selected="@(Context.Request.Query["cor"] == cor)">
+                                @cor
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- TIPO -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2">
+
+                <select name="tipo"
+                        class="form-select">
+
+                    <option value="">
+                        Tipo
+                    </option>
+
+                    <option value="Unitario"
+                            selected="@(Context.Request.Query["tipo"] == "Unitario")">
+                        Unitário
+                    </option>
+
+                    <option value="Quantidade"
+                            selected="@(Context.Request.Query["tipo"] == "Quantidade")">
+                        Quantidade
+                    </option>
+
+                    <option value="Combo"
+                            selected="@(Context.Request.Query["tipo"] == "Combo")">
+                        Combo
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- ORDENAÇÃO -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2">
+
+                <select name="ordenar"
+                        class="form-select">
+
+                    <option value="">
+                        Ordenar
+                    </option>
+
+                    <option value="recentes"
+                            selected="@(Context.Request.Query["ordenar"] == "recentes")">
+                        Mais recentes
+                    </option>
+
+                    <option value="az"
+                            selected="@(Context.Request.Query["ordenar"] == "az")">
+                        Nome: A-Z
+                    </option>
+
+                    <option value="za"
+                            selected="@(Context.Request.Query["ordenar"] == "za")">
+                        Nome: Z-A
+                    </option>
+
+                    <option value="menor-preco"
+                            selected="@(Context.Request.Query["ordenar"] == "menor-preco")">
+                        Menor preço
+                    </option>
+
+                    <option value="maior-preco"
+                            selected="@(Context.Request.Query["ordenar"] == "maior-preco")">
+                        Maior preço
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- BOTÕES -->
+            <!-- ========================================= -->
+
+            <div class="col-md-2 d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-dark w-100">
+
+                    <i class="bi bi-funnel"></i>
+                    Filtrar
+
+                </button>
+
+                <a asp-action="Promocoes"
+                   class="btn btn-outline-secondary">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <!-- ========================================= -->
+    <!-- QUANTIDADE -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3 class="mb-0">
+            Ofertas em Promoção
+        </h3>
+
+        <span class="text-muted">
+
+           @ViewBag.TotalOfertas oferta(s) encontrada(s)
+
+        </span>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- CATÁLOGO ÚNICO -->
+    <!-- PRODUTOS + COMBOS -->
+    <!-- ========================================= -->
+    @if (!Model.Any())
+    {
+        <div class="alert alert-light text-center py-5">
+
+            <i class="bi bi-tag fs-1 text-muted"></i>
+
+            <h4 class="mt-3">
+                Nenhuma promoção encontrada
+            </h4>
+
+            <p class="mb-0">
+                Tente alterar os filtros da sua busca.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var item in Model)
+            {
+
+                <!-- ========================================= -->
+                <!-- COMBO -->
+                <!-- ========================================= -->
+                @if (item.EhCombo)
+                {
+                    var combo = item.Combo;
+
+                    if (combo != null)
+                    {
+                        var desconto = (int)Math.Round(
+                        combo.PercentualDesconto
+                        );
+
+
+                        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                            <div class="card promocao-card promocao-card-clicavel h-100"
+                                 data-url="@Url.Action("DetalhesCombo", "Loja", new { id = combo.Id })">
+
+
+                                <!-- ========================================= -->
+                                <!-- IMAGEM DO COMBO -->
+                                <!-- ========================================= -->
+
+                                <div class="produto-imagem">
+
+                                    @if (!string.IsNullOrEmpty(combo.Imagem))
+                                    {
+                                        <img src="@combo.Imagem"
+                                             alt="@combo.Nome" />
+                                    }
+                                    else
+                                    {
+                                        <div class="sem-imagem">
+
+                                            <i class="bi bi-box-seam"></i>
+
+                                        </div>
+                                    }
+
+
+                                    <!-- ========================================= -->
+                                    <!-- DESCONTO -->
+                                    <!-- ========================================= -->
+                                    @if (desconto > 0)
+                                    {
+                                        <span class="desconto-badge">
+
+                                            @desconto% OFF
+
+                                        </span>
+                                    }
+
+
+                                    <!-- ========================================= -->
+                                    <!-- FRETE GRÁTIS -->
+                                    <!-- ========================================= -->
+                                    @if (combo.FreteGratis)
+                                    {
+                                        <span class="frete-gratis-badge">
+
+                                            Frete grátis
+
+                                        </span>
+                                    }
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- INFORMAÇÕES DO COMBO -->
+                    <!-- ========================================= -->
+
+                    <div class="card-body d-flex flex-column">
+
+
+                        <!-- BADGE COMBO -->
+
+                        <div class="mb-2">
+
+                            <span class="badge bg-primary">
+
+                                <i class="bi bi-box-seam"></i>
+
+                                Combo
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- NOME -->
+
+                        <h5 class="produto-nome">
+
+                            @combo.Nome
+
+                        </h5>
+
+
+                        <!-- QUANTIDADE -->
+
+                        <small class="text-muted mb-2">
+
+                            @combo.Itens.Count
+                            @(combo.Itens.Count == 1
+                                                    ? " produto"
+                                                    : " produtos")
+
+                    </small>
+
+                                    <!-- AVALIAÇÕES -->
+
+                                    <div class="combo-avaliacao mb-3">
+
+                                        <span class="combo-estrelas">
+                                            ★★★★★
+                                        </span>
+
+                                        <span class="combo-total-avaliacoes">
+                                            (0)
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- ========================================= -->
+                                    <!-- PREÇOS -->
+                                    <!-- ========================================= -->
+
+                                    <div class="produto-precos">
+
+                        @if (combo.ValorOriginal > combo.Preco)
+                                        {
+                                            <div class="preco-antigo">
+
+                                                R$
+                                                @combo.ValorOriginal.ToString("N2")
+
+                                            </div>
+                                        }
+
+                                        <div class="preco-promocional">
+
+                                            R$
+                                            @combo.Preco.ToString("N2")
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- ========================================= -->
+                                    <!-- DESCRIÇÃO -->
+                                    <!-- ========================================= -->
+                                    @if (!string.IsNullOrWhiteSpace(combo.Descricao))
+                                    {
+                                        <p class="text-muted small mt-2">
+
+                                            @combo.Descricao
+
+                                        </p>
+                                    }
+
+
+                                    <!-- ========================================= -->
+                                    <!-- BOTÃO -->
+                                    <!-- ========================================= -->
+                                    
+                                    <form asp-controller="Carrinho"
+                                          asp-action="AdicionarCombo"
+                                          method="post"
+                                          class="mt-auto form-adicionar-combo">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="comboId"
+                                               value="@combo.Id" />
+
+                                        <input type="hidden"
+                                               name="quantidade"
+                                               value="1" />
+
+                                        <button type="submit"
+                                                class="btn btn-dark produto-btn w-100">
+
+                                            <i class="bi bi-lightning-charge-fill me-1"></i>
+                                            Compra rápida
+
+                                        </button>
+
+                                    </form>
+                                    
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+
+                    <!-- ========================================= -->
+                    <!-- PRODUTO NORMAL -->
+                    <!-- ========================================= -->
+                    var produto = item.Produto;
+
+                    if (produto != null)
+                    {
+                        var desconto = 0;
+
+                        if (produto.PrecoPromocional.HasValue &&
+                        produto.Preco > 0)
+                        {
+                            desconto = (int)Math.Round(
+                            (
+                            (produto.Preco -
+                            produto.PrecoPromocional.Value)
+                            / produto.Preco
+                            ) * 100
+                            );
+                        }
+
+
+                        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                            <div class="card promocao-card promocao-card-clicavel h-100"
+                                 data-url="@Url.Action("Detalhes", "Loja", new { id = produto.Id })">
+
+
+                                <!-- ========================================= -->
+                                <!-- IMAGEM -->
+                                <!-- ========================================= -->
+
+                                <div class="produto-imagem">
+
+                                    @if (!string.IsNullOrEmpty(item.Imagem))
+                                    {
+                                        <img src="@item.Imagem"
+                                             alt="@produto.Nome@(item.Cor != null ? " - " + item.Cor.Nome : "")" />
+                                    }
+                                    else
+                                    {
+                                        <div class="sem-imagem">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    }
+
+                                    <!-- ========================================= -->
+                                    <!-- DESCONTO -->
+                                    <!-- ========================================= -->
+                                    @if (desconto > 0)
+                                    {
+                                        <span class="desconto-badge">
+
+                                            @desconto% OFF
+
+                                        </span>
+                                    }
+
+
+                                    <!-- ========================================= -->
+                                    <!-- FRETE GRÁTIS -->
+                                    <!-- ========================================= -->
+                                    @if (produto.TipoPromocao == "Kit" ||
+                                                        produto.TipoPromocao == "Combo")
+                                    {
+                                        <span class="frete-gratis-badge">
+
+                                            Frete grátis
+
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <!-- ========================================= -->
+                                <!-- INFORMAÇÕES -->
+                                <!-- ========================================= -->
+
+                                <div class="card-body d-flex flex-column">
+
+
+                                    <!-- NOME -->
+
+                                    <h5 class="produto-nome">
+
+                                        @produto.Nome
+
+                                    </h5>
+
+
+                                    <!-- CATEGORIA -->
+                                    @if (produto.Categoria != null)
+                                    {
+                                        <small class="text-muted mb-2">
+
+                                            @produto.Categoria.Nome
+
+                                        </small>
+                                    }
+
+                                    <!--COR-->
+                                    @if (item.Cor != null)
+                                    {
+                                        <div class="produto-cor mb-2">
+                                            <span class="text-muted">Cor:</span>
+                                            <strong>@item.Cor.Nome</strong>
+                                        </div>
+                                    }
+
+                                    <!-- ========================================= -->
+                                    <!-- PREÇOS -->
+                                    <!-- ========================================= -->
+
+                                    <div class="produto-precos">
+
+                                        <div class="preco-antigo">
+
+                                            R$
+                                            @produto.Preco.ToString("N2")
+
+                                        </div>
+
+                                        <div class="preco-promocional">
+
+                                            R$
+                                            @produto.PrecoPromocional?.ToString("N2")
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- ========================================= -->
+                                    <!-- PROMOÇÃO POR QUANTIDADE -->
+                                    <!-- ========================================= -->
+                                    @if (produto.TipoPromocao == "Quantidade" &&
+                                                        produto.QuantidadeMinimaPromocao.HasValue &&
+                                                        produto.PrecoQuantidadePromocional.HasValue)
+                                    {
+                                        <div class="promo-quantidade">
+
+                                            🔥 Compre
+                                            @produto.QuantidadeMinimaPromocao
+                                            ou mais
+
+                                            <br />
+
+                                            <strong>
+
+                                                R$
+                                                @produto.PrecoQuantidadePromocional?.ToString("N2")
+                                                cada
+
+                                            </strong>
+
+                                        </div>
+                                    }
+
+
+                                    <!-- ========================================= -->
+                                    <!-- AVALIAÇÃO -->
+                                    <!-- ========================================= -->
+
+                                    <div class="produto-avaliacao mt-3">
+
+                                        <span class="estrelas">
+                                            ★★★★★
+                                        </span>
+
+                                        <small class="text-muted">
+                                            (0)
+                                        </small>
+
+                                    </div>
+
+
+                                    <!-- ========================================= -->
+                                    <!-- TAMANHOS -->
+                                    <!-- ========================================= -->
+                                 @{
+                                        var tamanhosPadrao = new[]
+                                        {
+                                            "PP", "P", "M", "G", "GG", "XGG"
+                                        };
+
+                                        var tamanhosDisponiveis = produto.Estoques?
+                                            .Where(e =>
+                                                item.Cor != null &&
+                                                e.Cor == item.Cor.Nome &&
+                                                e.Quantidade > 0)
+                                            .Select(e => e.Tamanho)
+                                            .Where(t => !string.IsNullOrWhiteSpace(t))
+                                            .Distinct()
+                                            .ToList()
+                                            ?? new List<string>();
+                                    }
+
+                                    <div class="produto-tamanhos mt-3">
+
+                                        @foreach (var tamanho in tamanhosPadrao)
+                                        {
+                                            var disponivel = tamanhosDisponiveis
+                                                .Any(t => string.Equals(
+                                                    t,
+                                                    tamanho,
+                                                    StringComparison.OrdinalIgnoreCase));
+
+                                            <button type="button"
+                                                    class="produto-tamanho @(disponivel ? "disponivel" : "indisponivel")"
+                                                    data-tamanho="@tamanho"
+                                                    @(disponivel ? "" : "disabled")>
+
+                                                @tamanho
+
+                                            </button>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- ========================================= -->
+                                    <!-- BOTÃO -->
+                                    <!-- ========================================= -->
+                                    <form asp-controller="Carrinho"
+                                          asp-action="CompraRapida"
+                                          method="post"
+                                          class="mt-auto form-compra-rapida">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="produtoId"
+                                               value="@produto.Id" />
+
+                                        <input type="hidden"
+                                               name="cor"
+                                               value="@(item.Cor?.Nome ?? "")"
+                                               class="campo-cor" />
+
+                                        <input type="hidden"
+                                               name="tamanho"
+                                               value=""
+                                               class="campo-tamanho" />
+
+                                        <input type="hidden"
+                                               name="quantidade"
+                                               value="1" />
+
+                                        <button type="submit"
+                                                class="btn btn-dark produto-btn w-100">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i>
+                                            Compra rápida
+                                        </button>
+
+                                    </form>
+                                    
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                }
+
+            }
+
+        </div>
+
+        @if (ViewBag.TotalPaginas > 1)
+{
+    <nav aria-label="Navegação das promoções"
+         class="mt-5">
+
+        <ul class="pagination justify-content-center">
+
+            @* ANTERIOR *@
+
+            <li class="page-item @(ViewBag.PaginaAtual <= 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Promocoes"
+                   asp-route-publico="@Context.Request.Query["publico"]"
+                   asp-route-categoriaId="@Context.Request.Query["categoriaId"]"
+                   asp-route-cor="@Context.Request.Query["cor"]"
+                   asp-route-tipo="@Context.Request.Query["tipo"]"
+                   asp-route-pesquisa="@Context.Request.Query["pesquisa"]"
+                   asp-route-ordenar="@Context.Request.Query["ordenar"]"
+                   asp-route-pagina="@(ViewBag.PaginaAtual - 1)">
+
+                    <i class="bi bi-chevron-left"></i>
+                    
+
+                </a>
+
+            </li>
+
+
+            @* NÚMEROS DAS PÁGINAS *@
+
+@{
+    int paginaAtual = ViewBag.PaginaAtual;
+    int totalPaginas = ViewBag.TotalPaginas;
+
+    int inicio = Math.Max(1, paginaAtual - 2);
+    int fim = Math.Min(totalPaginas, paginaAtual + 2);
+}
+
+@* PRIMEIRA PÁGINA *@
+
+@if (inicio > 1)
+{
+    <li class="page-item">
+
+        <a class="page-link"
+           asp-action="Promocoes"
+           asp-route-publico="@Context.Request.Query["publico"]"
+           asp-route-categoriaId="@Context.Request.Query["categoriaId"]"
+           asp-route-cor="@Context.Request.Query["cor"]"
+           asp-route-tipo="@Context.Request.Query["tipo"]"
+           asp-route-pesquisa="@Context.Request.Query["pesquisa"]"
+           asp-route-ordenar="@Context.Request.Query["ordenar"]"
+           asp-route-pagina="1">
+
+            1
+
+        </a>
+
+    </li>
+
+    @if (inicio > 2)
+    {
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                ...
+            </span>
+
+        </li>
+    }
+}
+
+
+                @* PÁGINAS PRÓXIMAS DA ATUAL *@
+
+                @for (int i = inicio; i <= fim; i++)
+                {
+                    <li class="page-item @(i == paginaAtual ? "active" : "")">
+
+                        <a class="page-link"
+                           asp-action="Promocoes"
+                           asp-route-publico="@Context.Request.Query["publico"]"
+                           asp-route-categoriaId="@Context.Request.Query["categoriaId"]"
+                           asp-route-cor="@Context.Request.Query["cor"]"
+                           asp-route-tipo="@Context.Request.Query["tipo"]"
+                           asp-route-pesquisa="@Context.Request.Query["pesquisa"]"
+                           asp-route-ordenar="@Context.Request.Query["ordenar"]"
+                           asp-route-pagina="@i">
+
+                            @i
+
+                        </a>
+
+                    </li>
+                }
+
+
+                @* ÚLTIMA PÁGINA *@
+
+                @if (fim < totalPaginas)
+                {
+                    @if (fim < totalPaginas - 1)
+                    {
+                        <li class="page-item disabled">
+
+                            <span class="page-link">
+                                ...
+                            </span>
+
+                        </li>
+                    }
+
+                    <li class="page-item">
+
+                        <a class="page-link"
+                           asp-action="Promocoes"
+                           asp-route-publico="@Context.Request.Query["publico"]"
+                           asp-route-categoriaId="@Context.Request.Query["categoriaId"]"
+                           asp-route-cor="@Context.Request.Query["cor"]"
+                           asp-route-tipo="@Context.Request.Query["tipo"]"
+                           asp-route-pesquisa="@Context.Request.Query["pesquisa"]"
+                           asp-route-ordenar="@Context.Request.Query["ordenar"]"
+                           asp-route-pagina="@totalPaginas">
+
+                            @totalPaginas
+
+                        </a>
+
+                    </li>
+                }
+
+                                @* PRÓXIMA *@
+
+                <li class="page-item @(paginaAtual >= totalPaginas ? "disabled" : "")">
+
+                    <a class="page-link"
+                       asp-action="Promocoes"
+                       asp-route-publico="@Context.Request.Query["publico"]"
+                       asp-route-categoriaId="@Context.Request.Query["categoriaId"]"
+                       asp-route-cor="@Context.Request.Query["cor"]"
+                       asp-route-tipo="@Context.Request.Query["tipo"]"
+                       asp-route-pesquisa="@Context.Request.Query["pesquisa"]"
+                       asp-route-ordenar="@Context.Request.Query["ordenar"]"
+                       asp-route-pagina="@(paginaAtual + 1)">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+        </ul>
+
+    </nav>
+}
+    }
+
+</div>
+
+<style>
+    /* =========================================
+   FAIXA PROMOÇÃO
+   ========================================= */
+
+.promo-faixa {
+    width: 100vw;
+    height: 50px;
+    margin-left: calc(50% - 50vw);
+    margin-top: -24px;
+    overflow: hidden;
+    background: #141414;
+    color: #cfa34a;
+    border-top: 2px solid #cfa34a;
+    border-bottom: 2px solid #cfa34a;
+    padding: 9px 0;
+}
+
+.promo-faixa-conteudo {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    width: max-content;
+
+    white-space: nowrap;
+
+    animation: promoFaixa 25s linear infinite;
+}
+
+.promo-faixa-conteudo span {
+    font-size: 17px;
+    font-weight: 620;
+    letter-spacing: 0.8px;
+}
+
+@@keyframes promoFaixa {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-30%);
+    }
+
+}
+
+/* =========================================
+   BANNER DE PROMOÇÕES
+   ========================================= */
+
+.promo-banner {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    
+    margin-left: calc(50% - 50vw);
+    
+    padding: 55px 30px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #141414 0%,
+            #202020 55%,
+            #141414 100%
+        );
+
+    color: #fff;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* detalhe dourado */
+
+.promo-banner::before {
+    content: "";
+
+    position: absolute;
+
+    width: 200px;
+    height: 200px;
+
+    border: 1px solid rgba(207, 163, 74, 0.35);
+    border-radius: 50%;
+
+    top: -90px;
+    left: -70px;
+}
+
+.promo-banner::after {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    border: 1px solid rgba(207, 163, 74, 0.25);
+    border-radius: 50%;
+
+    bottom: -130px;
+    right: -80px;
+}
+
+.promo-banner-conteudo {
+    position: relative;
+    z-index: 1;
+
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+/* etiqueta */
+
+.promo-banner-tag {
+    display: inline-block;
+
+    margin-bottom: 15px;
+
+    padding: 6px 14px;
+
+    border: 1px solid #cfa34a;
+    border-radius: 20px;
+
+    color: #cfa34a;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+/* título */
+
+.promo-banner h1 {
+    margin: 0;
+
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+
+    line-height: 1.15;
+}
+
+/* desconto */
+
+.promo-banner-desconto {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 8px;
+
+    margin: 15px 0 10px;
+
+    color: #cfa34a;
+}
+
+.promo-banner-desconto span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.promo-banner-desconto strong {
+    font-size: clamp(50px, 8vw, 76px);
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* descrição */
+
+.promo-banner p {
+    max-width: 600px;
+    margin: 15px auto 20px;
+
+    color: #d5d5d5;
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* frete */
+
+.promo-banner .promo-frete {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 15px;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.promo-banner .promo-frete i {
+    color: #cfa34a;
+    font-size: 16px;
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@@media (max-width: 576px) {
+
+    .promo-banner {
+        padding: 40px 20px;
+        border-radius: 12px;
+    }
+
+    .promo-banner h1 {
+        font-size: 28px;
+    }
+
+    .promo-banner-desconto strong {
+        font-size: 55px;
+    }
+
+    .promo-banner-desconto span {
+        font-size: 15px;
+    }
+
+    .promo-banner p {
+        font-size: 14px;
+    }
+
+    .promo-banner .promo-frete {
+        font-size: 12px;
+    }
+
+}
+
+.produto-tamanhos {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.produto-tamanho {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 28px;
+    padding: 0 4px;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    background: #fff;
+    color: #212529;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.produto-tamanho.disponivel:hover {
+    border-color: #cfa34a;
+    background: #cfa34a;
+    color: #141414;
+}
+
+.produto-tamanho.disponivel.selecionado {
+    background: #cfa34a;
+    border-color: #cfa34a;
+    color: #141414;
+    font-weight: 700;
+}
+
+.produto-tamanho.indisponivel {
+    background: #f5f5f5;
+    border-color: #d9d9d9;
+    color: #b5b5b5;
+    cursor: not-allowed;
+    opacity: .65;
+}
+
+.produto-tamanho.indisponivel::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 50%;
+    height: 2px;
+    background: #dc3545;
+    transform: rotate(-12deg);
+    pointer-events: none;
+}
+
+/* =========================================
+   CARD CLICÁVEL
+   ========================================= */
+
+.promocao-card-clicavel {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.promocao-card-clicavel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================
+   PAGINAÇÃO 
+   ========================================= */
+
+.pagination {
+    gap: 6px;
+}
+
+.pagination .page-link {
+    color: #cfa34a;
+    border-color: #cfa34a;
+    background-color: #fff;
+    font-weight: 200;
+    border-radius: 10px !important;
+    margin: 0;
+}
+
+/* PASSAR O MOUSE */
+
+.pagination .page-link:hover {
+    background-color: #cfa34a;
+    border-color: #cfa34a;
+    color: #141414;
+}
+
+/* PÁGINA ATUAL */
+
+.pagination .page-item.active .page-link {
+    background-color: #cfa34a;
+    border-color: #cfa34a;
+    color: #141414;
+    font-weight: 300;
+    border-radius: 10px !important;
+}
+
+/* PRIMEIRO BOTÃO */
+
+.pagination .page-item:first-child .page-link {
+    border-radius: 10px !important;
+}
+
+/* ÚLTIMO BOTÃO */
+
+.pagination .page-item:last-child .page-link {
+    border-radius: 10px !important;
+}
+
+/* =========================================
+   COMBO - ACABAMENTO
+   ========================================= */
+
+.promocao-card .badge.bg-primary {
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Nome do combo */
+.promocao-card .produto-nome {
+    min-height: 43px;
+}
+
+/* Quantidade de produtos */
+.promocao-card .card-body > small {
+    min-height: 20px;
+}
+
+/* Avaliação do combo */
+.promocao-card .combo-avaliacao {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.promocao-card .combo-estrelas {
+    color: #cfa34a;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.promocao-card .combo-total-avaliacoes {
+    color: #777;
+    font-size: 12px;
+}
+
+/* Descrição */
+.promocao-card .card-body p.text-muted {
+    font-size: 12px;
+    line-height: 1.5;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.produto-btn:hover {
+    background: #cfa34a;
+    border-color: #cfa34a;
+    color: #141414;
+
+/* Botão do combo */
+.promocao-card .form-adicionar-combo {
+    margin-top: auto;
+}
+
+.promocao-card .form-adicionar-combo .produto-btn {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Hover do botão */
+.promocao-card  .form-adicionar-combo .produto-btn:hover {
+    background: #cfa34a;
+    border-color: #cfa34a;
+    color: #141414;
+}
+</style>
+
+<script>
+    document.querySelectorAll(".promocao-card-clicavel").forEach(card => {
+
+        card.addEventListener("click", function (e) {
+
+            // Elementos que futuramente terão seus próprios cliques
+            if (
+                e.target.closest("button") ||
+                e.target.closest("a") ||
+                e.target.closest("form") ||
+                e.target.closest("input") ||
+                e.target.closest("select") ||
+                e.target.closest("textarea") ||
+                e.target.closest("label")
+            ) {
+                return;
+            }
+
+            const url = this.dataset.url;
+
+            if (url) {
+                window.location.href = url;
+            }
+        });
+
+    });
+
+    /* =========================================
+       BOTÃO COMPRA RAPIDO
+       ========================================= */
+ document.querySelectorAll(".produto-tamanho.disponivel").forEach(botao => {
+
+        botao.addEventListener("click", function (e) {
+
+            e.stopPropagation();
+
+            const card = this.closest(".promocao-card");
+
+            if (!card) {
+                return;
+            }
+
+            card.querySelectorAll(".produto-tamanho")
+                .forEach(btn => btn.classList.remove("selecionado"));
+
+            this.classList.add("selecionado");
+
+            const campoTamanho =
+                card.querySelector(".campo-tamanho");
+
+            if (campoTamanho) {
+                campoTamanho.value =
+                    this.dataset.tamanho;
+            }
+        });
+
+    });
+
+    document.querySelectorAll(".form-compra-rapida").forEach(form => {
+
+        form.addEventListener("click", function (e) {
+            e.stopPropagation();
+        });
+
+        form.addEventListener("submit", function (e) {
+
+            const campoTamanho =
+                this.querySelector(".campo-tamanho");
+
+            if (!campoTamanho ||
+                !campoTamanho.value) {
+
+                e.preventDefault();
+
+                alert("Selecione um tamanho antes de continuar.");
+
+                return;
+            }
+
+        });
+
+    });
+</script>
+    

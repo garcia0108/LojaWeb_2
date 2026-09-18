@@ -1,0 +1,549 @@
+﻿@model LojaWeb_2.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "VesteArte";
+}
+
+<!-- HERO BANNER -->
+@{
+    ViewData["Title"] = "VesteArte";
+}
+
+<section class="hero-section">
+
+    <!-- IMAGEM DO LADO ESQUERDO -->
+    <div class="hero-image">
+
+        <img src="~/images/banner-vestearte.png"
+             alt="VesteArte Moda" />
+
+    </div>
+
+
+    <!-- CONTEÚDO DO LADO DIREITO -->
+    <div class="hero-content">
+
+        <span class="hero-subtitle">
+            NOVA COLEÇÃO
+        </span>
+
+        <h1>
+            Vista seu estilo.<br />
+            Mostre sua arte.
+        </h1>
+
+        <p>
+            Moda, conforto e personalidade em cada detalhe.
+            Encontre peças feitas para combinar com você.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a asp-controller="Loja"
+               asp-action="Index"
+               class="btn-hero-primary">
+
+                Comprar agora
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+            <a asp-controller="Loja"
+               asp-action="Index"
+               class="btn-hero-secondary">
+
+                Ver coleção
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DESTAQUE ABAIXO DO BANNER -->
+<section class="home-intro">
+
+    <div class="home-intro-content">
+
+        <span>
+            VESTEARTE
+        </span>
+
+        <h2>
+            Mais do que roupas.<br />
+            Uma forma de expressão.
+        </h2>
+
+        <p>
+            Descubra peças que combinam conforto, qualidade
+            e estilo para acompanhar o seu dia.
+        </p>
+
+    </div>
+
+</section>
+
+<!-- CATEGORIAS -->
+<section class="home-categories">
+
+    <div class="categories-header">
+
+        <span>NOSSAS CATEGORIAS</span>
+
+        <h2>
+            Encontre seu estilo
+        </h2>
+
+        <p>
+            Escolha a categoria que mais combina com você.
+        </p>
+
+    </div>
+
+
+    <div class="categories-grid">
+
+        <a asp-controller="Loja"
+           asp-action="Masculino"
+           asp-route-publico="Masculino"
+           class="category-card" >
+
+            <div class="category-image">
+
+                <i class="bi bi-person-standing"></i>
+
+            </div>
+
+            <div class="category-info">
+
+                <h3>Masculino</h3>
+
+                <span>
+                    Ver produtos
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a asp-controller="Loja"
+           asp-action="Feminino"
+           asp-route-publico="Feminino"
+           class="category-card">
+
+            <div class="category-image">
+
+                <i class="bi bi-person-standing-dress"></i>
+
+            </div>
+
+            <div class="category-info">
+
+                <h3>Feminino</h3>
+
+                <span>
+                    Ver produtos
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a asp-controller="Loja"
+           asp-action="Index"
+           asp-route-novidades="true"
+           class="category-card category-card-large">
+
+            <div class="category-image">
+
+                <i class="bi bi-stars"></i>
+
+            </div>
+
+            <div class="category-info">
+
+                <h3>Novidades</h3>
+
+                <span>
+                    Conferir coleção
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+<!-- PRODUTOS EM DESTAQUE -->
+<section class="home-featured">
+
+    <div class="featured-header">
+
+        <span>SELEÇÃO ESPECIAL</span>
+
+        <h2>Produtos em destaque</h2>
+
+        <p>
+            Peças selecionadas especialmente para você.
+        </p>
+
+    </div>
+
+
+    <div class="featured-grid">
+
+        @if (Model.ProdutosDestaque != null && Model.ProdutosDestaque.Any())
+        {
+            foreach (var produto in Model.ProdutosDestaque)
+            {
+                <div class="featured-card">
+
+                    <a asp-controller="Loja"
+                       asp-action="Detalhes"
+                       asp-route-id="@produto.Id"
+                       class="featured-image">
+
+                        @if (!string.IsNullOrEmpty(produto.Imagem))
+                        {
+                            <img src="@produto.Imagem"
+                                 alt="@produto.Nome" />
+                        }
+                        else if (produto.Imagens != null && produto.Imagens.Any())
+                        {
+                            <img src="@produto.Imagens.First().Caminho"
+                                 alt="@produto.Nome" />
+                        }
+                        else
+                        {
+                            <div class="no-image">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
+
+                    </a>
+
+                    <div class="featured-info">
+
+                        <h3>@produto.Nome</h3>
+
+                        @if (produto.Categoria != null)
+                        {
+                            <span class="featured-category">
+                                @produto.Categoria.Nome
+                            </span>
+                        }
+
+                        <div class="featured-footer">
+
+                            <strong>
+                                @produto.Preco.ToString("C")
+                            </strong>
+
+                            <a asp-controller="Loja"
+                               asp-action="Detalhes"
+                               asp-route-id="@produto.Id"
+                               class="featured-button">
+
+                                Ver produto
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="featured-empty">
+
+                <i class="bi bi-stars"></i>
+
+                <p>
+                    Em breve teremos produtos em destaque.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+   
+
+
+    <div class="featured-all">
+
+        <a asp-controller="Loja"
+           asp-action="Produtos">
+
+            Ver todos os produtos
+            <i class="bi bi-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+
+<!-- MAIS VENDIDOS -->
+<section class="home-best-sellers">
+
+    <div class="best-sellers-header">
+
+        <span>OS FAVORITOS DOS CLIENTES</span>
+
+        <h2>
+            Mais vendidos
+        </h2>
+
+        <p>
+            Os produtos que mais fazem sucesso na VesteArte.
+        </p>
+
+    </div>
+
+
+    <div class="best-sellers-grid">
+
+        @if (Model.MaisVendidos != null && Model.MaisVendidos.Any())
+        {
+            foreach (var produto in Model.MaisVendidos)
+            {
+                <div class="best-seller-card">
+
+                    <a asp-controller="Loja"
+                       asp-action="Detalhes"
+                       asp-route-id="@produto.Id"
+                       class="best-seller-image">
+
+                        @if (!string.IsNullOrEmpty(produto.Imagem))
+                        {
+                            <img src="@produto.Imagem"
+                                 alt="@produto.Nome" />
+                        }
+                        else if (produto.Imagens != null && produto.Imagens.Any())
+                        {
+                            <img src="@produto.Imagens.First().Caminho"
+                                 alt="@produto.Nome" />
+                        }
+                        else
+                        {
+                            <div class="no-image">
+
+                                <i class="bi bi-image"></i>
+
+                            </div>
+                        }
+
+                    </a>
+
+
+                    <div class="best-seller-info">
+
+                        <h3>@produto.Nome</h3>
+
+                        @if (produto.Categoria != null)
+                        {
+                            <span class="best-seller-category">
+                                @produto.Categoria.Nome
+                            </span>
+                        }
+
+
+                        <div class="best-seller-footer">
+
+                            <strong>
+                                @produto.Preco.ToString("C")
+                            </strong>
+
+                            <a asp-controller="Loja"
+                               asp-action="Detalhes"
+                               asp-route-id="@produto.Id"
+                               class="best-seller-button">
+
+                                Ver produto
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="best-seller-empty">
+
+                <i class="bi bi-fire"></i>
+
+                <p>
+                    Ainda não temos vendas suficientes para mostrar os produtos mais vendidos.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+
+    <div class="best-sellers-all">
+
+        <a asp-controller="Loja"
+           asp-action="Produtos">
+
+            Ver todos os produtos
+            <i class="bi bi-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+
+<!-- HISTÓRIA / IDENTIDADE DA MARCA -->
+<section class="home-brand">
+
+    <div class="brand-content">
+
+        <!-- IMAGEM -->
+        <div class="brand-image">
+
+            <img src="~/images/home/brand-style.jpg"
+                 alt="Estilo VesteArte" />
+
+        </div>
+
+
+        <!-- TEXTO -->
+        <div class="brand-text">
+
+            <span>VESTEARTE</span>
+
+            <h2>
+                Vista o que representa você.
+            </h2>
+
+            <p>
+                Acreditamos que cada pessoa tem seu próprio estilo.
+                Por isso, a VesteArte une conforto, qualidade e
+                personalidade em peças para acompanhar o seu dia.
+            </p>
+
+            <p>
+                Mais do que seguir tendências, queremos ajudar você
+                a expressar quem realmente é.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Sobre"
+               class="brand-button">
+
+                Conheça a VesteArte
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- NEWSLETTER -->
+<section class="home-newsletter">
+
+    <div class="newsletter-content">
+
+        <div class="newsletter-text">
+
+            <span>FIQUE POR DENTRO</span>
+
+            <h2>
+                Novidades, estilo e lançamentos.
+            </h2>
+
+            <p>
+                Cadastre seu e-mail e receba novidades,
+                novos produtos e ofertas da VesteArte.
+            </p>
+
+        </div>
+
+
+        <form asp-controller="Home"
+              asp-action="Newsletter"
+              method="post"
+              class="newsletter-form">
+
+            @Html.AntiForgeryToken()
+
+            <input type="email"
+                   name="email"
+                   placeholder="Digite seu melhor e-mail"
+                   required />
+
+            <button type="submit">
+
+                Quero receber
+                <i class="bi bi-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+        @if (TempData["NewsletterSucesso"] != null)
+        {
+            <div class="newsletter-success">
+                @TempData["NewsletterSucesso"]
+            </div>
+        }
+
+        @if (TempData["NewsletterErro"] != null)
+        {
+            <div class="newsletter-error">
+                @TempData["NewsletterErro"]
+            </div>
+        }
+
+    </div>
+
+</section>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+
+            const mensagens = document.querySelectorAll(
+                '.newsletter-success, .newsletter-error'
+            );
+
+            mensagens.forEach(function (mensagem) {
+
+                mensagem.style.transition = 'opacity 0.5s ease';
+                mensagem.style.opacity = '0';
+
+                setTimeout(function () {
+                    mensagem.remove();
+                }, 500);
+
+            });
+
+        }, 4000);
+    </script>
+}

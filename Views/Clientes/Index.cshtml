@@ -1,0 +1,443 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<div class="usuarios-page">
+
+    <!-- CABEÇALHO -->
+    <div class="usuarios-header">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-people"></i>
+                Clientes
+            </h2>
+
+            <p class="text-muted mb-0">
+                Gerencie os clientes cadastrados na loja.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-success">
+
+            <i class="bi bi-person-plus"></i>
+            Novo Cliente
+
+        </a>
+
+    </div>
+
+
+    <!-- MENSAGENS -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div id="mensagemSucesso"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <strong>@TempData["Sucesso"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+
+    @if (TempData["Erro"] != null)
+    {
+        <div id="mensagemErro"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            <strong>@TempData["Erro"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- PESQUISA -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form asp-action="Index"
+                  method="get">
+
+                <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+
+                            <input type="text"
+                                   name="pesquisa"
+                                   value="@Context.Request.Query["pesquisa"]"
+                                   class="form-control"
+                                   placeholder="Pesquisar por nome, CPF/CNPJ, e-mail, telefone ou cidade..." />
+
+
+                          <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-search"></i>
+                                Pesquisar
+
+                            </button>
+
+                            @if (!string.IsNullOrWhiteSpace(
+                                                        Context.Request.Query["pesquisa"]))
+                            {
+                                <a asp-action="Index"
+                                   class="btn btn-outline-secondary"
+                                   title="Limpar pesquisa">
+
+                                    <i class="bi bi-x-circle"></i>
+                                       Limpar
+                                </a>
+                            }
+                    </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- LISTA -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model.Any())
+            {
+                <!-- DESKTOP -->
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Cliente</th>
+
+                                <th>CPF/CNPJ</th>
+
+                                <th>E-mail</th>
+
+                                <th>Telefone</th>
+
+                                <th>Cidade</th>
+
+                                <th>Status</th>
+
+                                <th class="text-end">
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var cliente in Model)
+                            {
+                                <tr>
+
+                                    <!-- CLIENTE -->
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="me-2">
+
+                                                <i class="bi bi-person-circle fs-4 text-muted"></i>
+
+                                            </div>
+
+                                            <strong>
+                                                @cliente.Nome
+                                            </strong>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CPF/CNPJ -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(cliente.CpfCnpj))
+                                        {
+                                            @cliente.CpfCnpj
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Não informado
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- EMAIL -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(cliente.Email))
+                                        {
+                                            @cliente.Email
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Não informado
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- TELEFONE -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(cliente.Telefone))
+                                        {
+                                            @cliente.Telefone
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Não informado
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- CIDADE -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(cliente.Cidade))
+                                        {
+                                            @cliente.Cidade
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Não informado
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (cliente.Ativo)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i>
+                                                Ativo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle"></i>
+                                                Inativo
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- AÇÕES -->
+
+                                    <td class="text-end">
+
+                                        <div class="btn-group">
+
+
+                                            <!-- DETALHES -->
+
+                                            <a asp-action="Details"
+                                               asp-route-id="@cliente.Id"
+                                               class="btn btn-sm btn-outline-info"
+                                               title="Visualizar">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+
+                                            <!-- EDITAR -->
+
+                                            <a asp-action="Edit"
+                                               asp-route-id="@cliente.Id"
+                                               class="btn btn-sm btn-outline-warning"
+                                               title="Editar">
+
+                                                <i class="bi bi-pencil"></i>
+
+                                            </a>
+
+
+                                            <!-- ATIVAR / INATIVAR -->
+
+                                            <form asp-controller="Clientes"
+                                                  asp-action="AtivarInativar"
+                                                  asp-route-id="@cliente.Id"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                @if (cliente.Ativo)
+                                                {
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger"
+                                                            title="Inativar">
+
+                                                        <i class="bi bi-person-dash"></i>
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-success"
+                                                            title="Ativar">
+
+                                                        <i class="bi bi-person-check"></i>
+
+                                                    </button>
+                                                }
+
+                                            </form>
+
+
+                                            <!-- EXCLUIR -->
+
+                                            <a asp-action="Delete"
+                                               asp-route-id="@cliente.Id"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Excluir">
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- SEM CLIENTES -->
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-people fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        Nenhum cliente cadastrado
+                    </h5>
+
+                    <p class="text-muted">
+                        Comece cadastrando o primeiro cliente da loja.
+                    </p>
+
+                    <a asp-action="Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-person-plus"></i>
+
+                        Cadastrar Cliente
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <script>
+
+        setTimeout(function () {
+
+            const sucesso =
+                document.getElementById("mensagemSucesso");
+
+            if (sucesso) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(sucesso);
+
+                alerta.close();
+
+            }
+
+
+            const erro =
+                document.getElementById("mensagemErro");
+
+            if (erro) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(erro);
+
+                alerta.close();
+
+            }
+
+        }, 4000);
+
+    </script>
+}

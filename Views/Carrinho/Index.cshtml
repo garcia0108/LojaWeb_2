@@ -1,0 +1,968 @@
+﻿@model List<LojaWeb_2.Models.ItemCarrinho>
+
+@{
+    ViewData["Title"] = "Carrinho";
+
+    decimal total = Model.Sum(i => i.Subtotal);
+    int totalItens = Model.Sum(i => i.Quantidade);
+
+    var cotacaoFrete =
+    ViewBag.CotacaoFrete
+    as LojaWeb_2.Models.CotacaoFrete;
+
+    decimal valorFrete =
+        cotacaoFrete?.Valor ?? 0;
+
+    decimal totalComFrete =
+        total + valorFrete;
+}
+
+<div class="container mt-5">
+
+    <!-- ========================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-cart3"></i>
+                Meu Carrinho
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confira os produtos selecionados.
+            </p>
+
+        </div>
+
+
+        <a asp-controller="Loja"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Continuar comprando
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- MENSAGEM DE SUCESSO -->
+    <!-- ========================================= -->
+    @if (TempData.TryGetValue("Sucesso", out var mensagemSucesso))
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <strong>@mensagemSucesso</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- ========================================= -->
+    <!-- MENSAGEM DE ERRO -->
+    <!-- ========================================= -->
+    @if (TempData.TryGetValue("Erro", out var mensagemErro))
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+            <strong>@mensagemErro</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+    <!-- ========================================= -->
+    <!-- CARRINHO -->
+    <!-- ========================================= -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+
+            <!-- ========================================= -->
+            <!-- ITENS -->
+            <!-- ========================================= -->
+
+            <div class="col-lg-8">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        @foreach (var item in Model)
+                        {
+                            bool ehCombo = item.EhCombo;
+
+                            <div class="row align-items-center border-bottom py-4 carrinho-item">
+
+                                <!-- ================================= -->
+                                <!-- IMAGEM -->
+                                <!-- ================================= -->
+
+                                <div class="col-3 col-md-2">
+
+                                    @if (!string.IsNullOrEmpty(item.Imagem))
+                                    {
+                                        <img src="@item.Imagem"
+                                             class="img-fluid rounded carrinho-imagem"
+                                             alt="@item.NomeProduto" />
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex
+                                                                align-items-center
+                                                                justify-content-center
+                                                                bg-light
+                                                                rounded
+                                                                carrinho-imagem">
+
+                                            @if (ehCombo)
+                                            {
+                                                <i class="bi bi-box-seam
+                                                                          text-muted
+                                                                          fs-3"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-image
+                                                                          text-muted
+                                                                          fs-3"></i>
+                                            }
+
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- NOME / INFORMAÇÕES -->
+                                <!-- ================================= -->
+
+                                <div class="col-9 col-md-3">
+
+                                    <!-- BADGE -->
+
+                                    <div class="mb-2">
+
+                                        @if (ehCombo)
+                                        {
+                                            <span class="badge bg-danger">
+
+                                                <i class="bi bi-box-seam"></i>
+
+                                                COMBO
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary">
+
+                                                <i class="bi bi-bag"></i>
+
+                                                PRODUTO
+
+                                            </span>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- NOME -->
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        @item.NomeProduto
+
+                                    </h5>
+
+
+                                    <!-- INFORMAÇÕES DO PRODUTO -->
+                                    @if (ehCombo)
+                                    {
+                                        <div class="text-muted small">
+
+                                            <i class="bi bi-box-seam"></i>
+
+                                            Combo com vários produtos
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-muted small">
+
+                                            <div>
+
+                                                Cor:
+
+                                                <strong>
+                                                    @item.Cor
+                                                </strong>
+
+                                            </div>
+
+
+                                            <div>
+
+                                                Tamanho:
+
+                                                <strong>
+                                                    @item.Tamanho
+                                                </strong>
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- PREÇO -->
+                                <!-- ================================= -->
+
+                                <div class="col-6 col-md-2 mt-3 mt-md-0">
+
+                                    <span class="text-muted small">
+                                        Preço
+                                    </span>
+
+                                    <div class="fw-semibold">
+
+                                        @item.PrecoUnitario.ToString("C")
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- QUANTIDADE -->
+                                <!-- ================================= -->
+
+                                <div class="col-6 col-md-2 mt-3 mt-md-0">
+
+                                    <span class="text-muted small">
+                                        Quantidade
+                                    </span>
+
+                                    @if (ehCombo)
+                                    {
+                                        <!-- QUANTIDADE DO COMBO -->
+
+                                        <div class="d-flex align-items-center mt-1">
+
+                                            <!-- DIMINUIR COMBO -->
+                                            <form asp-action="DiminuirCombo"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="comboId"
+                                                       value="@item.ComboId" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Diminuir">
+
+                                                    <i class="bi bi-dash"></i>
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- QUANTIDADE -->
+                                            <span class="mx-2 fw-semibold">
+
+                                                @item.Quantidade
+
+                                            </span>
+
+
+                                            <!-- AUMENTAR COMBO -->
+                                            <form asp-action="AumentarCombo"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="comboId"
+                                                       value="@item.ComboId" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Aumentar">
+
+                                                    <i class="bi bi-plus"></i>
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <!-- QUANTIDADE DO PRODUTO -->
+
+                                        <div class="d-flex align-items-center mt-1">
+
+                                            <!-- DIMINUIR -->
+
+                                            <form asp-action="Diminuir"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="produtoId"
+                                                       value="@item.ProdutoId" />
+
+                                                <input type="hidden"
+                                                       name="cor"
+                                                       value="@item.Cor" />
+
+                                                <input type="hidden"
+                                                       name="tamanho"
+                                                       value="@item.Tamanho" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-secondary">
+
+                                                    <i class="bi bi-dash"></i>
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- QUANTIDADE -->
+
+                                            <span class="mx-2 fw-semibold">
+
+                                                @item.Quantidade
+
+                                            </span>
+
+
+                                            <!-- AUMENTAR -->
+
+                                            <form asp-action="Aumentar"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="produtoId"
+                                                       value="@item.ProdutoId" />
+
+                                                <input type="hidden"
+                                                       name="cor"
+                                                       value="@item.Cor" />
+
+                                                <input type="hidden"
+                                                       name="tamanho"
+                                                       value="@item.Tamanho" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-secondary">
+
+                                                    <i class="bi bi-plus"></i>
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- SUBTOTAL -->
+                                <!-- ================================= -->
+
+                                <div class="col-10 col-md-2 mt-3 mt-md-0">
+
+                                    <span class="text-muted small">
+                                        Subtotal
+                                    </span>
+
+                                    <div class="fw-bold text-primary">
+
+                                        @item.Subtotal.ToString("C")
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- REMOVER -->
+                                <!-- ================================= -->
+
+                                <div class="col-2 col-md-1 mt-3 mt-md-0 text-end">
+
+                                    @if (ehCombo)
+                                    {
+                                        <!-- REMOVER COMBO -->
+
+                                        <form asp-action="RemoverCombo"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="comboId"
+                                                   value="@item.ComboId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    title="Remover combo">
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <!-- REMOVER PRODUTO -->
+
+                                        <form asp-action="Remover"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="produtoId"
+                                                   value="@item.ProdutoId" />
+
+                                            <input type="hidden"
+                                                   name="cor"
+                                                   value="@item.Cor" />
+
+                                            <input type="hidden"
+                                                   name="tamanho"
+                                                   value="@item.Tamanho" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    title="Remover">
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- RESUMO -->
+            <!-- ========================================= -->
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h4 class="fw-bold mb-4">
+
+                            Resumo do pedido
+
+                        </h4>
+
+
+                        <!-- QUANTIDADE DE ITENS -->
+
+                        <div class="d-flex justify-content-between mb-3">
+
+                            <span>
+                                Itens
+                            </span>
+
+                            <strong>
+                                @totalItens
+                            </strong>
+
+                        </div>
+
+
+                        <!-- SUBTOTAL -->
+
+                        <div class="d-flex justify-content-between mb-3">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong>
+                                @total.ToString("C")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ========================================= -->
+                        <!-- CÁLCULO DE FRETE -->
+                        <!-- ========================================= -->
+
+                        <div class="mb-4">
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <i class="bi bi-truck me-2 text-primary"></i>
+
+                                <strong>
+                                    Calcular frete
+                                </strong>
+
+                            </div>
+
+
+                            <form asp-action="CalcularFrete"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <div class="input-group">
+
+                                    <input type="text"
+                                           name="cepDestino"
+                                           value="@ViewBag.CepDestino"
+                                           class="form-control"
+                                           placeholder="Digite seu CEP"
+                                           maxlength="9" />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-primary">
+
+                                        <i class="bi bi-calculator me-1"></i>
+
+                                        Calcular
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+
+                            <small class="text-muted d-block mt-2">
+
+                                Informe o CEP para consultar as opções de entrega.
+
+                            </small>
+
+                        </div>
+
+                        @if (ViewBag.OpcoesFrete != null)
+                        {
+                            var opcoesFrete =
+                            (List<LojaWeb_2.Services.OpcaoFrete>)
+                            ViewBag.OpcoesFrete;
+
+                            <div class="mb-4">
+
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-box-seam me-2"></i>
+                                    Escolha a forma de entrega
+                                </h6>
+
+                                <form asp-action="SelecionarFrete"
+                                      method="post"
+                                      id="formFrete">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="cepDestino"
+                                           value="@ViewBag.CepDestino" />
+
+                                    <input type="hidden"
+                                           name="tipoFrete"
+                                           id="tipoFrete" />
+
+                                    <input type="hidden"
+                                           name="valorFrete"
+                                           id="valorFrete" />
+
+                                    <input type="hidden"
+                                           name="prazoDias"
+                                           id="prazoDias" />
+
+
+                                    @foreach (var opcao in opcoesFrete)
+                                    {
+                                        <div class="border rounded p-3 mb-2 opcao-frete"
+                                             style="cursor:pointer;"
+                                             data-tipo="@opcao.Nome"
+                                             data-valor="@opcao.Valor"
+                                             data-prazo="@opcao.PrazoDias">
+
+                                            <div class="d-flex
+                                            justify-content-between
+                                            align-items-center">
+
+                                                <div>
+
+                                                    <div class="form-check">
+
+                                                        <input class="form-check-input"
+                                                               type="radio"
+                                                               name="freteRadio">
+
+                                                        <span class="form-check-label fw-bold">
+
+                                                            @opcao.Nome
+
+                                                        </span>
+
+                                                    </div>
+
+                                                    <small class="text-muted ms-4">
+
+                                                        Entrega em até
+                                                        @opcao.PrazoDias
+                                                        dias úteis
+
+                                                    </small>
+
+                                                </div>
+
+                                                <strong class="text-primary">
+
+                                                    @opcao.Valor.ToString("C")
+
+                                                </strong>
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+
+                                    <button type="submit"
+                                            id="btnEscolherFrete"
+                                            class="btn btn-primary w-100 mt-2"
+                                            disabled>
+
+                                        <i class="bi bi-check-circle me-1"></i>
+
+                                        Escolher entrega
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        }
+
+                        <hr />
+
+                        <!-- ========================================= -->
+                        <!-- FRETE SELECIONADO -->
+                        <!-- ========================================= -->
+                        
+                        @if (cotacaoFrete != null)
+                        {
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <span>
+
+                                    <i class="bi bi-truck me-1"></i>
+
+                                    Frete (@cotacaoFrete.TipoFrete)
+
+                                </span>
+
+                                <strong class="text-success">
+
+                                    @cotacaoFrete.Valor.ToString("C2")
+
+                                </strong>
+
+                            </div>
+                        }
+
+                        <!-- TOTAL -->
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <span class="fw-bold">
+                                Total
+                            </span>
+
+                            <span class="fw-bold text-primary fs-4">
+
+                                @totalComFrete.ToString("C")
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- FINALIZAR -->
+
+                        <a asp-controller="Checkout"
+                           asp-action="Index"
+                           class="btn btn-success btn-lg w-100">
+
+                            <i class="bi bi-credit-card"></i>
+
+                            Finalizar compra
+
+                        </a>
+
+
+                        <small class="text-muted d-block text-center mt-2">
+
+                            Checkout será implementado na próxima etapa.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- ========================================= -->
+        <!-- CARRINHO VAZIO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <i class="bi bi-cart-x fs-1 text-muted"></i>
+
+                <h4 class="fw-bold mt-3">
+
+                    Seu carrinho está vazio
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Você ainda não adicionou nenhum produto.
+
+                </p>
+
+                <a asp-controller="Loja"
+                   asp-action="Index"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-shop"></i>
+
+                    Ir para a loja
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- CSS -->
+<!-- ========================================= -->
+
+<style>
+
+    .carrinho-imagem {
+        height: 90px;
+        width: 90px;
+        object-fit: cover;
+    }
+
+
+    .carrinho-item:last-child {
+        border-bottom: none !important;
+    }
+
+
+    .carrinho-item {
+        transition: background-color 0.2s ease;
+    }
+
+
+        .carrinho-item:hover {
+            background-color: #f8f9fa;
+        }
+
+
+    .badge {
+        font-size: 0.75rem;
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .carrinho-imagem {
+            width: 75px;
+            height: 75px;
+        }
+    }
+
+</style>
+
+
+@section Scripts {
+
+    <script>
+
+        // =========================================
+        // FECHAR MENSAGENS AUTOMATICAMENTE
+        // =========================================
+
+        setTimeout(function () {
+
+            const mensagens =
+                document.querySelectorAll(".alert");
+
+            mensagens.forEach(function (mensagem) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(mensagem);
+
+                alerta.close();
+
+            });
+
+        }, 4000);
+
+            document.addEventListener("DOMContentLoaded", function () {
+
+            const opcoes =
+                document.querySelectorAll(".opcao-frete");
+
+            const tipoFrete =
+                document.getElementById("tipoFrete");
+
+            const valorFrete =
+                document.getElementById("valorFrete");
+
+            const prazoDias =
+                document.getElementById("prazoDias");
+
+            const botao =
+                document.getElementById("btnEscolherFrete");
+
+
+            opcoes.forEach(function (opcao) {
+
+                opcao.addEventListener("click", function () {
+
+                    // Remover seleção anterior
+
+                    opcoes.forEach(function (item) {
+
+                        item.classList.remove(
+                            "border-primary",
+                            "bg-light"
+                        );
+
+                        const radio =
+                            item.querySelector(
+                                'input[type="radio"]'
+                            );
+
+                        radio.checked = false;
+
+                    });
+
+
+                    // Selecionar opção atual
+
+                    opcao.classList.add(
+                        "border-primary",
+                        "bg-light"
+                    );
+
+
+                    const radio =
+                        opcao.querySelector(
+                            'input[type="radio"]'
+                        );
+
+                    radio.checked = true;
+
+
+                    // Guardar os dados selecionados
+
+                    tipoFrete.value =
+                        opcao.dataset.tipo;
+
+                    valorFrete.value =
+                        opcao.dataset.valor;
+
+                    prazoDias.value =
+                        opcao.dataset.prazo;
+
+
+                    // Liberar botão
+
+                    botao.disabled = false;
+
+                });
+
+            });
+
+        });
+
+
+    </script>
+
+}

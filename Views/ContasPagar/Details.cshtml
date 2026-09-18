@@ -1,0 +1,342 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model LojaWeb_2.Models.ContaPagar
+
+@{
+    ViewData["Title"] = "Detalhes da Conta a Pagar";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-receipt me-2"></i>
+
+                Detalhes da Conta a Pagar
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulte todas as informações desta conta.
+            </p>
+
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- CARD PRINCIPAL -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="col-md-8">
+
+                    <small class="text-muted">
+                        Descrição
+                    </small>
+
+                    <h5 class="fw-bold mt-1">
+                        @Model.Descricao
+                    </h5>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Status
+                    </small>
+
+                    <div class="mt-1">
+
+                        @if (Model.Status ==
+                                                StatusContaPagar.Pendente)
+                        {
+                            <span class="badge bg-warning text-dark fs-6">
+                                Pendente
+                            </span>
+                        }
+                        else if (Model.Status ==
+                        StatusContaPagar.Pago)
+                        {
+                            <span class="badge bg-success fs-6">
+                                Pago
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary fs-6">
+                                Cancelado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- VALOR -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Valor
+                    </small>
+
+                    <h4 class="fw-bold text-danger mt-1">
+                        @Model.Valor.ToString("C")
+                    </h4>
+
+                </div>
+
+
+                <!-- VENCIMENTO -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Data de vencimento
+                    </small>
+
+                    <h5 class="fw-semibold mt-1">
+
+                        @Model.DataVencimento.ToString("dd/MM/yyyy")
+                        
+
+                    </h5>
+
+                    @if (
+                                        Model.Status ==
+                                        StatusContaPagar.Pendente &&
+                                        Model.DataVencimento.Date <
+                                        DateTime.Today)
+                    {
+                        <span class="badge bg-danger">
+                            Vencida
+                        </span>
+                    }
+
+                </div>
+
+
+                <!-- CATEGORIA -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Categoria
+                    </small>
+
+                    <h5 class="fw-semibold mt-1">
+                        @Model.Categoria
+                    </h5>
+
+                </div>
+
+
+                <!-- FORNECEDOR -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Fornecedor
+                    </small>
+
+                    @if (Model.Fornecedor != null)
+                    {
+                        <h5 class="fw-semibold mt-1">
+                            @Model.Fornecedor.Nome
+                        </h5>
+                    }
+                    else
+                    {
+                        <h5 class="text-muted mt-1">
+                            Não informado
+                        </h5>
+                    }
+
+                </div>
+
+
+                <!-- FORMA DE PAGAMENTO -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Forma de pagamento
+                    </small>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.FormaPagamento))
+                    {
+                        <h5 class="fw-semibold mt-1">
+                            @Model.FormaPagamento
+                        </h5>
+                    }
+                    else
+                    {
+                        <h5 class="text-muted mt-1">
+                            Não informada
+                        </h5>
+                    }
+
+                </div>
+
+
+                <!-- DATA PAGAMENTO -->
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Data de pagamento
+                    </small>
+
+                    @if (Model.DataPagamento.HasValue)
+                    {
+                        <h5 class="fw-semibold mt-1">
+
+                            @Model.DataPagamento.Value.ToString("dd/MM/yyyy HH:mm")
+                            
+
+                        </h5>
+                    }
+                    else
+                    {
+                        <h5 class="text-muted mt-1">
+                            Ainda não paga
+                        </h5>
+                    }
+
+                </div>
+
+
+                <!-- OBSERVAÇÃO -->
+
+                <div class="col-12">
+
+                    <small class="text-muted">
+                        Observação
+                    </small>
+
+                    <div class="border rounded p-3 mt-2 bg-light">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Observacao))
+                        {
+                            @Model.Observacao
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Nenhuma observação informada.
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AÇÕES -->
+
+            <hr class="my-4" />
+
+            <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+                @if (Model.Status ==
+                                StatusContaPagar.Pendente)
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-pencil me-1"></i>
+
+                        Editar
+
+                    </a>
+
+
+                    <form asp-action="Pagar"
+                          asp-route-id="@Model.Id"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-success"
+                                onclick="return confirm('Confirmar pagamento desta conta?');">
+
+                            <i class="bi bi-check-circle me-1"></i>
+
+                            Pagar
+
+                        </button>
+
+                    </form>
+
+
+                    <form asp-action="Cancelar"
+                          asp-route-id="@Model.Id"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-warning"
+                                onclick="return confirm('Cancelar esta conta a pagar?');">
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Cancelar
+
+                        </button>
+
+                    </form>
+                }
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Voltar
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

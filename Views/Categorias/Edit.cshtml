@@ -1,0 +1,158 @@
+﻿@model LojaWeb_2.Models.Categoria
+
+@{
+    ViewData["Title"] = "Editar Categoria";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+            <h3>Editar Categoria</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descricao"></label>
+                    <textarea asp-for="Descricao" class="form-control"></textarea>
+                </div>
+
+                <!-- IMAGEM DA CATEGORIA -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Imagem da categoria
+                    </label>
+
+                    @if (!string.IsNullOrEmpty(Model.Imagem))
+                    {
+                        <div class="mb-2">
+
+                            <img src="@Model.Imagem"
+                                 alt="@Model.Nome"
+                                 style="width: 150px;
+                            height: 150px;
+                            object-fit: cover;
+                            border-radius: 10px;" />
+
+                        </div>
+                    }
+
+                    <input type="file"
+                           name="imagemArquivo"
+                           class="form-control"
+                           accept="image/*" />
+
+                    <small class="text-muted">
+                        Selecione uma nova imagem somente se quiser substituir a atual.
+                    </small>
+
+                </div>
+
+                <!-- ========================================= -->
+<!-- IMAGEM MASCULINA -->
+<!-- ========================================= -->
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Imagem masculina
+    </label>
+
+    @if (!string.IsNullOrEmpty(Model.ImagemMasculina))
+    {
+        <div class="mb-2">
+
+            <img src="@Model.ImagemMasculina"
+                 alt="Imagem masculina - @Model.Nome"
+                 style="width: 150px;
+                        height: 150px;
+                        object-fit: cover;
+                        border-radius: 10px;" />
+
+        </div>
+    }
+
+    <input type="file"
+           name="imagemMasculinaArquivo"
+           class="form-control"
+           accept="image/*" />
+
+    <small class="text-muted">
+        Selecione uma nova imagem somente se quiser substituir a atual.
+    </small>
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- IMAGEM FEMININA -->
+<!-- ========================================= -->
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Imagem feminina
+    </label>
+
+    @if (!string.IsNullOrEmpty(Model.ImagemFeminina))
+    {
+        <div class="mb-2">
+
+            <img src="@Model.ImagemFeminina"
+                 alt="Imagem feminina - @Model.Nome"
+                 style="width: 150px;
+                        height: 150px;
+                        object-fit: cover;
+                        border-radius: 10px;" />
+
+        </div>
+    }
+
+    <input type="file"
+           name="imagemFemininaArquivo"
+           class="form-control"
+           accept="image/*" />
+
+    <small class="text-muted">
+        Selecione uma nova imagem somente se quiser substituir a atual.
+    </small>
+
+</div>
+
+                <button class="btn btn-success">
+                    Atualizar
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

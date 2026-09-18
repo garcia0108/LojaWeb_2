@@ -1,0 +1,3226 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Produto>
+
+@{
+    ViewData["Title"] = "Loja";
+}
+
+<div class="container mt-4">
+
+    <!-- =========================================
+     BANNER PRINCIPAL
+     ========================================= -->
+
+    <section class="banner-principal">
+
+        <div class="banner-carousel">
+
+            <!-- BANNER 1 -->
+            <div class="banner-slide ativo">
+                <img src="~/uploads/banners/banner1.webp"
+                     alt="Banner principal 1">
+            </div>
+
+            <!-- BANNER 2 -->
+            <div class="banner-slide">
+                <img src="~/uploads/banners/banner2.webp"
+                     alt="Banner principal 2">
+            </div>
+
+            <!-- BANNER 3 -->
+            <div class="banner-slide">
+                <img src="~/uploads/banners/banner3.webp"
+                     alt="Banner principal 3">
+            </div>
+
+            <!-- BANNER 4 -->
+            <div class="banner-slide">
+                <img src="~/uploads/banners/banner4.webp"
+                     alt="Banner principal 4">
+            </div>
+
+
+            <!-- SETA ESQUERDA -->
+            <button type="button"
+                    class="banner-arrow banner-prev"
+                    aria-label="Banner anterior">
+                &#10094;
+            </button>
+
+
+            <!-- SETA DIREITA -->
+            <button type="button"
+                    class="banner-arrow banner-next"
+                    aria-label="Próximo banner">
+                &#10095;
+            </button>
+
+
+            <!-- INDICADORES -->
+            <div class="banner-indicadores">
+
+                <button type="button"
+                        class="banner-indicador ativo"
+                        data-slide="0"
+                        aria-label="Banner 1"></button>
+
+                <button type="button"
+                        class="banner-indicador"
+                        data-slide="1"
+                        aria-label="Banner 2"></button>
+
+                <button type="button"
+                        class="banner-indicador"
+                        data-slide="2"
+                        aria-label="Banner 3"></button>
+
+                <button type="button"
+                        class="banner-indicador"
+                        data-slide="3"
+                        aria-label="Banner 4"></button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =========================================
+     ÁREA DE BENEFÍCIOS
+     ========================================= -->
+
+    <section class="beneficios-section">
+
+        <div class="beneficios-carousel">
+
+            <!-- BENEFÍCIO 1 -->
+            <div class="beneficio-item ativo">
+                <span class="beneficio-icone">✺</span>
+                <span>10% de desconto na primeira compra</span>
+            </div>
+
+            <!-- BENEFÍCIO 2 -->
+            <div class="beneficio-item">
+                <span class="beneficio-icone">🛡</span>
+                <span>Compra 100% segura</span>
+            </div>
+
+            <!-- BENEFÍCIO 3 -->
+            <div class="beneficio-item">
+                <span class="beneficio-icone">▣</span>
+                <span>Até 10x sem juros</span>
+            </div>
+
+            <!-- BENEFÍCIO 4 -->
+            <div class="beneficio-item">
+                <span class="beneficio-icone">🚚</span>
+                <span>Frete grátis acima de R$ 250,00</span>
+            </div>
+
+
+            <!-- SETA ESQUERDA - CELULAR -->
+            <button type="button"
+                    class="beneficio-arrow beneficio-prev"
+                    aria-label="Benefício anterior">
+                &#10094;
+            </button>
+
+
+            <!-- SETA DIREITA - CELULAR -->
+            <button type="button"
+                    class="beneficio-arrow beneficio-next"
+                    aria-label="Próximo benefício">
+                &#10095;
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- ========================================= -->
+    <!-- BOTÃO CATÁLOGO COMPLETO -->
+    <!-- ========================================= -->
+
+    <div class="text-center mt-4 mb-4">
+
+        <a asp-controller="Loja"
+           asp-action="Produtos"
+           class="btn btn-dark btn-lg px-5">
+
+            <i class="bi bi-grid-3x3-gap"></i>
+            Ver todos os produtos
+
+        </a>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- COMBOS -->
+    <!-- ========================================= -->
+    @if (ViewBag.Combos != null &&
+        ViewBag.Combos.Count > 0)
+    {
+        <section class="mb-5">
+
+            <div class="text-center mb-4">
+
+                <h2 class="fw-bold">
+                    <i class="bi bi-box-seam"></i>
+                    Nossos Combos
+                </h2>
+
+                <p class="text-muted">
+                    Aproveite nossos combos especiais e economize.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4 justify-content-center">
+
+                @foreach (var combo in ViewBag.Combos)
+                {
+                    <div class="col-12 col-sm-6 col-md-4 col-lg">
+
+                        <div class="card combo-card h-100 shadow-sm border-0">
+
+
+                            <!-- IMAGEM DO COMBO -->
+
+                            <div class="combo-imagem">
+
+                                @if (!string.IsNullOrEmpty(combo.Imagem))
+                                {
+                                    <img src="@combo.Imagem"
+                                         alt="@combo.Nome" />
+                                }
+                                else
+                                {
+                                    <div class="combo-sem-imagem">
+
+                                        <i class="bi bi-box-seam"></i>
+
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <!-- NOME -->
+
+                            <div class="card-body text-center">
+
+                                <h5 class="fw-bold mb-3">
+                                    @combo.Nome
+                                </h5>
+
+ 
+                                    <!-- ========================================= -->
+                                    <!-- BOTÃO -->
+                                    <!-- ========================================= -->
+                                    
+                                    <form asp-controller="Carrinho"
+                                          asp-action="AdicionarCombo"
+                                          method="post"
+                                          class="mt-auto form-adicionar-combo">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="comboId"
+                                               value="@combo.Id" />
+
+                                        <input type="hidden"
+                                               name="quantidade"
+                                               value="1" />
+
+                                        <button type="submit"
+                                                class="btn btn-dark produto-btn w-100">
+
+                                            <i class="bi bi-lightning-charge-fill me-1"></i>
+                                            Compra rápida
+
+                                        </button>
+
+                                    </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- VER TODOS -->
+
+            <div class="text-center mt-4">
+
+                <a asp-controller="Loja"
+                   asp-action="Combos"
+                   class="btn btn-outline-dark px-4">
+
+                    <i class="bi bi-box-seam"></i>
+                    Ver todos os combos
+
+                </a>
+
+            </div>
+
+        </section>
+    }
+
+
+    <!-- ========================================= -->
+    <!-- DIVISÃO -->
+    <!-- ========================================= -->
+
+    <hr class="my-5" />
+
+
+    <!-- ========================================= -->
+    <!-- CATEGORIAS MASCULINAS -->
+    <!-- ========================================= -->
+    @if (ViewBag.CategoriasMasculinas != null &&
+        ViewBag.CategoriasMasculinas.Count > 0)
+    {
+        <section class="categoria-section mb-5">
+
+            <div class="text-center mb-4">
+
+                <h2 class="fw-bold">
+                    👔 Masculino
+                </h2>
+
+                <p class="text-muted">
+                    Encontre nossos produtos masculinos por categoria.
+                </p>
+
+            </div>
+
+
+            <div class="categoria-carousel-wrapper">
+
+                <!-- SETA ESQUERDA -->
+
+                <button type="button"
+                        class="categoria-arrow categoria-prev"
+                        aria-label="Categorias anteriores">
+
+                    <i class="bi bi-chevron-left"></i>
+
+                </button>
+
+
+                <!-- CARROSSEL -->
+
+                <div class="categoria-carousel"
+                     id="carouselMasculino">
+
+                    @foreach (var categoria in ViewBag.CategoriasMasculinas)
+                    {
+                       <div class="categoria-card">
+
+    <a asp-controller="Loja"
+       asp-action="Masculino"
+       asp-route-categoriaId="@categoria.Id"
+       class="categoria-link">
+
+        <!-- IMAGEM -->
+
+        <div class="categoria-imagem">
+
+            @if (!string.IsNullOrEmpty(categoria.Imagem))
+            {
+                <img src="@categoria.Imagem"
+                     alt="@categoria.Nome" />
+            }
+            else
+            {
+                <div class="categoria-sem-imagem">
+
+                    <i class="bi bi-image"></i>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- NOME -->
+
+        <div class="categoria-nome">
+
+            @categoria.Nome
+
+        </div>
+
+    </a>
+
+</div>
+                    }
+
+                </div>
+
+
+                <!-- SETA DIREITA -->
+
+                <button type="button"
+                        class="categoria-arrow categoria-next"
+                        aria-label="Próximas categorias">
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- VER TODOS -->
+
+            <div class="text-center mt-4">
+
+                <a asp-controller="Loja"
+                   asp-action="Masculino"
+                   class="btn btn-outline-dark px-4">
+
+                    <i class="bi bi-grid"></i>
+                    Ver todos os produtos masculinos
+
+                </a>
+
+            </div>
+
+        </section>
+    }
+
+</div>
+
+    <!-- ========================================= -->
+    <!-- DIVISÃO -->
+    <!-- ========================================= -->
+
+    <hr class="my-5" />
+
+
+<!-- ========================================= -->
+<!-- CATEGORIAS FEMININAS -->
+<!-- ========================================= -->
+
+@if (ViewBag.CategoriasFemininas != null &&
+     ViewBag.CategoriasFemininas.Count > 0)
+{
+    <section class="categoria-section categoria-feminino mb-5">
+
+        <div class="text-center mb-4">
+
+            <h2 class="fw-bold">
+                👗 Feminino
+            </h2>
+
+            <p class="text-muted">
+                Encontre produtos femininos por categoria.
+            </p>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- CARROSSEL -->
+        <!-- ========================================= -->
+
+        <div class="categoria-carousel-wrapper">
+
+            <!-- SETA ESQUERDA -->
+
+            <button type="button"
+                    class="categoria-arrow categoria-prev-feminino">
+
+                <i class="bi bi-chevron-left"></i>
+
+            </button>
+
+
+            <!-- CARDS -->
+
+            <div class="categoria-carousel"
+                 id="carouselFeminino">
+
+                @foreach (var categoria in ViewBag.CategoriasFemininas)
+                {
+                    <div class="categoria-card">
+
+                        <a asp-controller="Loja"
+                           asp-action="Feminino"
+                           asp-route-categoriaId="@categoria.Id"
+                           class="categoria-link">
+
+                            <!-- IMAGEM FEMININA -->
+
+                            <div class="categoria-imagem">
+
+                                @if (!string.IsNullOrEmpty(
+                                    categoria.ImagemFeminina))
+                                {
+                                    <img src="@categoria.ImagemFeminina"
+                                         alt="@categoria.Nome" />
+                                }
+                                else
+                                {
+                                    <div class="categoria-sem-imagem">
+
+                                        <i class="bi bi-image"></i>
+
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <!-- NOME -->
+
+                            <div class="categoria-nome">
+
+                                @categoria.Nome
+
+                            </div>
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- SETA DIREITA -->
+
+            <button type="button"
+                    class="categoria-arrow categoria-next-feminino">
+
+                <i class="bi bi-chevron-right"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- VER TODOS -->
+        <!-- ========================================= -->
+
+        <div class="text-center mt-4">
+
+            <a asp-controller="Loja"
+               asp-action="Feminino"
+               class="btn btn-outline-dark px-4">
+
+                <i class="bi bi-grid"></i>
+                Ver todos os produtos femininos
+
+            </a>
+
+        </div>
+
+    </section>
+
+    
+    <!-- ========================================= -->
+    <!-- DIVISÃO -->
+    <!-- ========================================= -->
+
+    <hr class="my-5" />
+
+  <!-- ========================================= -->
+<!-- PROMOÇÕES -->
+<!-- ========================================= -->
+
+<section class="promocoes-section mb-5">
+
+    <div class="text-center mb-4">
+
+        <h2 class="fw-bold">
+            🔥 Promoções
+        </h2>
+
+        <p class="text-muted">
+            Aproveite nossas ofertas especiais.
+        </p>
+
+    </div>
+
+
+    <!-- BOTÕES -->
+
+        <div class="promocao-genero">
+
+            <button type="button"
+                    class="promocao-genero-btn ativo"
+                    data-genero="masculino">
+
+                Masculino
+
+            </button>
+
+            <button type="button"
+                    class="promocao-genero-btn"
+                    data-genero="feminino">
+
+                Feminino
+
+            </button>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- PROMOÇÕES MASCULINAS -->
+        <!-- ========================================= -->
+        @if (ViewBag.PaginasPromocoesMasculinas != null &&
+            ViewBag.PaginasPromocoesMasculinas.Count > 0)
+        {
+            <div id="promocoesMasculinas"
+                 class="promocao-genero-conteudo ativo">
+
+                <!-- ========================================= -->
+                <!-- PÁGINAS MASCULINAS -->
+                <!-- ========================================= -->
+                @for (int pagina = 0;
+                        pagina < ViewBag.PaginasPromocoesMasculinas.Count;
+                        pagina++)
+                {
+                    <div class="promocao-pagina @(pagina == 0 ? "" : "d-none")">
+
+                        <div class="row g-4">
+
+                            @foreach (var produto in ViewBag.PaginasPromocoesMasculinas[pagina])
+                            {
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                                    <div class="card h-100 shadow-sm border-0 position-relative">
+
+                                        <!-- ================================= -->
+                                        <!-- BADGE DE DESCONTO -->
+                                        <!-- ================================= -->
+                                        @if (produto.PrecoPromocional != null &&
+                                                                produto.Preco > 0)
+                                        {
+                                            decimal precoOriginal =
+                                            Convert.ToDecimal(produto.Preco);
+
+                                            decimal precoPromocional =
+                                            Convert.ToDecimal(produto.PrecoPromocional);
+
+                                            decimal percentualDesconto =
+                                            ((precoOriginal - precoPromocional)
+                                            / precoOriginal) * 100;
+
+                                            <span class="badge bg-danger
+                                                                     position-absolute
+                                                                     top-0 end-0 m-2"
+                                                  style="font-size: 0.9rem; z-index: 10;">
+
+                                                @Math.Round(percentualDesconto)% OFF
+
+                                            </span>
+                                        }
+
+
+                                        <!-- ================================= -->
+                                        <!-- IMAGEM -->
+                                        <!-- ================================= -->
+                                        @if (!string.IsNullOrEmpty(produto.Imagem))
+                                        {
+                                            <img src="@produto.Imagem"
+                                                 class="card-img-top"
+                                                 style="height:280px;
+                                                                    object-fit:cover;"
+                                                 alt="@produto.Nome" />
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex
+                                                                    align-items-center
+                                                                    justify-content-center
+                                                                    bg-light"
+                                                 style="height:280px;">
+
+                                                <i class="bi bi-image
+                                                                      fs-1 text-muted"></i>
+
+                                            </div>
+                                        }
+
+
+                                        <!-- ================================= -->
+                                        <!-- INFORMAÇÕES -->
+                                        <!-- ================================= -->
+
+                                        <div class="card-body">
+
+                                            <h5 class="fw-bold">
+                                                @produto.Nome
+                                            </h5>
+
+                                            <div>
+
+                                                <span class="text-muted
+                                                                     text-decoration-line-through
+                                                                     me-2">
+
+                                                    @produto.Preco.ToString("C")
+
+                                                </span>
+
+                                                <span class="text-success
+                                                                     fw-bold fs-5">
+
+                                                    @produto.PrecoPromocional?.ToString("C")
+
+                                                </span>
+
+                                            </div>
+
+                                            <a asp-controller="Loja"
+                                               asp-action="Detalhes"
+                                               asp-route-id="@produto.Id"
+                                               class="btn btn-primary  promocao-btn
+                                                              w-100 mt-3">
+
+                                                Ver produto
+
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- ========================================= -->
+                <!-- SETAS + BOLINHAS MASCULINAS -->
+                <!-- ========================================= -->
+                @if (ViewBag.PaginasPromocoesMasculinas.Count > 1)
+                {
+                    <div class="text-center mt-4">
+
+                        <button type="button"
+                                id="promocaoAnterior"
+                                class="btn btn-outline-secondary me-2">
+
+                            <i class="bi bi-chevron-left"></i>
+
+                        </button>
+
+
+                        @for (int i = 0;
+                                    i < ViewBag.PaginasPromocoesMasculinas.Count;
+                                    i++)
+                        {
+                            <button type="button"
+                                    class="promocao-bolinha @(i == 0 ? "ativa" : "")"
+                                    data-pagina="@i">
+                            </button>
+                        }
+
+
+                        <button type="button"
+                                id="promocaoProxima"
+                                class="btn btn-outline-secondary ms-2">
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+                }
+
+
+                <!-- ========================================= -->
+                <!-- BOTÃO VER TODAS MASCULINAS -->
+                <!-- ========================================= -->
+
+                <div class="text-center mt-4">
+
+                    <a asp-controller="Loja"
+                       asp-action="Promocoes"
+                       asp-route-publico="Masculino"
+                       class="btn btn-outline-dark">
+
+                        <i class="bi bi-grid"></i>
+
+                        Ver todas masculinas
+
+                    </a>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted">
+                Nenhuma promoção masculina disponível.
+            </p>
+        }
+
+        <!-- ========================================= -->
+        <!-- PROMOÇÕES FEMININAS -->
+        <!-- ========================================= -->
+
+        <div id="promocoesFemininas" class="promocao-genero-conteudo">
+
+            @if (ViewBag.PaginasPromocoesFemininas != null &&
+                    ViewBag.PaginasPromocoesFemininas.Count > 0)
+            {
+                <div class="promocao-feminina-container">
+
+                    @for (int pagina = 0;
+                                pagina < Math.Min(4, ViewBag.PaginasPromocoesFemininas.Count);
+                                pagina++)
+                    {
+                        <div class="promocao-pagina-feminina @(pagina == 0 ? "" : "d-none")">
+
+                            <div class="row g-4">
+
+                                @foreach (var produto in
+                                                    ViewBag.PaginasPromocoesFemininas[pagina])
+                                {
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                                        <div class="card h-100 shadow-sm border-0 position-relative">
+
+                                            <!-- BADGE DE DESCONTO -->
+                                            @if (produto.PrecoPromocional != null &&
+                                                                        produto.Preco > 0)
+                                            {
+                                                decimal precoOriginal =
+                                                Convert.ToDecimal(produto.Preco);
+
+                                                decimal precoPromocional =
+                                                Convert.ToDecimal(
+                                                produto.PrecoPromocional);
+
+                                                decimal percentualDesconto =
+                                                ((precoOriginal -
+                                                precoPromocional)
+                                                / precoOriginal) * 100;
+
+                                                <span class="badge bg-danger
+                                                                         position-absolute
+                                                                         top-0 end-0 m-2"
+                                                      style="font-size: 0.9rem;
+                                                                         z-index: 10;">
+
+                                                    @Math.Round(percentualDesconto)% OFF
+
+                                                </span>
+                                            }
+
+
+                                            <!-- IMAGEM -->
+                                            @if (!string.IsNullOrEmpty(produto.Imagem))
+                                            {
+                                                <img src="@produto.Imagem"
+                                                     class="card-img-top"
+                                                     style="height:280px;
+                                                                        object-fit:cover;"
+                                                     alt="@produto.Nome" />
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex
+                                                                        align-items-center
+                                                                        justify-content-center
+                                                                        bg-light"
+                                                     style="height:280px;">
+
+                                                    <i class="bi bi-image
+                                                                          fs-1 text-muted"></i>
+
+                                                </div>
+                                            }
+
+
+                                            <!-- INFORMAÇÕES -->
+
+                                            <div class="card-body">
+
+                                                <h5 class="fw-bold">
+                                                    @produto.Nome
+                                                </h5>
+
+
+                                                <div>
+
+                                                    <span class="text-muted
+                                                                         text-decoration-line-through
+                                                                         me-2">
+
+                                                        @produto.Preco.ToString("C")
+
+                                                    </span>
+
+
+                                                    <span class="text-success
+                                                                         fw-bold fs-5">
+
+                                                        @produto.PrecoPromocional?.ToString("C")
+
+                                                    </span>
+
+                                                </div>
+
+
+                                                <a asp-controller="Loja"
+                                                   asp-action="Detalhes"
+                                                   asp-route-id="@produto.Id"
+                                                   class="btn btn-primary  promocao-btn
+                                                                  w-100 mt-3">
+
+                                                    Ver produto
+
+                                                </a>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- SETAS FEMININAS -->
+                <!-- ========================================= -->
+                @if (ViewBag.PaginasPromocoesFemininas.Count > 1)
+                {
+                    <div class="text-center mt-4">
+
+                        <button type="button"
+                                id="promocaoAnteriorFeminino"
+                                class="btn btn-outline-secondary me-2">
+
+                            <i class="bi bi-chevron-left"></i>
+
+                        </button>
+
+
+                        <!-- BOLINHAS -->
+                        @for (int i = 0;
+                                    i < Math.Min(4, ViewBag.PaginasPromocoesFemininas.Count);
+                                    i++)
+                        {
+                            <button type="button"
+                                    class="promocao-bolinha-feminino @(i == 0 ? "ativa" : "")"
+                                    data-pagina="@i">
+                            </button>
+                        }
+
+
+                        <button type="button"
+                                id="promocaoProximaFeminino"
+                                class="btn btn-outline-secondary ms-2">
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+                }
+
+            }
+            else
+            {
+                <p class="text-center text-muted">
+                    Nenhuma promoção feminina disponível.
+                </p>
+            }
+
+
+            <!-- BOTÃO VER TODAS -->
+
+            <div class="text-center mt-4">
+
+                <a asp-controller="Loja"
+                   asp-action="Promocoes"
+                   asp-route-publico="Feminino"
+                   class="btn btn-outline-dark">
+
+                    <i class="bi bi-grid"></i>
+                    Ver todas as promoções femininas
+
+                </a>
+
+            </div>
+
+        </div>
+</section>
+
+}
+
+<!-- ========================================= -->
+<!-- CSS DOS COMBOS -->
+<!-- ========================================= -->
+
+<style>
+
+    /* =========================================
+       BANNER PRINCIPAL
+       ========================================= */
+
+    .banner-principal {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        margin-top: -25px;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .banner-carousel {
+        position: relative;
+        width: 100%;
+        height: 420px;
+        overflow: hidden;
+    }
+    .banner-slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.6s ease;
+    }
+
+        .banner-slide.ativo {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+    /* =========================================
+       SETAS
+       ========================================= */
+
+    .banner-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 45px;
+        height: 45px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.35);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease;
+    }
+
+        .banner-arrow:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+    .banner-prev {
+        left: 20px;
+    }
+
+    .banner-next {
+        right: 20px;
+    }
+
+
+    /* =========================================
+       RISCOS INDICADORES
+       ========================================= */
+
+    .banner-indicadores {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+    }
+
+    .banner-indicador {
+        width: 32px;
+        height: 4px;
+        padding: 0;
+        border: none;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.55);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .banner-indicador.ativo {
+            width: 45px;
+            background: white;
+        }
+
+
+    /* =========================================
+       TABLET
+       ========================================= */
+
+    @@media (max-width: 991px) {
+        .banner-carousel
+
+    {
+        height: 350px;
+    }
+
+    }
+
+
+    /* =========================================
+       CELULAR
+       ========================================= */
+
+    @@media (max-width: 767px) {
+        .banner-carousel
+
+    {
+        height: 260px;
+    }
+
+    .banner-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+
+    .banner-prev {
+        left: 10px;
+    }
+
+    .banner-next {
+        right: 10px;
+    }
+
+    .banner-indicadores {
+        bottom: 12px;
+    }
+
+    .banner-indicador {
+        width: 24px;
+    }
+
+        .banner-indicador.ativo {
+            width: 35px;
+        }
+
+    }
+
+
+    /* =========================================
+       CELULAR PEQUENO
+       ========================================= */
+
+    @@media (max-width: 480px) {
+        .banner-carousel
+
+    {
+        height: 220px;
+    }
+
+    }
+
+    .combo-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+    }
+
+
+        .combo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+        }
+
+
+    .combo-imagem {
+        width: 100%;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+
+        .combo-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+
+    .combo-sem-imagem {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #adb5bd;
+        font-size: 60px;
+    }
+
+
+    .combo-card .btn {
+        border-radius: 8px;
+    }
+
+    /* =========================================
+       PADRONIZAÇÃO DOS CARDS DE COMBOS
+       ========================================= */
+
+    .combo-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .combo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+        }
+
+
+        /* =========================================
+       CONTEÚDO DO COMBO
+       ========================================= */
+
+        .combo-card .card-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+
+            /* =========================================
+       NOME DO COMBO
+       ========================================= */
+
+            .combo-card .card-body h5 {
+                min-height: 48px;
+            }
+
+
+            /* =========================================
+       BOTÃO VER COMBO
+       ========================================= */
+
+            .combo-card .card-body .btn {
+                margin-top: auto;
+            }
+
+    /* =========================================
+       ÁREA DE BENEFÍCIOS
+       ========================================= */
+
+    .beneficios-section {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        margin-bottom: 30px;
+        padding: 0;
+        background: linear-gradient( 135deg, #06132e, #003794);
+        color: white;
+    }
+
+    .beneficios-carousel {
+        width: 100%;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 15px 30px;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================
+       BENEFÍCIO
+       ========================================= */
+
+    .beneficio-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 16px;
+        font-weight: 50;
+        text-align: center;
+        flex: 1;
+    }
+
+    .beneficio-icone {
+        font-size: 27px;
+    }
+
+
+    /* =========================================
+       SETAS
+       ESCONDIDAS NO COMPUTADOR
+       ========================================= */
+
+    .beneficio-arrow {
+        display: none;
+    }
+
+    /* =========================================
+       CELULAR
+       ========================================= */
+
+    @@media (max-width: 767px) {
+        .beneficios-carousel
+
+    {
+        min-height: 60px;
+        padding: 10px 50px;
+        overflow: hidden;
+    }
+
+
+    .beneficio-item {
+        display: none;
+        width: 100%;
+        flex: none;
+        font-size: 14px;
+    }
+
+
+        .beneficio-item.ativo {
+            display: flex;
+        }
+
+
+    .beneficio-icone {
+        font-size: 23px;
+    }
+
+
+    /* SETAS */
+
+    .beneficio-arrow {
+        display: flex;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+
+    .beneficio-prev {
+        left: 10px;
+    }
+
+
+    .beneficio-next {
+        right: 10px;
+    }
+
+    }
+
+  /* =========================================
+   CARROSSEL DE CATEGORIAS
+   ========================================= */
+  
+.categoria-carousel-wrapper {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+
+    gap: 12px;
+
+    padding: 0;
+
+    overflow: hidden;
+}
+
+
+.categoria-carousel {
+    flex: 1 1 auto;
+
+    width: 0;
+    min-width: 0;
+
+    display: flex;
+    flex-wrap: nowrap;
+
+    gap: 16px;
+
+    overflow: hidden !important;
+
+    padding: 0;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    scroll-behavior: smooth;
+}
+
+
+.categoria-card {
+    flex: 0 0 calc((100% - 64px) / 5);
+
+    width: calc((100% - 64px) / 5);
+
+    min-width: 0;
+    max-width: calc((100% - 64px) / 5);
+
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+/* LINK */
+
+.categoria-link {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* IMAGEM */
+
+.categoria-imagem {
+    width: 100%;
+    height: 270px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+
+.categoria-imagem img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+
+.categoria-link:hover .categoria-imagem img {
+    transform: scale(1.04);
+}
+
+
+
+/* SEM IMAGEM */
+
+.categoria-sem-imagem {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 50px;
+    color: #adb5bd;
+}
+
+
+/* NOME */
+
+.categoria-nome {
+    text-align: center;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    margin-top: 10px;
+
+    color: #212529;
+}
+
+
+/* SETAS */
+
+.categoria-arrow {
+    flex: 0 0 45px;
+
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+.categoria-arrow:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+
+    /* =========================================
+       TABLET
+       ========================================= */
+
+    @@media (max-width: 991px) {
+        .categoria-card
+
+    {
+        flex: 0 0 calc((100% - 32px) / 3);
+        width: calc((100% - 32px) / 3);
+        max-width: calc((100% - 32px) / 3);
+    }
+
+    }
+
+
+    /* =========================================
+       CELULAR
+       ========================================= */
+
+    @@media (max-width: 767px) {
+        .categoria-card
+
+    {
+        flex: 0 0 calc((100% - 16px) / 2);
+        width: calc((100% - 16px) / 2);
+        max-width: calc((100% - 16px) / 2);
+    }
+
+    }
+
+
+    /* =========================================
+       CELULAR PEQUENO
+       ========================================= */
+
+    @@media (max-width: 480px) {
+        .categoria-card
+
+    {
+        flex: 0 0 calc((100% - 32px) / 3);
+        width: calc((100% - 32px) / 3);
+        max-width: calc((100% - 32px) / 3);
+    }
+
+    .categoria-arrow {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .categoria-imagem {
+        height: 250px;
+    }
+
+    }
+
+/* =========================================
+   PROMOÇÕES
+   ========================================= */
+
+.promocoes-section {
+    width: 100%;
+    padding: 30px 0 40px;
+}
+
+
+/* =========================================
+   BOTÕES MASCULINO / FEMININO
+   ========================================= */
+
+.promocao-genero {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.promocao-genero-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 5px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #555;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.promocao-genero-btn:hover {
+    color: #000;
+}
+
+.promocao-genero-btn.ativo {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+
+/* =========================================
+   CONTEÚDO
+   ========================================= */
+
+.promocao-conteudo {
+    display: none;
+}
+
+.promocao-conteudo.ativo {
+    display: block;
+}
+
+
+/* =========================================
+   CARROSSEL
+   ========================================= */
+
+.promocao-carousel-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+
+/* =========================================
+   PÁGINAS
+   ========================================= */
+
+.promocao-pages {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.promocao-page {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.promocao-page.ativa {
+    display: grid;
+}
+
+    /* =========================================
+       CARDS DAS PROMOÇÕES
+       ========================================= */
+
+    .promocoes-section .card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .promocoes-section .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+
+    /* =========================================
+       CONTEÚDO DO CARD
+       ========================================= */
+
+    .promocoes-section .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+
+        /* =========================================
+       NOME DO PRODUTO
+       ========================================= */
+
+        .promocoes-section .card-body h5 {
+            min-height: 48px;
+        }
+
+
+    /* =========================================
+       BOTÃO
+       ========================================= */
+
+    .promocoes-section .promocao-btn {
+        margin-top: auto !important;
+    }
+
+/* =========================================
+   LINK
+   ========================================= */
+
+.promocao-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =========================================
+   IMAGEM
+   ========================================= */
+
+.promocao-imagem {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    background: #f8f8f8;
+}
+
+.promocao-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.promocao-card:hover .promocao-imagem img {
+    transform: scale(1.03);
+}
+
+
+/* =========================================
+   SEM IMAGEM
+   ========================================= */
+
+.promocao-sem-imagem {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+    color: #adb5bd;
+}
+
+
+/* =========================================
+   DESCONTO
+   ========================================= */
+
+.promocao-desconto {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #dc3545;
+    color: #fff;
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   INFORMAÇÕES
+   ========================================= */
+
+.promocao-info {
+    padding: 12px 5px;
+}
+
+.promocao-info h5 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+
+/* =========================================
+   PREÇO NORMAL
+   ========================================= */
+
+.preco-normal {
+    display: inline-block;
+    margin-right: 8px;
+    color: #555;
+    text-decoration: line-through;
+    font-size: 15px;
+}
+
+
+/* =========================================
+   PREÇO PROMOCIONAL
+   ========================================= */
+
+.preco-promocional {
+    display: inline-block;
+    color: #198754;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   SETAS
+   ========================================= */
+
+.promocao-arrow {
+    flex: 0 0 45px;
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #212529;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+.promocao-arrow:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+
+    .promocao-bolinha {
+        width: 10px;
+        height: 10px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: #ccc;
+        margin: 0 4px;
+        cursor: pointer;
+    }
+
+        .promocao-bolinha.ativa {
+            background: #0d6efd;
+            transform: scale(1.2);
+        }
+
+    .promocao-bolinha-feminino {
+        width: 10px;
+        height: 10px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: #ccc;
+        margin: 0 4px;
+        cursor: pointer;
+    }
+
+        .promocao-bolinha-feminino.ativa {
+            background: #0d6efd;
+            transform: scale(1.2);
+        }
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+
+@@media (max-width: 991px) {
+
+    .promocao-page {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .promocao-imagem {
+        height: 300px;
+    }
+
+}
+
+
+@@media (max-width: 767px) {
+
+    .promocao-carousel-wrapper {
+        gap: 8px;
+    }
+
+    .promocao-page {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .promocao-imagem {
+        height: 250px;
+    }
+
+    .promocao-arrow {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+    }
+
+}
+
+
+@@media (max-width: 480px) {
+
+    .promocao-page {
+        grid-template-columns: 1fr;
+    }
+
+    .promocao-imagem {
+        height: 320px;
+    }
+
+    .promocao-genero {
+        gap: 20px;
+    }
+
+    .promocao-genero-btn {
+        font-size: 16px;
+    }
+
+}
+
+    .promocao-genero-conteudo {
+        display: none;
+    }
+
+        .promocao-genero-conteudo.ativo {
+            display: block;
+        }
+
+    .promocao-genero {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .promocao-genero-btn {
+        border: none;
+        background: transparent;
+        padding: 10px 15px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+    }
+
+        .promocao-genero-btn.ativo {
+            border-bottom: 3px solid #000;
+        }
+
+</style>
+
+<script>
+
+    //BANNER
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const slides = document.querySelectorAll(".banner-slide");
+        const indicadores = document.querySelectorAll(".banner-indicador");
+
+        const anterior = document.querySelector(".banner-prev");
+        const proximo = document.querySelector(".banner-next");
+
+        let slideAtual = 0;
+
+        function mostrarSlide(indice) {
+
+            if (indice >= slides.length) {
+                slideAtual = 0;
+            }
+
+            else if (indice < 0) {
+                slideAtual = slides.length - 1;
+            }
+
+            else {
+                slideAtual = indice;
+            }
+
+
+            slides.forEach(function (slide) {
+                slide.classList.remove("ativo");
+            });
+
+
+            indicadores.forEach(function (indicador) {
+                indicador.classList.remove("ativo");
+            });
+
+
+            slides[slideAtual].classList.add("ativo");
+
+
+            if (indicadores[slideAtual]) {
+                indicadores[slideAtual].classList.add("ativo");
+            }
+        }
+
+
+        anterior.addEventListener("click", function () {
+            mostrarSlide(slideAtual - 1);
+        });
+
+
+        proximo.addEventListener("click", function () {
+            mostrarSlide(slideAtual + 1);
+        });
+
+
+        indicadores.forEach(function (indicador, indice) {
+
+            indicador.addEventListener("click", function () {
+                mostrarSlide(indice);
+            });
+
+        });
+
+
+        // TROCA AUTOMÁTICA
+        setInterval(function () {
+            mostrarSlide(slideAtual + 1);
+        }, 5000);
+
+    });
+
+    //ÁRE DE BENEFÍCIO RESPONSÍVEL EM CARROSEL INFINITO AUTOMÁTICO
+    
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const beneficios = document.querySelectorAll(
+            ".beneficio-item"
+        );
+
+        const anterior = document.querySelector(
+            ".beneficio-prev"
+        );
+
+        const proximo = document.querySelector(
+            ".beneficio-next"
+        );
+
+
+        if (
+            beneficios.length === 0 ||
+            !anterior ||
+            !proximo
+        ) {
+            return;
+        }
+
+
+        let beneficioAtual = 0;
+
+
+        function mostrarBeneficio(indice) {
+
+            // LOOP INFINITO
+
+            if (indice >= beneficios.length) {
+                beneficioAtual = 0;
+            }
+            else if (indice < 0) {
+                beneficioAtual = beneficios.length - 1;
+            }
+            else {
+                beneficioAtual = indice;
+            }
+
+
+            // Esconde todos
+
+            beneficios.forEach(function (beneficio) {
+
+                beneficio.classList.remove("ativo");
+
+            });
+
+
+            // Mostra o atual
+
+            beneficios[beneficioAtual]
+                .classList.add("ativo");
+
+        }
+
+
+        // =========================================
+        // SETA ESQUERDA
+        // =========================================
+
+        anterior.addEventListener("click", function () {
+
+            mostrarBeneficio(
+                beneficioAtual - 1
+            );
+
+        });
+
+
+        // =========================================
+        // SETA DIREITA
+        // =========================================
+
+        proximo.addEventListener("click", function () {
+
+            mostrarBeneficio(
+                beneficioAtual + 1
+            );
+
+        });
+
+
+        // =========================================
+        // TROCA AUTOMÁTICA
+        // =========================================
+
+        setInterval(function () {
+
+            mostrarBeneficio(
+                beneficioAtual + 1
+            );
+
+        }, 4000);
+
+
+        // =========================================
+        // INICIA NO PRIMEIRO
+        // =========================================
+
+        mostrarBeneficio(0);
+
+    });
+
+    //COMBO
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const carousel =
+            document.getElementById("carouselMasculino");
+
+        const previous =
+            document.querySelector(".categoria-prev");
+
+        const next =
+            document.querySelector(".categoria-next");
+
+
+        if (!carousel || !previous || !next) {
+            return;
+        }
+
+
+        // =========================================
+        // PEGAR OS CARDS ORIGINAIS
+        // =========================================
+
+        const cardsOriginais =
+            Array.from(
+                carousel.querySelectorAll(".categoria-card")
+            );
+
+
+        const quantidade =
+            cardsOriginais.length;
+
+
+        // Se não houver cards suficientes,
+        // não precisamos do loop.
+
+        if (quantidade <= 1) {
+            return;
+        }
+
+
+        // =========================================
+        // CRIAR CÓPIAS
+        // =========================================
+
+        cardsOriginais.forEach(function (card) {
+
+            const clone =
+                card.cloneNode(true);
+
+            carousel.appendChild(clone);
+
+        });
+
+
+        cardsOriginais.forEach(function (card) {
+
+            const clone =
+                card.cloneNode(true);
+
+            carousel.insertBefore(
+                clone,
+                carousel.firstChild
+            );
+
+        });
+
+
+        // =========================================
+        // ATUALIZAR OS CARDS
+        // =========================================
+
+        const cards =
+            Array.from(
+                carousel.querySelectorAll(".categoria-card")
+            );
+
+
+        // =========================================
+        // CALCULAR MOVIMENTO
+        // =========================================
+
+        function obterMovimento() {
+
+            const card =
+                cards[0];
+
+            const estilo =
+                window.getComputedStyle(carousel);
+
+            const gap =
+                parseFloat(
+                    estilo.columnGap ||
+                    estilo.gap
+                ) || 0;
+
+            return card.offsetWidth + gap;
+        }
+
+
+        // =========================================
+        // POSIÇÃO INICIAL
+        // =========================================
+
+        function posicionarInicialmente() {
+
+    const movimento = obterMovimento();
+
+    carousel.scrollLeft =
+        quantidade * movimento;
+}
+
+
+        // Espera o navegador terminar
+        // de montar o layout.
+
+        requestAnimationFrame(function () {
+
+            posicionarInicialmente();
+
+        });
+
+
+        // =========================================
+        // CONTROLAR MOVIMENTO
+        // =========================================
+
+        let movimentoEmAndamento = false;
+
+
+        // =========================================
+        // DIREITA
+        // =========================================
+
+        next.addEventListener("click", function () {
+
+            if (movimentoEmAndamento) {
+                return;
+            }
+
+            movimentoEmAndamento = true;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            carousel.scrollBy({
+
+                left: movimento,
+
+                behavior: "smooth"
+
+            });
+
+
+            setTimeout(function () {
+
+                verificarLimites();
+
+                movimentoEmAndamento = false;
+
+            }, 450);
+
+        });
+
+
+        // =========================================
+        // ESQUERDA
+        // =========================================
+
+        previous.addEventListener("click", function () {
+
+            if (movimentoEmAndamento) {
+                return;
+            }
+
+            movimentoEmAndamento = true;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            carousel.scrollBy({
+
+                left: -movimento,
+
+                behavior: "smooth"
+
+            });
+
+
+            setTimeout(function () {
+
+                verificarLimites();
+
+                movimentoEmAndamento = false;
+
+            }, 450);
+
+        });
+
+
+        // =========================================
+        // CORRIGIR LIMITES
+        // =========================================
+
+        function verificarLimites() {
+
+            const primeiroOriginal =
+                cardsOriginais[0];
+
+            const ultimoOriginal =
+                cardsOriginais[quantidade - 1];
+
+
+            const inicioOriginal =
+                primeiroOriginal.offsetLeft;
+
+
+            const inicioUltimoOriginal =
+                ultimoOriginal.offsetLeft;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            // =====================================
+            // PASSOU PARA OS CLONES DA DIREITA
+            // =====================================
+
+            if (
+                carousel.scrollLeft >=
+                inicioUltimoOriginal + movimento
+            ) {
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+
+                carousel.scrollLeft =
+                    inicioOriginal +
+                    (
+                        carousel.scrollLeft -
+                        (
+                            inicioUltimoOriginal +
+                            movimento
+                        )
+                    );
+
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+            }
+
+
+            // =====================================
+            // PASSOU PARA OS CLONES DA ESQUERDA
+            // =====================================
+
+            if (
+                carousel.scrollLeft <
+                inicioOriginal
+            ) {
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+
+                carousel.scrollLeft =
+                    inicioUltimoOriginal -
+                    (
+                        inicioOriginal -
+                        carousel.scrollLeft
+                    );
+
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+            }
+
+        }
+
+
+        // =========================================
+        // RECALCULAR AO REDIMENSIONAR A TELA
+        // =========================================
+
+        window.addEventListener(
+            "resize",
+            function () {
+
+                const movimento =
+                    obterMovimento();
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+                carousel.scrollLeft =
+                    quantidade * movimento;
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+
+    }
+);
+
+    });
+
+
+    // =========================================
+        // CARROSEL FEMININO    
+        // =========================================
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const carousel =
+            document.getElementById("carouselFeminino");
+
+        const previous =
+            document.querySelector(".categoria-prev-feminino");
+
+        const next =
+            document.querySelector(".categoria-next-feminino");
+
+
+        if (!carousel || !previous || !next) {
+            return;
+        }
+
+
+        // =========================================
+        // PEGAR OS CARDS ORIGINAIS
+        // =========================================
+
+        const cardsOriginais =
+            Array.from(
+                carousel.querySelectorAll(".categoria-card")
+            );
+
+
+        const quantidade =
+            cardsOriginais.length;
+
+
+        if (quantidade <= 1) {
+            return;
+        }
+
+
+        // =========================================
+        // CRIAR CÓPIAS À DIREITA
+        // =========================================
+
+        cardsOriginais.forEach(function (card) {
+
+            const clone =
+                card.cloneNode(true);
+
+            carousel.appendChild(clone);
+
+        });
+
+
+        // =========================================
+        // CRIAR CÓPIAS À ESQUERDA
+        // =========================================
+
+        cardsOriginais.forEach(function (card) {
+
+            const clone =
+                card.cloneNode(true);
+
+            carousel.insertBefore(
+                clone,
+                carousel.firstChild
+            );
+
+        });
+
+
+        // =========================================
+        // TODOS OS CARDS
+        // =========================================
+
+        const cards =
+            Array.from(
+                carousel.querySelectorAll(".categoria-card")
+            );
+
+
+        // =========================================
+        // MOVIMENTO
+        // =========================================
+
+        function obterMovimento() {
+
+            const card =
+                cards[0];
+
+            const estilo =
+                window.getComputedStyle(carousel);
+
+            const gap =
+                parseFloat(
+                    estilo.columnGap ||
+                    estilo.gap
+                ) || 0;
+
+            return card.offsetWidth + gap;
+        }
+
+
+        // =========================================
+        // POSIÇÃO INICIAL
+        // =========================================
+
+        function posicionarInicialmente() {
+
+            const movimento =
+                obterMovimento();
+
+            carousel.scrollLeft =
+                quantidade * movimento;
+
+        }
+
+
+        requestAnimationFrame(function () {
+
+            posicionarInicialmente();
+
+        });
+
+
+        // =========================================
+        // CONTROLE DE MOVIMENTO
+        // =========================================
+
+        let movimentoEmAndamento = false;
+
+
+        // =========================================
+        // DIREITA
+        // =========================================
+
+        next.addEventListener("click", function () {
+
+            if (movimentoEmAndamento) {
+                return;
+            }
+
+            movimentoEmAndamento = true;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            carousel.scrollBy({
+
+                left: movimento,
+
+                behavior: "smooth"
+
+            });
+
+
+            setTimeout(function () {
+
+                verificarLimites();
+
+                movimentoEmAndamento = false;
+
+            }, 450);
+
+        });
+
+
+        // =========================================
+        // ESQUERDA
+        // =========================================
+
+        previous.addEventListener("click", function () {
+
+            if (movimentoEmAndamento) {
+                return;
+            }
+
+            movimentoEmAndamento = true;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            carousel.scrollBy({
+
+                left: -movimento,
+
+                behavior: "smooth"
+
+            });
+
+
+            setTimeout(function () {
+
+                verificarLimites();
+
+                movimentoEmAndamento = false;
+
+            }, 450);
+
+        });
+
+
+        // =========================================
+        // CORRIGIR LIMITES
+        // =========================================
+
+        function verificarLimites() {
+
+            const primeiroOriginal =
+                cardsOriginais[0];
+
+            const ultimoOriginal =
+                cardsOriginais[quantidade - 1];
+
+
+            const inicioOriginal =
+                primeiroOriginal.offsetLeft;
+
+
+            const inicioUltimoOriginal =
+                ultimoOriginal.offsetLeft;
+
+
+            const movimento =
+                obterMovimento();
+
+
+            // =====================================
+            // CLONES DA DIREITA
+            // =====================================
+
+            if (
+                carousel.scrollLeft >=
+                inicioUltimoOriginal + movimento
+            ) {
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+
+                carousel.scrollLeft =
+                    inicioOriginal +
+                    (
+                        carousel.scrollLeft -
+                        (
+                            inicioUltimoOriginal +
+                            movimento
+                        )
+                    );
+
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+            }
+
+
+            // =====================================
+            // CLONES DA ESQUERDA
+            // =====================================
+
+            if (
+                carousel.scrollLeft <
+                inicioOriginal
+            ) {
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+
+                carousel.scrollLeft =
+                    inicioUltimoOriginal -
+                    (
+                        inicioOriginal -
+                        carousel.scrollLeft
+                    );
+
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+            }
+
+        }
+
+
+        // =========================================
+        // REDIMENSIONAMENTO
+        // =========================================
+
+        window.addEventListener(
+            "resize",
+            function () {
+
+                const movimento =
+                    obterMovimento();
+
+                carousel.style.scrollBehavior =
+                    "auto";
+
+                carousel.scrollLeft =
+                    quantidade * movimento;
+
+                carousel.style.scrollBehavior =
+                    "smooth";
+
+            }
+        );
+
+    });
+
+    //PROMOÇÃO MASCULINA
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const paginas =
+                document.querySelectorAll(
+                    "#promocoesMasculinas .promocao-pagina"
+                );
+
+            const bolinhas =
+                document.querySelectorAll(
+                    ".promocao-bolinha"
+                );
+
+            const anterior =
+                document.getElementById(
+                    "promocaoAnterior"
+                );
+
+            const proxima =
+                document.getElementById(
+                    "promocaoProxima"
+                );
+
+
+            if (paginas.length === 0) {
+                return;
+            }
+
+
+            let paginaAtual = 0;
+
+
+            function mostrarPagina(numero) {
+
+                if (numero < 0 ||
+                    numero >= paginas.length) {
+
+                    return;
+                }
+
+
+                paginas.forEach(function (pagina, index) {
+
+                    if (index === numero) {
+
+                        pagina.classList.remove("d-none");
+
+                    } else {
+
+                        pagina.classList.add("d-none");
+
+                    }
+
+                });
+
+
+                bolinhas.forEach(function (bolinha, index) {
+
+                    if (index === numero) {
+
+                        bolinha.classList.add("ativa");
+
+                    } else {
+
+                        bolinha.classList.remove("ativa");
+
+                    }
+
+                });
+
+
+                paginaAtual = numero;
+
+
+                anterior.disabled =
+                    paginaAtual === 0;
+
+                proxima.disabled =
+                    paginaAtual === paginas.length - 1;
+
+            }
+
+
+            proxima.addEventListener("click", function () {
+
+                if (paginaAtual < paginas.length - 1) {
+
+                    mostrarPagina(paginaAtual + 1);
+
+                }
+
+            });
+
+
+            anterior.addEventListener("click", function () {
+
+                if (paginaAtual > 0) {
+
+                    mostrarPagina(paginaAtual - 1);
+
+                }
+
+            });
+
+
+            bolinhas.forEach(function (bolinha) {
+
+                bolinha.addEventListener("click", function () {
+
+                    const pagina =
+                        parseInt(
+                            this.dataset.pagina
+                        );
+
+                    mostrarPagina(pagina);
+
+                });
+
+            });
+
+
+            mostrarPagina(0);
+
+        });
+
+       
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const botaoMasculino =
+                document.getElementById(
+                    "botaoPromocaoMasculino"
+                );
+
+            const botaoFeminino =
+                document.getElementById(
+                    "botaoPromocaoFeminino"
+                );
+
+            const masculino =
+                document.getElementById(
+                    "promocoesMasculinas"
+                );
+
+            const feminino =
+                document.getElementById(
+                    "promocoesFemininas"
+                );
+
+
+            if (!botaoMasculino ||
+                !botaoFeminino ||
+                !masculino ||
+                !feminino) {
+
+                return;
+
+            }
+
+
+            // =========================================
+            // MASCULINO BOTÃO
+            // =========================================
+
+            botaoMasculino.addEventListener(
+                "click",
+                function () {
+
+                    masculino.classList.remove("d-none");
+
+                    feminino.classList.add("d-none");
+
+
+                    botaoMasculino.classList.remove(
+                        "btn-outline-dark"
+                    );
+
+                    botaoMasculino.classList.add(
+                        "btn-dark"
+                    );
+
+
+                    botaoFeminino.classList.remove(
+                        "btn-dark"
+                    );
+
+                    botaoFeminino.classList.add(
+                        "btn-outline-dark"
+                    );
+
+                }
+            );
+
+
+            // =========================================
+            // FEMININO BOTÃO
+            // =========================================
+
+            botaoFeminino.addEventListener(
+                "click",
+                function () {
+
+                    feminino.classList.remove("d-none");
+
+                    masculino.classList.add("d-none");
+
+
+                    botaoFeminino.classList.remove(
+                        "btn-outline-dark"
+                    );
+
+                    botaoFeminino.classList.add(
+                        "btn-dark"
+                    );
+
+
+                    botaoMasculino.classList.remove(
+                        "btn-dark"
+                    );
+
+                    botaoMasculino.classList.add(
+                        "btn-outline-dark"
+                    );
+
+                }
+            );
+
+        });
+
+            
+        //BOTÕES MASCULINO/FEMININO
+
+           
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const botoes = document.querySelectorAll(
+                ".promocao-genero-btn"
+            );
+
+            const masculino = document.getElementById(
+                "promocoesMasculinas"
+            );
+
+            const feminino = document.getElementById(
+                "promocoesFemininas"
+            );
+
+
+            if (!masculino || !feminino || botoes.length === 0) {
+                return;
+            }
+
+
+            botoes.forEach(function (botao) {
+
+                botao.addEventListener("click", function () {
+
+                    // Remove o ativo de TODOS os botões
+                    botoes.forEach(function (item) {
+
+                        item.classList.remove("ativo");
+
+                    });
+
+
+                    // Coloca ativo somente no botão clicado
+                    this.classList.add("ativo");
+
+
+                    // Descobre qual botão foi clicado
+                    const genero = this.dataset.genero;
+
+
+                    // ============================
+                    // MASCULINO
+                    // ============================
+
+                    if (genero === "masculino") {
+
+                        masculino.classList.add("ativo");
+
+                        feminino.classList.remove("ativo");
+
+                    }
+
+
+                    // ============================
+                    // FEMININO
+                    // ============================
+
+                    if (genero === "feminino") {
+
+                        feminino.classList.add("ativo");
+
+                        masculino.classList.remove("ativo");
+
+                    }
+
+                });
+
+            });
+
+        });
+
+        //SETAS, PAGINAÇÃO E BOLINHA INDICADORA DE PAGINA PROMOÇÃO FEMININA
+            
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const paginas = document.querySelectorAll(
+                "#promocoesFemininas .promocao-pagina-feminina"
+            );
+
+            const bolinhas = document.querySelectorAll(
+                "#promocoesFemininas .promocao-bolinha-feminino"
+            );
+
+            const anterior = document.getElementById(
+                "promocaoAnteriorFeminino"
+            );
+
+            const proxima = document.getElementById(
+                "promocaoProximaFeminino"
+            );
+
+
+            if (
+                paginas.length === 0 ||
+                !anterior ||
+                !proxima
+            ) {
+                return;
+            }
+
+
+            let paginaAtual = 0;
+
+
+            function mostrarPagina(numero) {
+
+                // Impede passar dos limites
+
+                if (numero < 0) {
+                    numero = 0;
+                }
+
+                if (numero >= paginas.length) {
+                    numero = paginas.length - 1;
+                }
+
+
+                paginaAtual = numero;
+
+
+                // Esconde todas as páginas
+
+                paginas.forEach(function (pagina) {
+
+                    pagina.classList.add("d-none");
+
+                });
+
+
+                // Mostra somente a página atual
+
+                paginas[paginaAtual].classList.remove("d-none");
+
+
+                // Atualiza as bolinhas
+
+                bolinhas.forEach(function (bolinha, indice) {
+
+                    bolinha.classList.remove("ativa");
+
+                    if (indice === paginaAtual) {
+
+                        bolinha.classList.add("ativa");
+
+                    }
+
+                });
+
+
+                // Controla a seta esquerda
+
+                anterior.disabled = paginaAtual === 0;
+
+
+                // Controla a seta direita
+
+                proxima.disabled =
+                    paginaAtual === paginas.length - 1;
+
+            }
+
+
+            // =========================================
+            // SETA ESQUERDA
+            // =========================================
+
+            anterior.addEventListener("click", function () {
+
+                mostrarPagina(paginaAtual - 1);
+
+            });
+
+
+            // =========================================
+            // SETA DIREITA
+            // =========================================
+
+            proxima.addEventListener("click", function () {
+
+                mostrarPagina(paginaAtual + 1);
+
+            });
+
+
+            // =========================================
+            // BOLINHAS
+            // =========================================
+
+            bolinhas.forEach(function (bolinha, indice) {
+
+                bolinha.addEventListener("click", function () {
+
+                    mostrarPagina(indice);
+
+                });
+
+            });
+
+
+            // =========================================
+            // INICIA NA PRIMEIRA PÁGINA
+            // =========================================
+
+            mostrarPagina(0);
+
+        });
+</script>
+
+
+
+

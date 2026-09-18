@@ -1,0 +1,283 @@
+@model IEnumerable<LojaWeb_2.Models.Marca>
+
+@{
+	ViewData["Title"] = "Marcas";
+}
+
+<!--CABEÇALHO-->
+
+<div class="container mt-4">
+
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<h2 class="fw-bold">
+				<i class="bi bi-tags"></i> Marcas
+			</h2>
+
+			<p class="text-muted mb-0">
+				Gerencie as marcas cadastradas na loja.
+			</p>
+		</div>
+
+		@if (User.IsInRole("Administrador"))
+		{
+			<a asp-action="Create" class="btn btn-success">
+				<i class="bi bi-plus-circle"></i>
+				Nova Marca
+			</a>
+		}
+	</div>
+
+	<!--MENSAGENS DE ALERTAS-->
+	@if (TempData["Mensagem"] != null)
+	{
+		var tipoMensagem = TempData["TipoMensagem"]?.ToString() ?? "success";
+
+		var icone = tipoMensagem switch
+		{
+			"success" => "bi-check-circle-fill",
+			"warning" => "bi-pencil-fill",
+			"danger" => "bi-trash-fill",
+			_ => "bi-info-circle-fill"
+		};
+
+		<div id="mensagem"
+			 class="alert alert-@tipoMensagem alert-dismissible fade show"
+			 role="alert">
+
+			<i class="bi @icone me-2"></i>
+
+			<strong>@TempData["Mensagem"]</strong>
+
+			<button type="button"
+					class="btn-close"
+					data-bs-dismiss="alert"
+					aria-label="Fechar">
+			</button>
+
+		</div>
+	}
+
+	<!-- PESQUISA -->
+
+	<div class="card shadow-sm border-0 mb-4">
+
+		<div class="card-body">
+
+			<form asp-action="Index"
+				  method="get">
+
+				<div class="input-group">
+
+					<span class="input-group-text">
+						<i class="bi bi-search"></i>
+					</span>
+
+					<input type="text"
+						   name="pesquisa"
+						   value="@ViewBag.Pesquisa"
+						   class="form-control"
+						   placeholder="Digite o nome da marca..." />
+
+					<button type="submit"
+							class="btn btn-primary">
+
+						<i class="bi bi-search"></i>
+						Pesquisar
+
+					</button>
+
+					@if (!string.IsNullOrWhiteSpace(
+										Context.Request.Query["pesquisa"]))
+					{
+						<a asp-action="Index"
+						   class="btn btn-outline-secondary">
+
+							<i class="bi bi-x-circle"></i>
+							Limpar
+
+						</a>
+					}
+				</div>
+
+			</form>
+
+		</div>
+
+	</div>
+
+	<!--TABELA-->
+
+	<div class="card shadow-sm border-0">
+
+		<div class="card-body">
+
+			@if (Model.Any())
+			{
+				<div class="table-responsive">
+
+					<table class="table table-hover align-middle">
+
+						<thead class="table-light">
+							<tr>
+								<th>
+									@Html.DisplayNameFor(model => model.Nome)
+								</th>
+
+								<th>
+									@Html.DisplayNameFor(model => model.Descricao)
+								</th>
+
+								<th class="text-end">
+									Ações
+								</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							@foreach (var item in Model)
+							{
+								<tr>
+
+									<td>
+										<strong>
+											@Html.DisplayFor(modelItem => item.Nome)
+										</strong>
+									</td>
+
+									<td>
+										@if (!string.IsNullOrEmpty(item.Descricao))
+										{
+											@Html.DisplayFor(modelItem => item.Descricao)
+										}
+										else
+										{
+											<span class="text-muted">
+												Sem descrição
+											</span>
+										}
+									</td>
+
+									<td class="text-end">
+
+										<div class="btn-group">
+
+											<a asp-action="Details"
+											   asp-route-id="@item.Id"
+											   class="btn btn-sm btn-outline-info"
+											   title="Visualizar">
+												<i class="bi bi-eye"></i>
+											</a>
+
+											@if (User.IsInRole("Administrador"))
+											{
+												<a asp-action="Edit"
+												   asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-warning"
+												   title="Editar">
+
+													<i class="bi bi-pencil"></i>
+
+												</a>
+
+												<a asp-action="Delete"
+												   asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-danger"
+												   title="Excluir">
+
+													<i class="bi bi-trash"></i>
+
+												</a>
+											}
+
+										</div>
+
+									</td>
+
+								</tr>
+							}
+
+						</tbody>
+
+					</table>
+
+				</div>
+			}
+			else
+			{
+				<div class="text-center py-5">
+
+					@if (!string.IsNullOrWhiteSpace(ViewBag.Pesquisa))
+					{
+						<i class="bi bi-search fs-1 text-muted"></i>
+
+						<h5 class="mt-3">
+							Nenhuma marca encontrada
+						</h5>
+
+						<p class="text-muted">
+							Não encontramos nenhuma marca para a pesquisa realizada.
+						</p>
+
+						<a asp-action="Index"
+						   class="btn btn-secondary">
+
+							<i class="bi bi-x-circle"></i>
+							Limpar pesquisa
+
+						</a>
+					}
+					else
+					{
+						<i class="bi bi-tags fs-1 text-muted"></i>
+
+						<h5 class="mt-3">
+							Nenhuma marca cadastrada
+						</h5>
+
+						<p class="text-muted">
+							Comece cadastrando a primeira marca da sua loja.
+						</p>
+
+						@if (User.IsInRole("Administrador"))
+						{
+							<a asp-action="Create"
+							   class="btn btn-primary">
+
+								<i class="bi bi-plus-circle"></i>
+								Cadastrar Marca
+
+							</a>
+						}
+					}
+
+				</div>
+			}
+
+		</div>
+		
+
+	</div>
+
+</div>
+
+
+
+@section Scripts {
+	<script>
+		setTimeout(function () {
+
+			const mensagem = document.getElementById("mensagem");
+
+			if (mensagem) {
+
+				const alerta = bootstrap.Alert.getOrCreateInstance(mensagem);
+
+				alerta.close();
+			}
+
+		}, 4000);
+	</script>
+
+}

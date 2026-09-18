@@ -1,0 +1,351 @@
+﻿@model LojaWeb_2.Models.Cliente
+
+@{
+    ViewData["Title"] = "Minha Conta";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-person-circle"></i>
+
+            Minha Conta
+
+        </h2>
+
+        <p class="text-muted">
+            Gerencie seus dados pessoais e endereço.
+        </p>
+
+    </div>
+
+
+    <!-- MENSAGENS -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="bi bi-check-circle me-2"></i>
+
+            @TempData["Sucesso"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+
+            <i class="bi bi-exclamation-circle me-2"></i>
+
+            @TempData["Erro"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <form asp-action="Index"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- DADOS PESSOAIS -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-person"></i>
+
+                    Dados pessoais
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+
+                    <!-- NOME -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Nome"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Nome"
+                               class="form-control"
+                               placeholder="Digite seu nome completo" />
+
+                        <span asp-validation-for="Nome"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CPF -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="CpfCnpj"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="CpfCnpj"
+                               class="form-control"
+                               placeholder="CPF ou CNPJ" />
+
+                        <span asp-validation-for="CpfCnpj"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Email"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               readonly />
+
+                        <small class="text-muted">
+                            O e-mail da conta não pode ser alterado aqui.
+                        </small>
+
+                    </div>
+
+
+                    <!-- TELEFONE -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Telefone"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Telefone"
+                               class="form-control"
+                               placeholder="(00) 00000-0000" />
+
+                        <span asp-validation-for="Telefone"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- ENDEREÇO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    Endereço
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+
+                    <!-- CEP -->
+
+                    <div class="col-md-3">
+
+                        <label asp-for="Cep"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Cep"
+                               class="form-control"
+                               placeholder="00000-000" />
+
+                        <span asp-validation-for="Cep"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- ENDEREÇO -->
+
+                    <div class="col-md-7">
+
+                        <label asp-for="Endereco"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Endereco"
+                               class="form-control"
+                               placeholder="Rua, Avenida..." />
+
+                        <span asp-validation-for="Endereco"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- NÚMERO -->
+
+                    <div class="col-md-2">
+
+                        <label asp-for="Numero"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Numero"
+                               class="form-control"
+                               placeholder="Nº" />
+
+                        <span asp-validation-for="Numero"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- BAIRRO -->
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Bairro"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Bairro"
+                               class="form-control"
+                               placeholder="Bairro" />
+
+                        <span asp-validation-for="Bairro"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CIDADE -->
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Cidade"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Cidade"
+                               class="form-control"
+                               placeholder="Cidade" />
+
+                        <span asp-validation-for="Cidade"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Estado"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Estado"
+                               class="form-control"
+                               maxlength="2"
+                               placeholder="SC" />
+
+                        <span asp-validation-for="Estado"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- BOTÃO -->
+        <!-- ========================================= -->
+
+        <div class="d-flex justify-content-end">
+
+            <button type="submit"
+                    class="btn btn-success btn-lg">
+
+                <i class="bi bi-check-lg me-2"></i>
+
+                Salvar alterações
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

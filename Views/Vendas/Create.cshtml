@@ -1,0 +1,992 @@
+﻿@model LojaWeb_2.Models.Venda
+
+@{
+    ViewData["Title"] = "Nova Venda";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-cart-plus"></i>
+                Nova Venda
+            </h2>
+
+            <p class="text-muted mb-0">
+                Registre uma nova venda para um cliente.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+                <!-- CLIENTE -->
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-person"></i>
+                    Cliente
+
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-8 mb-4">
+
+                        <label asp-for="ClienteId"
+                               class="form-label fw-semibold">
+
+                            Cliente
+
+                        </label>
+
+                        <select asp-for="ClienteId"
+                                class="form-select">
+
+                            <option value="">
+                                -- Selecione o cliente --
+                            </option>
+
+                            @foreach (var cliente in ViewBag.Clientes)
+                            {
+                                <option value="@cliente.Id">
+                                    @cliente.Nome
+                                </option>
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="ClienteId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <hr class="my-4" />
+
+
+                <!-- PRODUTO -->
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-box-seam"></i>
+                    Produto
+
+                </h5>
+
+                <div class="row">
+
+                    <!-- PRODUTO -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Produto
+                        </label>
+
+                        <select id="produtoId"
+                                class="form-select">
+
+                            <option value="">
+                                -- Selecione o produto --
+                            </option>
+
+                            @foreach (var produto in ViewBag.Produtos)
+                            {
+                                <option value="@produto.Id">
+                                    @produto.Nome
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- VARIANTE -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Variante disponível
+                        </label>
+
+                        <select id="estoqueId"
+                                class="form-select"
+                                disabled>
+
+                            <option value="">
+                                -- Selecione primeiro o produto --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- MARCA -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Marca
+                        </label>
+
+                        <input type="text"
+                               id="marca"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+
+                    <!-- TAMANHO -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Tamanho
+                        </label>
+
+                        <input type="text"
+                               id="tamanho"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+
+                    <!-- COR -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Cor
+                        </label>
+
+                        <input type="text"
+                               id="cor"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- QUANTIDADE -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Quantidade
+                        </label>
+
+                        <input type="number"
+                               id="quantidade"
+                               class="form-control"
+                               min="1"
+                               value="1" />
+
+                        <small id="estoqueDisponivel"
+                               class="text-muted">
+                        </small>
+
+                    </div>
+
+
+                    <!-- PREÇO -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Preço unitário
+                        </label>
+
+                        <input type="text"
+                               id="precoUnitario"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <button type="button"
+                            id="btnAdicionarProduto"
+                            class="btn btn-success"
+                            disabled>
+
+                        <i class="bi bi-plus-circle"></i>
+                        Adicionar produto
+
+                    </button>
+
+                </div>
+
+
+                <!-- ITENS -->
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-list-ul"></i>
+                    Itens da venda
+
+                </h5>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle"
+                           id="tabelaItens">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Produto</th>
+
+                                <th>Tamanho</th>
+
+                                <th>Cor</th>
+
+                                <th>Quantidade</th>
+
+                                <th>Preço unitário</th>
+
+                                <th>Subtotal</th>
+
+                                <th class="text-end">Ação</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="itensBody">
+
+                            <tr id="nenhumItem">
+
+                                <td colspan="7"
+                                    class="text-center text-muted py-4">
+
+                                    <i class="bi bi-cart-x fs-3"></i>
+
+                                    <br />
+
+                                    Nenhum produto adicionado.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- CAMPOS OCULTOS DOS ITENS -->
+                <div id="itensHidden"></div>
+
+                <!-- TOTAL -->
+
+                <div class="row justify-content-end mt-4">
+
+                    <div class="col-md-4">
+
+                        <div class="card bg-light border-0">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <span class="fw-semibold">
+                                        Total:
+                                    </span>
+
+                                    <strong id="totalVenda"
+                                            class="fs-4 text-success">
+
+                                        R$ 0,00
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <hr class="my-4" />
+
+
+                <!-- PAGAMENTO -->
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-credit-card"></i>
+                    Pagamento
+
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FormaPagamento"
+                               class="form-label fw-semibold">
+
+                            Forma de pagamento
+
+                        </label>
+
+                        <select asp-for="FormaPagamento"
+                                class="form-select">
+
+                            <option value="">
+                                -- Selecione --
+                            </option>
+
+                            <option value="Dinheiro">
+                                Dinheiro
+                            </option>
+
+                            <option value="PIX">
+                                PIX
+                            </option>
+
+                            <option value="Cartão de Débito">
+                                Cartão de Débito
+                            </option>
+
+                            <option value="Cartão de Crédito">
+                                Cartão de Crédito
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="FormaPagamento"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+                        Finalizar Venda
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const produtoSelect =
+            document.getElementById("produtoId");
+
+        const estoqueSelect =
+            document.getElementById("estoqueId");
+
+        const marcaInput =
+            document.getElementById("marca");
+
+        const tamanhoInput =
+            document.getElementById("tamanho");
+
+        const corInput =
+            document.getElementById("cor");
+
+        const quantidadeInput =
+            document.getElementById("quantidade");
+
+        const estoqueDisponivel =
+            document.getElementById("estoqueDisponivel");
+
+        const precoInput =
+            document.getElementById("precoUnitario");
+
+        const btnAdicionar =
+            document.getElementById("btnAdicionarProduto");
+
+        const itensBody =
+            document.getElementById("itensBody");
+
+        const nenhumItem =
+            document.getElementById("nenhumItem");
+
+        const totalVenda =
+            document.getElementById("totalVenda");
+
+
+        let estoques = [];
+
+        let itens = [];
+
+        let total = 0;
+
+
+        // =========================================
+        // SELECIONAR PRODUTO
+        // =========================================
+
+        produtoSelect.addEventListener("change", async function () {
+
+            const produtoId = this.value;
+
+            estoqueSelect.innerHTML =
+                '<option value="">-- Selecione a variante --</option>';
+
+            estoqueSelect.disabled = true;
+
+            marcaInput.value = "";
+            tamanhoInput.value = "";
+            corInput.value = "";
+            precoInput.value = "";
+
+            estoqueDisponivel.textContent = "";
+
+            btnAdicionar.disabled = true;
+
+            if (!produtoId) {
+                return;
+            }
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `/Vendas/ObterEstoque?produtoId=${produtoId}`
+                    );
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        "Não foi possível consultar o estoque."
+                    );
+                }
+
+                estoques = await resposta.json();
+
+                if (estoques.length === 0) {
+
+                    estoqueSelect.innerHTML =
+                        '<option value="">Produto sem estoque disponível</option>';
+
+                    return;
+                }
+
+                estoques.forEach(function (estoque) {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value =
+                        estoque.estoqueId;
+
+                    option.textContent =
+                        `${estoque.marca} | ${estoque.tamanho} | ${estoque.cor} | Estoque: ${estoque.quantidadeDisponivel}`;
+
+                    estoqueSelect.appendChild(option);
+
+                });
+
+                estoqueSelect.disabled = false;
+
+                estoqueSelect.selectedIndex = 1;
+
+                preencherVariante();
+
+            }
+            catch (erro) {
+
+                console.error(erro);
+
+                alert(
+                    "Erro ao consultar o estoque."
+                );
+            }
+
+        });
+
+
+        // =========================================
+        // SELECIONAR VARIANTE
+        // =========================================
+
+        estoqueSelect.addEventListener(
+            "change",
+            preencherVariante
+        );
+
+
+        function preencherVariante() {
+
+            const estoqueId =
+                parseInt(estoqueSelect.value);
+
+            const estoque =
+                estoques.find(
+                    e => e.estoqueId === estoqueId
+                );
+
+            if (!estoque) {
+
+                marcaInput.value = "";
+                tamanhoInput.value = "";
+                corInput.value = "";
+                precoInput.value = "";
+
+                estoqueDisponivel.textContent = "";
+
+                btnAdicionar.disabled = true;
+
+                return;
+            }
+
+            marcaInput.value =
+                estoque.marca;
+
+            tamanhoInput.value =
+                estoque.tamanho;
+
+            corInput.value =
+                estoque.cor;
+
+            precoInput.value =
+                estoque.preco.toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+            estoqueDisponivel.textContent =
+                `Disponível em estoque: ${estoque.quantidadeDisponivel}`;
+
+            quantidadeInput.max =
+                estoque.quantidadeDisponivel;
+
+            quantidadeInput.value = 1;
+
+            btnAdicionar.disabled = false;
+
+        }
+
+
+        // =========================================
+        // ADICIONAR PRODUTO
+        // =========================================
+
+        btnAdicionar.addEventListener(
+            "click",
+            adicionarProduto
+        );
+
+
+        function adicionarProduto() {
+
+            const produtoId =
+                parseInt(produtoSelect.value);
+
+            const estoqueId =
+                parseInt(estoqueSelect.value);
+
+            const quantidade =
+                parseInt(quantidadeInput.value);
+
+            const estoque =
+                estoques.find(
+                    e => e.estoqueId === estoqueId
+                );
+
+
+            if (!produtoId || !estoque) {
+
+                alert(
+                    "Selecione um produto e uma variante."
+                );
+
+                return;
+            }
+
+
+            if (!quantidade || quantidade <= 0) {
+
+                alert(
+                    "Informe uma quantidade válida."
+                );
+
+                return;
+            }
+
+
+            if (quantidade > estoque.quantidadeDisponivel) {
+
+                alert(
+                    `Quantidade indisponível. Existem apenas ${estoque.quantidadeDisponivel} unidades em estoque.`
+                );
+
+                return;
+            }
+
+
+            // Verifica se a mesma variante já foi adicionada
+
+            const itemExistente =
+                itens.find(
+                    i => i.estoqueId === estoqueId
+                );
+
+
+            if (itemExistente) {
+
+                alert(
+                    "Essa variante já foi adicionada à venda."
+                );
+
+                return;
+            }
+
+
+            const preco =
+                Number(estoque.preco);
+
+            const subtotal =
+                quantidade * preco;
+
+
+            const item = {
+
+                estoqueId: estoqueId,
+
+                produtoId: produtoId,
+
+                produto: estoque.produto,
+
+                marcaId: estoque.marcaId,
+
+                marca: estoque.marca,
+
+                tamanho: estoque.tamanho,
+
+                cor: estoque.cor,
+
+                quantidade: quantidade,
+
+                precoUnitario: preco,
+
+                subtotal: subtotal
+
+            };
+
+
+            itens.push(item);
+
+            atualizarTabela();
+
+            limparProduto();
+
+        }
+
+
+        // =========================================
+        // ATUALIZAR TABELA
+        // =========================================
+
+               function atualizarTabela() {
+
+            const itensHidden =
+                document.getElementById("itensHidden");
+
+            itensHidden.innerHTML = "";
+
+            itensBody.innerHTML = "";
+
+            total = 0;
+
+
+            if (itens.length === 0) {
+
+                itensBody.innerHTML = `
+
+                    <tr id="nenhumItem">
+
+                        <td colspan="7"
+                            class="text-center text-muted py-4">
+
+                            <i class="bi bi-cart-x fs-3"></i>
+
+                            <br />
+
+                            Nenhum produto adicionado.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                atualizarTotal();
+
+                return;
+            }
+
+
+            itens.forEach(function (item, index) {
+
+                total += item.subtotal;
+
+
+                const linha =
+                    document.createElement("tr");
+
+
+                linha.innerHTML = `
+
+                    <td>
+
+                        <strong>
+                            ${item.produto}
+                        </strong>
+
+                        <br />
+
+                        <small class="text-muted">
+                            ${item.marca}
+                        </small>
+
+                    </td>
+
+
+                    <td>
+                        ${item.tamanho}
+                    </td>
+
+
+                    <td>
+                        ${item.cor}
+                    </td>
+
+
+                    <td>
+                        ${item.quantidade}
+                    </td>
+
+
+                    <td>
+
+                        ${item.precoUnitario.toLocaleString(
+                            "pt-BR",
+                            {
+                                style: "currency",
+                                currency: "BRL"
+                            }
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+
+                            ${item.subtotal.toLocaleString(
+                                "pt-BR",
+                                {
+                                    style: "currency",
+                                    currency: "BRL"
+                                }
+                            )}
+
+                        </strong>
+
+                    </td>
+
+
+                    <td class="text-end">
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="removerItem(${index})">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                itensBody.appendChild(linha);
+
+
+                // =========================================
+                // CAMPOS ENVIADOS PARA O CONTROLLER
+                // =========================================
+
+                itensHidden.innerHTML += `
+
+                    <input type="hidden"
+                           name="Itens[${index}].ProdutoId"
+                           value="${item.produtoId}" />
+
+                    <input type="hidden"
+                           name="Itens[${index}].MarcaId"
+                           value="${item.marcaId}" />
+
+                    <input type="hidden"
+                           name="Itens[${index}].Tamanho"
+                           value="${item.tamanho}" />
+
+                    <input type="hidden"
+                           name="Itens[${index}].Cor"
+                           value="${item.cor}" />
+
+                    <input type="hidden"
+                           name="Itens[${index}].Quantidade"
+                           value="${item.quantidade}" />
+
+                    <input type="hidden"
+                           name="Itens[${index}].PrecoUnitario"
+                           value="${item.precoUnitario}" />
+
+                `;
+
+            });
+
+
+            atualizarTotal();
+        }
+
+
+        // =========================================
+        // REMOVER ITEM
+        // =========================================
+
+        function removerItem(index) {
+
+            itens.splice(index, 1);
+
+            atualizarTabela();
+
+        }
+
+
+        // =========================================
+        // ATUALIZAR TOTAL
+        // =========================================
+
+        function atualizarTotal() {
+
+            totalVenda.textContent =
+                total.toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+        }
+
+
+        // =========================================
+        // LIMPAR SELEÇÃO
+        // =========================================
+
+        function limparProduto() {
+
+            produtoSelect.value = "";
+
+            estoqueSelect.innerHTML =
+                '<option value="">-- Selecione primeiro o produto --</option>';
+
+            estoqueSelect.disabled = true;
+
+            marcaInput.value = "";
+            tamanhoInput.value = "";
+            corInput.value = "";
+            precoInput.value = "";
+
+            quantidadeInput.value = 1;
+
+            estoqueDisponivel.textContent = "";
+
+            btnAdicionar.disabled = true;
+
+        }
+
+    </script>
+}

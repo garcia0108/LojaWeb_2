@@ -1,0 +1,1312 @@
+﻿@model IEnumerable<LojaWeb_2.ViewModels.ProdutoCatalogoViewModel>
+
+@{
+    ViewData["Title"] = "Todos os Produtos";
+}
+
+<!-- ========================================= -->
+<!-- PESQUISA E FILTROS -->
+<!-- ========================================= -->
+
+<div class="catalogo-filtros mb-5">
+
+    <form asp-controller="Loja"
+          asp-action="Produtos"
+          method="get">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- PESQUISA -->
+
+            <div class="col-12 col-md-6">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-search"></i>
+                    Buscar produto
+                </label>
+
+                <div class="input-group">
+
+                    <input type="text"
+                           name="pesquisa"
+                           value="@ViewBag.Pesquisa"
+                           class="form-control"
+                           placeholder="Digite o nome do produto..." />
+
+                    <button type="submit"
+                            class="btn btn-dark">
+
+                        <i class="bi bi-search"></i>
+                        Buscar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PÚBLICO -->
+
+            <div class="col-12 col-md-4">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-people"></i>
+                    Público
+                </label>
+
+                <select name="publico"
+                        class="form-select">
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    @if (ViewBag.Publico == "Masculino")
+                    {
+                        <option value="Masculino" selected>
+                            Masculino
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Masculino">
+                            Masculino
+                        </option>
+                    }
+
+                    @if (ViewBag.Publico == "Feminino")
+                    {
+                        <option value="Feminino" selected>
+                            Feminino
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Feminino">
+                            Feminino
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- CATEGORIA -->
+
+            <div class="col-12 col-md-4">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-tags"></i>
+                    Categoria
+                </label>
+
+                <select name="categoriaId"
+                        class="form-select">
+
+                    <option value="">
+                        Todas as categorias
+                    </option>
+
+                    @foreach (var categoria in ViewBag.Categorias)
+                    {
+                        if (ViewBag.CategoriaId == categoria.Id)
+                        {
+                            <option value="@categoria.Id" selected>
+                                @categoria.Nome
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@categoria.Id">
+                                @categoria.Nome
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- COR -->
+
+            <div class="col-12 col-md-3">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-palette"></i>
+                    Cor
+                </label>
+
+                <select name="cor"
+                        class="form-select">
+
+                    <option value="">
+                        Todas as cores
+                    </option>
+
+                    @foreach (var corItem in ViewBag.Cores)
+                    {
+                        if (ViewBag.Cor == corItem)
+                        {
+                            <option value="@corItem" selected>
+                                @corItem
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@corItem">
+                                @corItem
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- TAMANHO -->
+
+            <div class="col-12 col-md-4 col-lg-2">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-rulers"></i>
+                    Tamanho
+                </label>
+
+                <select name="tamanho"
+                        class="form-select">
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    @foreach (var tamanhoItem in ViewBag.Tamanhos)
+                    {
+                        if (ViewBag.Tamanho == tamanhoItem)
+                        {
+                            <option value="@tamanhoItem" selected>
+                                @tamanhoItem
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@tamanhoItem">
+                                @tamanhoItem
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- ORDENAÇÃO -->
+
+            <div class="col-12 col-md-4 col-lg-2">
+
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-sort-down"></i>
+                    Ordenar por
+                </label>
+
+                <select name="ordenar"
+                        class="form-select">
+
+                    <option value=""
+                            selected="@(string.IsNullOrWhiteSpace(ViewBag.Ordenar as string))">
+                        Mais relevantes
+                    </option>
+
+                    <option value="mais-recentes"
+                            selected="@(ViewBag.Ordenar == "mais-recentes")">
+                        Mais recentes
+                    </option>
+
+                    <option value="menor-preco"
+                            selected="@(ViewBag.Ordenar == "menor-preco")">
+                        Menor preço
+                    </option>
+
+                    <option value="maior-preco"
+                            selected="@(ViewBag.Ordenar == "maior-preco")">
+                        Maior preço
+                    </option>
+
+                    <option value="nome-az"
+                            selected="@(ViewBag.Ordenar == "nome-az")">
+                        Nome A-Z
+                    </option>
+
+                    <option value="nome-za"
+                            selected="@(ViewBag.Ordenar == "nome-za")">
+                        Nome Z-A
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PREÇO MÍNIMO -->
+
+            <div class="col-12 col-md-4 col-lg-2">
+
+                <label class="form-label fw-semibold">
+                    Preço mínimo
+                </label>
+
+                <input type="number"
+                       name="precoMin"
+                       value="@ViewBag.PrecoMin"
+                       class="form-control"
+                       placeholder="R$ 0,00"
+                       min="0"
+                       step="0.01" />
+
+            </div>
+
+
+            <!-- PREÇO MÁXIMO -->
+
+            <div class="col-12 col-md-4 col-lg-2">
+
+                <label class="form-label fw-semibold">
+                    Preço máximo
+                </label>
+
+                <input type="number"
+                       name="precoMax"
+                       value="@ViewBag.PrecoMax"
+                       class="form-control"
+                       placeholder="R$ 999,99"
+                       min="0"
+                       step="0.01" />
+
+            </div>
+
+
+            <!-- BOTÃO -->
+
+            <div class="col-12 col-md-2">
+
+                <button type="submit"
+                        class="btn btn-dark w-100">
+
+                    <i class="bi bi-funnel"></i>
+                    Filtrar
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIMPAR FILTROS -->
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Pesquisa as string) ||
+                     !string.IsNullOrWhiteSpace(ViewBag.Publico as string) ||
+                     ViewBag.CategoriaId != null ||
+                     !string.IsNullOrWhiteSpace(ViewBag.Cor as string) ||
+                     !string.IsNullOrWhiteSpace(ViewBag.Tamanho as string) ||
+                     !string.IsNullOrWhiteSpace(ViewBag.Ordenar as string) ||
+                     ViewBag.PrecoMin != null ||
+                     ViewBag.PrecoMax != null)
+        {
+
+            <div class="mt-3">
+
+                <a asp-controller="Loja"
+                   asp-action="Produtos"
+                   class="btn btn-outline-secondary btn-sm">
+
+                    <i class="bi bi-x-circle"></i>
+                    Limpar filtros
+
+                </a>
+
+            </div>
+
+        }
+
+    </form>
+
+</div>
+
+
+<div class="container mt-5 mb-5">
+
+    <!-- ========================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================= -->
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+
+            <i class="bi bi-grid"></i>
+
+            Todos os Produtos
+
+        </h1>
+
+        <p class="text-muted">
+
+            Encontre todos os nossos produtos em um só lugar.
+
+        </p>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- QUANTIDADE -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <span class="text-muted">
+
+            <i class="bi bi-box-seam"></i>
+
+            @ViewBag.TotalProdutos
+
+            @(ViewBag.TotalProdutos == 1
+                ? "produto encontrado"
+                : "produtos encontrados")
+
+        </span>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- PRODUTOS -->
+    <!-- ========================================= -->
+    @if (Model != null && Model.Any())
+    {
+
+        <div class="row g-4">
+
+            @foreach (var item in Model)
+            {
+
+                var produto = item.Produto;
+                var cor = item.Cor;
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                    <div class="card produto-card h-100"
+                         data-detalhes-url="@Url.Action("Detalhes", "Loja", new { id = produto.Id, cor = cor?.Nome })">
+
+                        <!-- ========================================= -->
+                        <!-- IMAGEM -->
+                        <!-- ========================================= -->
+
+                        <div class="produto-imagem-container">
+
+                            @if (!string.IsNullOrEmpty(item.Imagem))
+                            {
+
+                                <img src="@item.Imagem"
+                                     class="produto-imagem"
+                                     alt="@produto.Nome" />
+
+                            }
+                            else
+                            {
+
+                                <div class="produto-sem-imagem">
+
+                                    <i class="bi bi-image"></i>
+
+                                </div>
+
+                            }
+
+
+                            <!-- PROMOÇÃO -->
+                            @if (produto.PrecoPromocional.HasValue &&
+                                                             produto.PrecoPromocional.Value > 0 &&
+                                                             produto.PrecoPromocional.Value < produto.Preco)
+                            {
+
+                                decimal desconto =
+                                    ((produto.Preco - produto.PrecoPromocional.Value)
+                                    / produto.Preco) * 100;
+
+                                <span class="produto-badge-promocao">
+
+                                    -@Math.Round(desconto)% OFF
+
+                                </span>
+
+                            }
+
+                        </div>
+
+
+                        <!-- ========================================= -->
+                        <!-- INFORMAÇÕES -->
+                        <!-- ========================================= -->
+
+                        <div class="card-body produto-card-body">
+
+                            <!-- CATEGORIA -->
+
+                            <div class="produto-categoria">
+
+                                @(produto.Categoria?.Nome ?? "Sem categoria")
+
+                            </div>
+
+
+                            <!-- COR -->
+                            @if (cor != null)
+                            {
+
+                                <div class="produto-cor">
+
+                                    <span class="produto-cor-indicador"></span>
+
+                                    @cor.Nome
+
+                                </div>
+
+                            }
+
+
+                            <!-- NOME -->
+
+                            <h5 class="produto-nome">
+
+                                @produto.Nome
+
+                            </h5>
+
+
+                            <!-- ========================================= -->
+                            <!-- PREÇO -->
+                            <!-- ========================================= -->
+                            @if (produto.PrecoPromocional.HasValue &&
+                                                             produto.PrecoPromocional.Value > 0 &&
+                                                             produto.PrecoPromocional.Value < produto.Preco)
+                            {
+
+                                <div class="produto-preco">
+
+                                    <span class="produto-preco-antigo">
+
+                                        @produto.Preco.ToString("C")
+
+                                    </span>
+
+                                    <span class="produto-preco-promocional">
+
+                                        @produto.PrecoPromocional.Value.ToString("C")
+
+                                    </span>
+
+                                </div>
+
+                            }
+                            else
+                            {
+
+                                <div class="produto-preco">
+
+                                    <span class="produto-preco-normal">
+
+                                        @produto.Preco.ToString("C")
+
+                                    </span>
+
+                                </div>
+
+                            }
+
+
+                            <!-- ========================================= -->
+                            <!-- AVALIAÇÕES -->
+                            <!-- ========================================= -->
+
+                            <div class="produto-avaliacoes-cupom">
+
+                                <div class="produto-avaliacoes">
+
+                                    <span class="estrelas">
+                                        ★★★★★
+                                    </span>
+
+                                    <span class="quantidade-avaliacoes">
+                                        (0)
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ========================================= -->
+                            <!-- TAMANHOS -->
+                            <!-- ========================================= -->
+                            @{
+                                var tamanhosPadrao =
+                                    new[] { "PP", "P", "M", "G", "GG", "XGG" };
+
+                                var tamanhosDisponiveis = produto.Estoques?
+                                    .Where(e =>
+                                        e.Quantidade > 0 &&
+                                        (
+                                            cor == null ||
+                                            e.Cor == cor.Nome
+                                        ))
+                                    .Select(e => e.Tamanho)
+                                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                                    .Distinct()
+                                    .ToList()
+                                    ?? new List<string>();
+                            }
+
+
+                            <div class="produto-tamanhos">
+
+                                @foreach (var tamanho in tamanhosPadrao)
+                                {
+
+                                    var disponivel =
+                                        tamanhosDisponiveis.Any(t =>
+                                            string.Equals(
+                                                t,
+                                                tamanho,
+                                                StringComparison.OrdinalIgnoreCase));
+
+                                    <button type="button"
+                                            class="produto-tamanho @(disponivel ? "disponivel" : "indisponivel")"
+                                            data-tamanho="@tamanho"
+                                        @(disponivel ? "" : "disabled")>
+
+                                        @tamanho
+
+                                    </button>
+
+                                }
+
+                            </div>
+
+
+                            <!-- ========================================= -->
+                            <!-- COMPRA RÁPIDA -->
+                            <!-- ========================================= -->
+
+                            <button type="button"
+                                    class="btn btn-dark produto-btn btn-compra-rapida"
+                                    data-produto-id="@produto.Id"
+                                    data-cor="@(cor?.Nome ?? "")"
+                                    disabled>
+
+                                <i class="bi bi-lightning-charge"></i>
+
+                                Compra rápida
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- PAGINAÇÃO -->
+        <!-- ========================================= -->
+        @if (ViewBag.TotalPaginas > 1)
+        {
+
+            <nav aria-label="Navegação de produtos"
+                 class="mt-5">
+
+                <ul class="pagination justify-content-center">
+
+
+                    <!-- ANTERIOR -->
+                    @if (ViewBag.PaginaAtual > 1)
+                    {
+
+                        <li class="page-item">
+
+                            <a class="page-link"
+                               asp-controller="Loja"
+                               asp-action="Produtos"
+                               asp-route-pesquisa="@ViewBag.Pesquisa"
+                               asp-route-publico="@ViewBag.Publico"
+                               asp-route-categoriaId="@ViewBag.CategoriaId"
+                               asp-route-cor="@ViewBag.Cor"
+                               asp-route-tamanho="@ViewBag.Tamanho"
+                               asp-route-ordenar="@ViewBag.Ordenar"
+                               asp-route-precoMin="@ViewBag.PrecoMin"
+                               asp-route-precoMax="@ViewBag.PrecoMax"
+                               asp-route-pagina="@(ViewBag.PaginaAtual - 1)">
+
+                                <i class="bi bi-chevron-left"></i>
+
+                            </a>
+
+                        </li>
+
+                    }
+
+
+                    <!-- NÚMEROS -->
+                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                    {
+
+                        if (i == ViewBag.PaginaAtual)
+                        {
+
+                            <li class="page-item active">
+
+                                <span class="page-link">
+
+                                    @i
+
+                                </span>
+
+                            </li>
+
+                        }
+                        else
+                        {
+
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   asp-controller="Loja"
+                                   asp-action="Produtos"
+                                   asp-route-pesquisa="@ViewBag.Pesquisa"
+                                   asp-route-publico="@ViewBag.Publico"
+                                   asp-route-categoriaId="@ViewBag.CategoriaId"
+                                   asp-route-cor="@ViewBag.Cor"
+                                   asp-route-tamanho="@ViewBag.Tamanho"
+                                   asp-route-ordenar="@ViewBag.Ordenar"
+                                   asp-route-precoMin="@ViewBag.PrecoMin"
+                                   asp-route-precoMax="@ViewBag.PrecoMax"
+                                   asp-route-pagina="@i">
+
+                                    @i
+
+                                </a>
+
+                            </li>
+
+                        }
+
+                    }
+
+
+                    <!-- PRÓXIMA -->
+                    @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+                    {
+
+                        <li class="page-item">
+
+                            <a class="page-link"
+                               asp-controller="Loja"
+                               asp-action="Produtos"
+                               asp-route-pesquisa="@ViewBag.Pesquisa"
+                               asp-route-publico="@ViewBag.Publico"
+                               asp-route-categoriaId="@ViewBag.CategoriaId"
+                               asp-route-cor="@ViewBag.Cor"
+                               asp-route-tamanho="@ViewBag.Tamanho"
+                               asp-route-ordenar="@ViewBag.Ordenar"
+                               asp-route-precoMin="@ViewBag.PrecoMin"
+                               asp-route-precoMax="@ViewBag.PrecoMax"
+                               asp-route-pagina="@(ViewBag.PaginaAtual + 1)">
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+                        </li>
+
+                    }
+
+                </ul>
+
+            </nav>
+
+        }
+
+    }
+    else
+    {
+
+        <div class="text-center py-5">
+
+            <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+            <h4 class="mt-3">
+
+                Nenhum produto encontrado.
+
+            </h4>
+
+        </div>
+
+    }
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           FILTROS
+           ========================================= */
+
+    .catalogo-filtros {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+        .catalogo-filtros .form-control,
+        .catalogo-filtros .form-select {
+            min-height: 46px;
+        }
+
+        .catalogo-filtros .btn {
+            min-height: 46px;
+        }
+
+
+    /* =========================================
+           CARD
+           ========================================= */
+
+    .produto-card {
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        transition: transform .2s ease, box-shadow .2s ease;
+        cursor: pointer;
+    }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .12);
+        }
+
+
+    /* =========================================
+           IMAGEM
+           ========================================= */
+
+    .produto-imagem-container {
+        position: relative;
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+        background: #f8f9fa;
+    }
+
+    .produto-imagem {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .3s ease;
+    }
+
+    .produto-card:hover .produto-imagem {
+        transform: scale(1.04);
+    }
+
+    .produto-sem-imagem {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        color: #adb5bd;
+    }
+
+
+    /* =========================================
+           PROMOÇÃO
+           ========================================= */
+
+    .produto-badge-promocao {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #dc3545;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+           COR
+           ========================================= */
+
+    .produto-cor {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #495057;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .produto-cor-indicador {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #adb5bd;
+        border: 1px solid #6c757d;
+        display: inline-block;
+    }
+
+
+    /* =========================================
+           CORPO
+           ========================================= */
+
+    .produto-card-body {
+        display: flex;
+        flex-direction: column;
+        min-height: 235px;
+    }
+
+
+    /* =========================================
+           CATEGORIA
+           ========================================= */
+
+    .produto-categoria {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 6px;
+    }
+
+
+    /* =========================================
+           NOME
+           ========================================= */
+
+    .produto-nome {
+        font-size: 18px;
+        font-weight: 600;
+        min-height: 48px;
+        margin-bottom: 12px;
+    }
+
+
+    /* =========================================
+           PREÇO
+           ========================================= */
+
+    .produto-preco {
+        margin-bottom: 18px;
+    }
+
+    .produto-preco-antigo {
+        display: block;
+        color: #6c757d;
+        text-decoration: line-through;
+        font-size: 14px;
+    }
+
+    .produto-preco-promocional {
+        display: block;
+        font-size: 21px;
+        font-weight: 700;
+        color: #198754;
+    }
+
+    .produto-preco-normal {
+        display: block;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+           AVALIAÇÕES
+           ========================================= */
+
+    .produto-avaliacoes-cupom {
+        min-height: 26px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .produto-avaliacoes {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        line-height: 1;
+    }
+
+        .produto-avaliacoes .estrelas {
+            color: #cfa34a;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .produto-avaliacoes .quantidade-avaliacoes {
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+
+    /* =========================================
+           TAMANHOS
+           ========================================= */
+
+    .produto-tamanhos {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 4px;
+        margin-bottom: 16px;
+        width: 100%;
+    }
+
+    .produto-tamanho {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        height: 28px;
+        padding: 0 4px;
+        border: 1px solid #adb5bd;
+        border-radius: 4px;
+        background: #fff;
+        color: #212529;
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+        .produto-tamanho.disponivel:hover {
+            border-color: #cfa34a;
+            background: #cfa34a;
+            color: #141414;
+        }
+
+        .produto-tamanho.disponivel.selecionado {
+            background: #cfa34a;
+            border-color: #cfa34a;
+            color: #141414;
+            font-weight: 700;
+        }
+
+        .produto-tamanho.indisponivel {
+            background: #f5f5f5;
+            border-color: #d9d9d9;
+            color: #b5b5b5;
+            cursor: not-allowed;
+            opacity: .65;
+        }
+
+            .produto-tamanho.indisponivel::after {
+                content: "";
+                position: absolute;
+                left: 3px;
+                right: 3px;
+                top: 50%;
+                height: 2px;
+                background: #dc3545;
+                transform: rotate(-12deg);
+                pointer-events: none;
+            }
+
+
+    /* =========================================
+           BOTÃO
+           ========================================= */
+
+    .produto-btn {
+        margin-top: auto;
+        width: 100%;
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================
+           PAGINAÇÃO
+           ========================================= */
+
+    .pagination {
+        gap: 6px;
+    }
+
+        .pagination .page-link {
+            color: #cfa34a;
+            border-color: #cfa34a;
+            background-color: #fff;
+            font-weight: 200;
+            border-radius: 10px !important;
+            margin: 0;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #cfa34a;
+                border-color: #cfa34a;
+                color: #141414;
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #cfa34a;
+            border-color: #cfa34a;
+            color: #141414;
+            font-weight: 300;
+            border-radius: 10px !important;
+        }
+
+
+    /* =========================================
+           CELULAR
+           ========================================= */
+
+    @@media (max-width: 767px) {
+
+        .produto-imagem-container {
+            height: 260px;
+        }
+
+        .produto-nome {
+            font-size: 16px;
+        }
+
+        .produto-preco-promocional,
+        .produto-preco-normal {
+            font-size: 19px;
+        }
+    }
+
+</style>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.querySelectorAll(".produto-card").forEach(function (card) {
+
+            const urlDetalhes =
+                card.dataset.detalhesUrl;
+
+            const tamanhos =
+                card.querySelectorAll(".produto-tamanho.disponivel");
+
+            const botaoCompraRapida =
+                card.querySelector(".btn-compra-rapida");
+
+
+            // =========================================
+            // CARD → DETALHES
+            // =========================================
+
+            card.addEventListener("click", function (event) {
+
+                // Não abrir detalhes quando clicar
+                // em tamanho ou compra rápida.
+
+                if (event.target.closest(".produto-tamanho")) {
+                    return;
+                }
+
+                if (event.target.closest(".btn-compra-rapida")) {
+                    return;
+                }
+
+                if (urlDetalhes) {
+
+                    window.location.href =
+                        urlDetalhes;
+
+                }
+
+            });
+
+
+            // =========================================
+            // SELECIONAR TAMANHO
+            // =========================================
+
+            tamanhos.forEach(function (botaoTamanho) {
+
+                botaoTamanho.addEventListener("click", function (event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+
+                    // Remover seleção anterior
+
+                    tamanhos.forEach(function (item) {
+
+                        item.classList.remove("selecionado");
+
+                    });
+
+
+                    // Selecionar tamanho atual
+
+                    botaoTamanho.classList.add("selecionado");
+
+
+                    // Guardar tamanho no botão Compra Rápida
+
+                    botaoCompraRapida.dataset.tamanho =
+                        botaoTamanho.dataset.tamanho;
+
+
+                    // =========================================
+                    // LIBERAR COMPRA RÁPIDA
+                    // =========================================
+
+                    botaoCompraRapida.disabled = false;
+
+                    botaoCompraRapida.removeAttribute("disabled");
+
+                });
+
+            });
+
+
+            // =========================================
+            // COMPRA RÁPIDA
+            // =========================================
+
+            botaoCompraRapida.addEventListener("click", function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+
+                const produtoId =
+                    botaoCompraRapida.dataset.produtoId;
+
+                const corSelecionada =
+                    botaoCompraRapida.dataset.cor;
+
+                const tamanhoSelecionado =
+                    botaoCompraRapida.dataset.tamanho;
+
+
+                // =========================================
+                // VALIDAR TAMANHO
+                // =========================================
+
+                if (!tamanhoSelecionado) {
+
+                    alert("Selecione um tamanho.");
+
+                    return;
+
+                }
+
+
+                // =========================================
+                // VALIDAR COR
+                // =========================================
+
+                if (!corSelecionada) {
+
+                    alert("Não foi possível identificar a cor.");
+
+                    return;
+
+                }
+
+
+                // =========================================
+                // CRIAR FORMULÁRIO
+                // =========================================
+
+                const formCompraRapida =
+                    document.createElement("form");
+
+                formCompraRapida.method = "POST";
+
+                formCompraRapida.action =
+                    '@Url.Action("CompraRapida", "Carrinho")';
+
+
+                // =========================================
+                // TOKEN ANTI-FORGERY
+                // =========================================
+
+                const token =
+                    document.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    )?.value;
+
+
+                // =========================================
+                // DADOS DA COMPRA
+                // =========================================
+
+                formCompraRapida.innerHTML = `
+
+                    <input type="hidden"
+                           name="produtoId"
+                           value="${produtoId}" />
+
+                    <input type="hidden"
+                           name="cor"
+                           value="${corSelecionada}" />
+
+                    <input type="hidden"
+                           name="tamanho"
+                           value="${tamanhoSelecionado}" />
+
+                    <input type="hidden"
+                           name="quantidade"
+                           value="1" />
+
+                    <input type="hidden"
+                           name="__RequestVerificationToken"
+                           value="${token || ""}" />
+
+                `;
+
+
+                // =========================================
+                // ENVIAR
+                // =========================================
+
+                document.body.appendChild(
+                    formCompraRapida
+                );
+
+                formCompraRapida.submit();
+
+            });
+
+        });
+
+    });
+
+</script>

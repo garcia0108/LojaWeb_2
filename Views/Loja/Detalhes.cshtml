@@ -1,0 +1,1459 @@
+﻿@model LojaWeb_2.Models.Produto
+
+@{
+    ViewData["Title"] = Model.Nome;
+
+    var estoque = ViewBag.Estoque
+        as List<LojaWeb_2.Models.Estoque>
+        ?? new List<LojaWeb_2.Models.Estoque>();
+
+    var corInicial = ViewBag.CorSelecionada as string;
+
+    var coresComImagens = Model.Cores?
+        .Where(c => !string.IsNullOrWhiteSpace(c.Nome))
+        .ToList()
+        ?? new List<LojaWeb_2.Models.ProdutoCor>();
+
+    var corParaInicializar = coresComImagens
+        .FirstOrDefault(c =>
+            !string.IsNullOrWhiteSpace(corInicial) &&
+            string.Equals(
+                c.Nome,
+                corInicial,
+                StringComparison.OrdinalIgnoreCase));
+
+    if (corParaInicializar == null)
+    {
+        corParaInicializar = coresComImagens.FirstOrDefault();
+    }
+}
+
+<style>
+    /* =========================================================
+           PRODUTO - DETALHES
+           ========================================================= */
+
+    .produto-detalhes {
+        padding-top: 35px;
+        padding-bottom: 70px;
+    }
+
+    /* =========================================================
+           GALERIA
+           ========================================================= */
+
+    .produto-galeria {
+        width: 100%;
+    }
+
+    .galeria-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .galeria-item {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #f5f5f5;
+        cursor: zoom-in;
+    }
+
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .35s ease;
+        }
+
+        .galeria-item:hover img {
+            transform: scale(1.035);
+        }
+
+    .galeria-sem-imagem {
+        min-height: 500px;
+        border-radius: 12px;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+    }
+
+        .galeria-sem-imagem i {
+            font-size: 70px;
+        }
+
+    /* =========================================================
+           INFORMAÇÕES
+           ========================================================= */
+
+    .produto-info {
+        padding-left: 25px;
+    }
+
+    .produto-marca {
+        font-size: .9rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        margin-bottom: 8px;
+    }
+
+    .produto-titulo {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 12px;
+    }
+
+    .produto-cor-titulo {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: #666;
+}
+
+.produto-cor-titulo strong {
+    color: #222;
+    font-weight: 600;
+}
+
+    .produto-categoria {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #f3f3f3;
+        border-radius: 20px;
+        font-size: .85rem;
+        color: #555;
+    }
+
+    .produto-preco {
+        margin-top: 22px;
+    }
+
+    .produto-preco-antigo {
+        display: block;
+        color: #888;
+        text-decoration: line-through;
+        font-size: 1rem;
+        margin-bottom: 2px;
+    }
+
+    .produto-preco-atual {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0757b8;
+    }
+
+    .produto-preco-promocional {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #198754;
+    }
+
+    .produto-promocao {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 5px 9px;
+        border-radius: 5px;
+        background: #198754;
+        color: white;
+        font-size: .75rem;
+        font-weight: 700;
+        vertical-align: middle;
+    }
+
+    .produto-descricao {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid #eee;
+    }
+
+        .produto-descricao h5 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .produto-descricao p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+    /* =========================================================
+           CORES
+           ========================================================= */
+
+    .selecao-titulo {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 13px;
+    }
+
+    .cor-selecionada-texto {
+        font-size: .95rem;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+        .cor-selecionada-texto strong {
+            color: #222;
+        }
+
+    .cores-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .cor-opcao {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid #d5d5d5;
+        padding: 3px;
+        background: transparent;
+        cursor: pointer;
+        transition: all .2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .cor-opcao:hover {
+            transform: scale(1.08);
+            border-color: #777;
+        }
+
+        .cor-opcao.active {
+            border: 3px solid #111;
+            box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111;
+            transform: scale(1.04);
+        }
+
+    .cor-circulo {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: block;
+        border: 1px solid rgba(0,0,0,.12);
+        background-color: #cccccc;
+    }
+
+    /* =========================================================
+           TAMANHOS
+           ========================================================= */
+
+    .tamanhos-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .produto-tamanho {
+        min-width: 48px;
+        height: 44px;
+        padding: 0 13px;
+        border: 1px solid #ccc;
+        background: white;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+        .produto-tamanho:hover:not(:disabled) {
+            border-color: #111;
+        }
+
+        .produto-tamanho.active {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        .produto-tamanho:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+    /* =========================================================
+           ESTOQUE
+           ========================================================= */
+
+    #estoqueDisponivel {
+        border-radius: 8px;
+        font-size: .9rem;
+    }
+
+    /* =========================================================
+           QUANTIDADE
+           ========================================================= */
+
+    .quantidade-container {
+        max-width: 180px;
+    }
+
+        .quantidade-container button {
+            width: 45px;
+        }
+
+    /* =========================================================
+           BOTÃO CARRINHO
+           ========================================================= */
+
+    .btn-adicionar-carrinho {
+        min-height: 54px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    /* =========================================================
+           MODAL
+           ========================================================= */
+
+    .imagem-modal {
+        max-width: 95vw;
+        max-height: 85vh;
+        object-fit: contain;
+    }
+
+    /* =========================================================
+           RESPONSIVO
+           ========================================================= */
+
+    @@media (max-width: 991px) {
+
+        .produto-info {
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        .produto-titulo {
+            font-size: 1.7rem;
+        }
+    }
+
+    @@media (max-width: 575px) {
+
+        .produto-detalhes {
+            padding-top: 15px;
+        }
+
+        .galeria-grid {
+            gap: 8px;
+        }
+
+        .galeria-item {
+            border-radius: 8px;
+        }
+
+        .produto-titulo {
+            font-size: 1.45rem;
+        }
+
+        .produto-preco-atual,
+        .produto-preco-promocional {
+            font-size: 1.7rem;
+        }
+
+        .cor-opcao {
+            width: 43px;
+            height: 43px;
+        }
+    }
+</style>
+
+<div class="container produto-detalhes">
+
+    <div class="row g-4">
+
+        <!-- =====================================================
+             GALERIA
+             ===================================================== -->
+
+        <div class="col-lg-6">
+
+            <div class="produto-galeria">
+
+                <div id="galeriaImagens"
+                     class="galeria-grid">
+                </div>
+
+                <div id="galeriaSemImagem"
+                     class="galeria-sem-imagem d-none">
+
+                    <i class="bi bi-image"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             INFORMAÇÕES
+             ===================================================== -->
+
+        <div class="col-lg-6">
+
+            <div class="produto-info">
+
+                @if (Model.Marca != null)
+                {
+                    <div class="produto-marca">
+                        @Model.Marca.Nome
+                    </div>
+                }
+
+                <h1 class="produto-titulo">
+                    @Model.Nome
+                </h1>
+
+                <div class="produto-cor-titulo">
+                    Cor:
+                    <strong id="nomeCorTitulo">
+                        @(corParaInicializar?.Nome ?? "Selecione uma cor")
+                    </strong>
+                </div>
+
+                @if (Model.Categoria != null)
+                {
+                    <span class="produto-categoria">
+                        @Model.Categoria.Nome
+                    </span>
+                }
+
+
+                <!-- =================================================
+                     PREÇO
+                     ================================================= -->
+                @if (Model.EmPromocao &&
+                                     Model.PrecoPromocional.HasValue &&
+                                     Model.PrecoPromocional.Value > 0 &&
+                                     Model.PrecoPromocional.Value < Model.Preco)
+                {
+                    <div class="produto-preco">
+
+                        <span class="produto-preco-antigo">
+                            @Model.Preco.ToString("C2")
+                        </span>
+
+                        <span class="produto-preco-promocional">
+                            @Model.PrecoPromocional.Value.ToString("C2")
+                        </span>
+
+                        <span class="produto-promocao">
+                            PROMOÇÃO
+                        </span>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="produto-preco">
+
+                        <span class="produto-preco-atual">
+                            @Model.Preco.ToString("C2")
+                        </span>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     DESCRIÇÃO
+                     ================================================= -->
+                @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+                {
+                    <div class="produto-descricao">
+
+                        <h5>
+                            Descrição
+                        </h5>
+
+                        <p>
+                            @Model.Descricao
+                        </p>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     OPÇÕES
+                     ================================================= -->
+                @if (estoque.Any())
+                {
+                    <div class="mt-4">
+
+                        <h5 class="selecao-titulo">
+                            Escolha suas opções
+                        </h5>
+
+
+                        <!-- ==============================
+                             COR
+                             ============================== -->
+                        @if (coresComImagens.Any())
+                        {
+                            <div class="mt-3">
+
+                                <div class="cor-selecionada-texto">
+                                    Cor:
+                                    <strong id="nomeCorSelecionada">
+                                        @(corParaInicializar?.Nome ?? "Selecione uma cor")
+                                    </strong>
+                                </div>
+
+                                <div class="cores-container">
+
+                                    @foreach (var cor in coresComImagens)
+                                    {
+                                        <button type="button"
+                                                class="cor-opcao @(corParaInicializar?.Id == cor.Id ? "active" : "")"
+                                                data-cor="@cor.Nome"
+                                                data-cor-id="@cor.Id"
+                                                aria-label="@cor.Nome"
+                                                title="@cor.Nome">
+
+                                            <span class="cor-circulo"
+                                                  data-cor-nome="@cor.Nome">
+                                            </span>
+
+                                        </button>
+                                    }
+
+                                </div>
+
+                            </div>
+                        }
+
+
+                        <!-- ==============================
+                             TAMANHO
+                             ============================== -->
+
+                        <div class="mt-4">
+
+                            <div class="selecao-titulo">
+                                Tamanho
+                            </div>
+
+                            <div id="tamanhosContainer"
+                                 class="tamanhos-container">
+                            </div>
+
+                        </div>
+
+
+                        <!-- ==============================
+                             ESTOQUE
+                             ============================== -->
+
+                        <div class="mt-4">
+
+                            <div id="estoqueDisponivel"
+                                 class="alert alert-secondary">
+
+                                <i class="bi bi-info-circle"></i>
+
+                                Selecione a cor e o tamanho.
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ==============================
+                             QUANTIDADE
+                             ============================== -->
+
+                        <div class="mt-4">
+
+                            <label class="selecao-titulo">
+                                Quantidade
+                            </label>
+
+                            <div class="input-group quantidade-container">
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="diminuirQuantidade">
+
+                                    <i class="bi bi-dash"></i>
+
+                                </button>
+
+                                <input type="number"
+                                       id="quantidade"
+                                       class="form-control text-center"
+                                       value="1"
+                                       min="1"
+                                       readonly />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="aumentarQuantidade">
+
+                                    <i class="bi bi-plus"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ==============================
+                             CARRINHO
+                             ============================== -->
+
+                        <div class="mt-4">
+
+                            <form asp-controller="Carrinho"
+                                  asp-action="Adicionar"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="produtoId"
+                                       value="@Model.Id" />
+
+                                <input type="hidden"
+                                       name="cor"
+                                       id="corSelecionada" />
+
+                                <input type="hidden"
+                                       name="tamanho"
+                                       id="tamanhoSelecionado" />
+
+                                <input type="hidden"
+                                       name="quantidade"
+                                       id="quantidadeSelecionada"
+                                       value="1" />
+
+                                <button type="submit"
+                                        id="btnAdicionarCarrinho"
+                                        class="btn btn-primary btn-lg w-100 btn-adicionar-carrinho"
+                                        disabled>
+
+                                    <i class="bi bi-cart-plus me-2"></i>
+
+                                    Adicionar ao carrinho
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning mt-4">
+
+                        <i class="bi bi-exclamation-circle me-2"></i>
+
+                        Produto temporariamente indisponível.
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     VOLTAR
+                     ================================================= -->
+
+                <div class="mt-4">
+
+                    <a asp-action="Produtos"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+
+                        Voltar para a loja
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     MODAL IMAGEM
+     ============================================================= -->
+
+<div class="modal fade"
+     id="modalImagem"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+
+        <div class="modal-content bg-dark border-0">
+
+            <div class="modal-header border-0">
+
+                <h5 class="modal-title text-white">
+                    @Model.Nome
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar">
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center p-2">
+
+                <img id="imagemAmpliada"
+                     src=""
+                     class="imagem-modal"
+                     alt="@Model.Nome" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        // =========================================================
+        // DADOS DO PRODUTO
+        // =========================================================
+
+        const estoque = @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    estoque.Select(e => new
+                            {
+                                e.Tamanho,
+                                e.Cor,
+                                e.Quantidade
+                            })
+                    )
+                    );
+
+      const imagensPorCor = @Html.Raw(
+    System.Text.Json.JsonSerializer.Serialize(
+        (Model.Cores ?? new List<LojaWeb_2.Models.ProdutoCor>())
+            .Where(c => !string.IsNullOrWhiteSpace(c.Nome))
+            .ToDictionary(
+                c => c.Nome,
+                c => new
+                {
+                    Principal = c.ImagemPrincipal?.Caminho,
+
+                    Imagens = c.Imagens?
+                        .OrderBy(i => i.Id)
+                        .Select(i => i.Caminho)
+                        .ToList()
+                        ?? new List<string>()
+                }
+            )
+    )
+);
+
+
+        // =========================================================
+        // ESTADO
+        // =========================================================
+
+        let corSelecionada =
+            @Html.Raw(
+            System.Text.Json.JsonSerializer.Serialize(
+            corParaInicializar?.Nome
+            )
+            );
+
+        let tamanhoSelecionado = null;
+
+        let estoqueSelecionado = 0;
+
+
+        // =========================================================
+        // CONVERSÃO DA COR PARA HEX
+        // =========================================================
+
+        function obterCorVisual(nome) {
+
+            if (!nome) {
+                return "#cccccc";
+            }
+
+            const cor = nome
+                .trim()
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+            const cores = {
+
+                // Básicas
+                "preto": "#111111",
+                "branco": "#ffffff",
+                "cinza": "#9ca3af",
+                "cinza claro": "#d1d5db",
+                "cinza chumbo": "#3f4348",
+                "grafite": "#374151",
+
+                // Vermelhos
+                "vermelha": "#dc2626",
+                "vermelho escuro": "#991b1b",
+                "vinho": "#722f37",
+                "bordo": "#800020",
+
+                // Azuis
+                "azul": "#2563eb",
+                "azul royal": "#4169e1",
+                "azul marinho": "#172554",
+                "azul claro": "#60a5fa",
+                "azul celeste": "#38bdf8",
+                "azul bebe": "#93c5fd",
+
+                // Verdes
+                "verde": "#16a34a",
+                "verde olive": "#6b7a3a",
+                "verde oliva": "#6b7a3a",
+                "verde musgo": "#556b2f",
+                "verde militar": "#4b5320",
+                "verde escuro": "#166534",
+                "verde claro": "#86efac",
+
+                // Amarelos / laranjas
+                "amarelo": "#facc15",
+                "amarelo mostarda": "#d4a017",
+                "mostarda": "#d4a017",
+                "laranja": "#f97316",
+
+                // Rosas / roxos
+                "rosa": "#ec4899",
+                "rosa claro": "#f9a8d4",
+                "pink": "#ec4899",
+                "roxo": "#9333ea",
+                "lilas": "#c084fc",
+                "lilas claro": "#d8b4fe",
+
+                // Tons neutros
+                "bege": "#d6c3a5",
+                "creme": "#fff1d0",
+                "marrom": "#78350f",
+                "caramelo": "#b7791f",
+
+                // Outros
+                "dourado": "#d4af37",
+                "prata": "#c0c0c0"
+            };
+
+            return cores[cor] ?? "#cccccc";
+}
+
+
+        // =========================================================
+        // APLICAR CORES NOS CÍRCULOS
+        // =========================================================
+
+       document
+                .querySelectorAll(".cor-circulo")
+                .forEach(circulo => {
+
+                    const nome =
+                        circulo.dataset.corNome;
+
+                    const corVisual =
+                        obterCorVisual(nome);
+
+                    circulo.style.backgroundColor =
+                        corVisual;
+
+                    // Garante que a cor ocupe todo o círculo
+                    circulo.style.backgroundImage = "none";
+
+                    // Cores claras precisam de uma borda mais visível
+                    if (
+                        nome &&
+                        (
+                            nome.toLowerCase() === "branco" ||
+                            nome.toLowerCase() === "bege" ||
+                            nome.toLowerCase() === "creme" ||
+                            nome.toLowerCase() === "amarelo"
+                        )
+                    ) {
+                        circulo.style.border =
+                            "1px solid #999";
+                    }
+
+    });
+
+
+        // =========================================================
+        // GALERIA
+        // =========================================================
+
+        function carregarGaleria(cor) {
+
+            const galeria =
+                document.getElementById("galeriaImagens");
+
+            const semImagem =
+                document.getElementById("galeriaSemImagem");
+
+            galeria.innerHTML = "";
+
+            let imagens = [];
+
+            if (cor && imagensPorCor[cor]) {
+
+                const dadosCor = imagensPorCor[cor];
+
+                const imagemPrincipal = dadosCor.Principal;
+
+                const outrasImagens = dadosCor.Imagens || [];
+
+                if (imagemPrincipal) {
+
+                    imagens.push(imagemPrincipal);
+
+                }
+
+                outrasImagens.forEach(imagem => {
+
+                    if (imagem !== imagemPrincipal) {
+
+                        imagens.push(imagem);
+
+                    }
+
+                });
+            }
+
+            if (
+                (!imagens || imagens.length === 0)
+                && !cor
+            ) {
+
+                imagens =
+                        @Html.Raw(
+                                System.Text.Json.JsonSerializer.Serialize(
+                                        Model.Imagens?
+                                                .OrderBy(i => i.Id)
+                                                .Select(i => i.Caminho)
+                .ToList()
+                ?? new List<string>()
+                )
+                );
+            }
+
+            if (!imagens || imagens.length === 0) {
+
+                galeria.classList.add("d-none");
+                semImagem.classList.remove("d-none");
+
+                return;
+            }
+
+            galeria.classList.remove("d-none");
+            semImagem.classList.add("d-none");
+
+
+            imagens.forEach(caminho => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "galeria-item";
+
+                const imagem =
+                    document.createElement("img");
+
+                imagem.src = caminho;
+
+                imagem.alt =
+                    "@Model.Nome" +
+                    (cor ? " - " + cor : "");
+
+                imagem.addEventListener(
+                    "click",
+                    function() {
+
+                        abrirImagem(caminho);
+
+                    }
+                );
+
+                item.appendChild(imagem);
+
+                galeria.appendChild(item);
+
+            });
+
+        }
+
+
+        // =========================================================
+        // MODAL
+        // =========================================================
+
+        function abrirImagem(caminho) {
+
+            const imagem =
+                document.getElementById("imagemAmpliada");
+
+            imagem.src = caminho;
+
+            const modalElement =
+                document.getElementById("modalImagem");
+
+            const modal =
+                bootstrap.Modal.getOrCreateInstance(
+                    modalElement
+                );
+
+            modal.show();
+
+        }
+
+
+        // =========================================================
+        // TAMANHOS DA COR
+        // =========================================================
+
+        function carregarTamanhos() {
+
+            const container =
+                document.getElementById(
+                    "tamanhosContainer"
+                );
+
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = "";
+
+            const tamanhos = [
+                "PP",
+                "P",
+                "M",
+                "G",
+                "GG",
+                "XG"
+                
+            ];
+
+            const tamanhosDisponiveis =
+                estoque
+                    .filter(e =>
+                        corSelecionada &&
+                        e.Cor === corSelecionada &&
+                        e.Quantidade > 0
+                    )
+                    .map(e => e.Tamanho)
+                    .filter(t => t)
+                    .map(t => t.toUpperCase());
+
+            tamanhos.forEach(tamanho => {
+
+                const disponivel =
+                    tamanhosDisponiveis.includes(
+                        tamanho
+                    );
+
+                const botao =
+                    document.createElement("button");
+
+                botao.type = "button";
+
+                botao.className =
+                    "produto-tamanho";
+
+                if (
+                    tamanhoSelecionado &&
+                    tamanhoSelecionado.toUpperCase() === tamanho
+                ) {
+                    botao.classList.add("active");
+                }
+
+                botao.textContent =
+                    tamanho;
+
+                botao.dataset.tamanho =
+                    tamanho;
+
+                botao.disabled =
+                    !disponivel;
+
+                botao.addEventListener(
+                    "click",
+                    function() {
+
+                        document
+                            .querySelectorAll(
+                                ".produto-tamanho"
+                            )
+                            .forEach(b =>
+                                b.classList.remove("active")
+                            );
+
+                        this.classList.add("active");
+
+                        tamanhoSelecionado =
+                            this.dataset.tamanho;
+
+                        document
+                            .getElementById(
+                                "tamanhoSelecionado"
+                            )
+                            .value =
+                            tamanhoSelecionado;
+
+                        verificarEstoque();
+
+                    }
+                );
+
+                container.appendChild(botao);
+
+            });
+
+        }
+
+
+        // =========================================================
+        // SELECIONAR COR
+        // =========================================================
+
+        document
+            .querySelectorAll(".cor-opcao")
+            .forEach(botao => {
+
+                botao.addEventListener(
+                    "click",
+                    function() {
+
+                        document
+                            .querySelectorAll(
+                                ".cor-opcao"
+                            )
+                            .forEach(b =>
+                                b.classList.remove("active")
+                            );
+
+                        this.classList.add("active");
+
+                        corSelecionada =
+                            this.dataset.cor;
+
+                        tamanhoSelecionado =
+                            null;
+
+                        document
+                            .getElementById(
+                                "corSelecionada"
+                            )
+                            .value =
+                            corSelecionada;
+
+                        document
+                            .getElementById(
+                                "tamanhoSelecionado"
+                            )
+                            .value = "";
+
+                        document
+                            .getElementById(
+                                "nomeCorSelecionada"
+                            )
+                            .textContent =
+                            corSelecionada;
+
+                            document
+                                .getElementById(
+                                    "nomeCorTitulo"
+                                )
+                                .textContent =
+                                    corSelecionada;
+
+                        carregarGaleria(
+                            corSelecionada
+                        );
+
+                        carregarTamanhos();
+
+                        verificarEstoque();
+
+                    }
+                );
+
+            });
+
+
+        // =========================================================
+        // VERIFICAR ESTOQUE
+        // =========================================================
+
+        function verificarEstoque() {
+
+            const mensagem =
+                document.getElementById(
+                    "estoqueDisponivel"
+                );
+
+            const botaoCarrinho =
+                document.getElementById(
+                    "btnAdicionarCarrinho"
+                );
+
+            if (
+                !corSelecionada ||
+                !tamanhoSelecionado
+            ) {
+
+                mensagem.className =
+                    "alert alert-secondary";
+
+                mensagem.innerHTML =
+                    '<i class="bi bi-info-circle me-2"></i>' +
+                    'Selecione a cor e o tamanho.';
+
+                botaoCarrinho.disabled =
+                    true;
+
+                estoqueSelecionado = 0;
+
+                return;
+            }
+
+
+            const item =
+                estoque.find(e =>
+                    e.Cor === corSelecionada &&
+                    e.Tamanho === tamanhoSelecionado
+                );
+
+
+            if (!item) {
+
+                estoqueSelecionado = 0;
+
+                mensagem.className =
+                    "alert alert-danger";
+
+                mensagem.innerHTML =
+                    '<i class="bi bi-x-circle me-2"></i>' +
+                    'Essa combinação não está disponível.';
+
+                botaoCarrinho.disabled =
+                    true;
+
+                return;
+            }
+
+
+            estoqueSelecionado =
+                item.Quantidade;
+
+
+            if (estoqueSelecionado <= 0) {
+
+                mensagem.className =
+                    "alert alert-danger";
+
+                mensagem.innerHTML =
+                    '<i class="bi bi-x-circle me-2"></i>' +
+                    'Produto esgotado.';
+
+                botaoCarrinho.disabled =
+                    true;
+
+                return;
+            }
+
+
+            mensagem.className =
+                "alert alert-success";
+
+            mensagem.innerHTML =
+                '<i class="bi bi-check-circle me-2"></i>' +
+                'Disponível: ' +
+                estoqueSelecionado +
+                ' unidade(s).';
+
+
+            const campoQuantidade =
+                document.getElementById(
+                    "quantidade"
+                );
+
+            campoQuantidade.value =
+                1;
+
+            document
+                .getElementById(
+                    "quantidadeSelecionada"
+                )
+                .value = 1;
+
+            botaoCarrinho.disabled =
+                false;
+
+        }
+
+
+        // =========================================================
+        // QUANTIDADE - DIMINUIR
+        // =========================================================
+
+        document
+            .getElementById(
+                "diminuirQuantidade"
+            )
+            ?.addEventListener(
+                "click",
+                function() {
+
+                    const campo =
+                        document.getElementById(
+                            "quantidade"
+                        );
+
+                    let quantidade =
+                        parseInt(
+                            campo.value
+                        );
+
+                    if (quantidade > 1) {
+
+                        quantidade--;
+
+                        campo.value =
+                            quantidade;
+
+                        document
+                            .getElementById(
+                                "quantidadeSelecionada"
+                            )
+                            .value =
+                            quantidade;
+
+                    }
+
+                }
+            );
+
+
+        // =========================================================
+        // QUANTIDADE - AUMENTAR
+        // =========================================================
+
+        document
+            .getElementById(
+                "aumentarQuantidade"
+            )
+            ?.addEventListener(
+                "click",
+                function() {
+
+                    const campo =
+                        document.getElementById(
+                            "quantidade"
+                        );
+
+                    let quantidade =
+                        parseInt(
+                            campo.value
+                        );
+
+                    if (
+                        quantidade <
+                        estoqueSelecionado
+                    ) {
+
+                        quantidade++;
+
+                        campo.value =
+                            quantidade;
+
+                        document
+                            .getElementById(
+                                "quantidadeSelecionada"
+                            )
+                            .value =
+                            quantidade;
+
+                    }
+
+                }
+            );
+
+
+        // =========================================================
+        // INICIALIZAÇÃO
+        // =========================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                if (corSelecionada) {
+
+                    document
+                        .getElementById(
+                            "corSelecionada"
+                        )
+                        .value =
+                        corSelecionada;
+
+                    document
+                        .getElementById(
+                            "nomeCorSelecionada"
+                        )
+                        .textContent =
+                        corSelecionada;
+
+                    carregarGaleria(
+                        corSelecionada
+                    );
+
+                }
+                else {
+
+                    carregarGaleria(null);
+
+                }
+
+                carregarTamanhos();
+
+                verificarEstoque();
+
+            }
+        );
+
+    </script>
+
+}

@@ -1,0 +1,1098 @@
+﻿@{
+    ViewData["Title"] = "Dashboard de Vendas";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-graph-up-arrow"></i>
+                Dashboard de Vendas
+            </h2>
+
+            <p class="text-muted mb-0">
+                Acompanhe o desempenho financeiro das vendas.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+<!-- FILTRO DE PERÍODO -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <div class="mb-3">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-funnel"></i>
+                Filtros
+
+            </h5>
+
+            <small class="text-muted">
+                Filtre o desempenho das vendas por período.
+            </small>
+
+        </div>
+
+
+        <form asp-action="Dashboard"
+              method="get">
+
+            <div class="row justify-content-center">
+
+                <!-- DATA INICIAL -->
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Data inicial
+                    </label>
+
+                    <input type="date"
+                           name="dataInicial"
+                           value="@ViewBag.DataInicial"
+                           class="form-control" />
+
+                </div>
+
+
+                <!-- DATA FINAL -->
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Data final
+                    </label>
+
+                    <input type="date"
+                           name="dataFinal"
+                           value="@ViewBag.DataFinal"
+                           class="form-control" />
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="d-flex justify-content-end gap-2 mt-2">
+
+                <a asp-action="Dashboard"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-x-circle"></i>
+                    Limpar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-search"></i>
+                    Filtrar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+    <!-- INDICADORES -->
+
+    <div class="row">
+
+        <!-- TOTAL DE VENDAS -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Total de vendas
+                            </small>
+
+                            <h3 class="fw-bold mt-2">
+                                @ViewBag.TotalVendas
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-primary">
+                            <i class="bi bi-cart-check"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FATURAMENTO -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Faturamento
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-success">
+
+                                @(((decimal)ViewBag.Faturamento).ToString("C2"))
+
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-success">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTO -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Custo das mercadorias
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-danger">
+
+                                @(((decimal)ViewBag.CustoTotal).ToString("C2"))
+
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-danger">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LUCRO -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Lucro bruto
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-success">
+
+                                @(((decimal)ViewBag.LucroBruto).ToString("C2"))
+
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-success">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VENDAS CANCELADAS -->
+
+    <div class="row">
+
+        <!-- QUANTIDADE CANCELADA -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Vendas canceladas
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-danger">
+                                @ViewBag.TotalVendasCanceladas
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-danger">
+
+                            <i class="bi bi-x-circle"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Quantidade de vendas canceladas
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VALOR CANCELADO -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Valor cancelado
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-danger">
+
+                                @(((decimal)ViewBag.ValorVendasCanceladas)
+                                                                .ToString("C2"))
+
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-danger">
+
+                            <i class="bi bi-cash-coin"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Valor total das vendas canceladas
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TICKET MÉDIO -->
+
+        <div class="col-md-6 col-xl-3 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Ticket médio
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-primary">
+
+                                @(((decimal)ViewBag.TicketMedio).ToString("C2"))
+
+                            </h3>
+
+                        </div>
+
+                        <div class="fs-1 text-primary">
+
+                            <i class="bi bi-basket"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Valor médio por venda
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MARGEM -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-percent"></i>
+
+                        Margem de lucro
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Percentual do faturamento que representa lucro bruto.
+                    </p>
+
+                </div>
+
+                <div class="col-md-4 text-md-end">
+
+                    <span class="display-6 fw-bold text-primary">
+
+                        @(((decimal)ViewBag.MargemLucro).ToString("N2"))%
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PRODUTOS MAIS VENDIDOS -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-trophy"></i>
+
+                        Produtos mais vendidos
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Os 5 produtos com maior quantidade de vendas.
+                    </p>
+
+                </div>
+
+                <span class="badge bg-warning text-dark">
+
+                    <i class="bi bi-star-fill"></i>
+
+                    Top 5
+
+                </span>
+
+            </div>
+
+
+            @if (ViewBag.ProdutosMaisVendidos != null &&
+                        ViewBag.ProdutosMaisVendidos.Count > 0)
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th class="text-center">
+                                    Quantidade vendida
+                                </th>
+
+                                <th class="text-end">
+                                    Faturamento
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @{
+                                int posicao = 1;
+                            }
+
+                            @foreach (var produto in ViewBag.ProdutosMaisVendidos)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        @if (posicao == 1)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                🥇
+                                            </span>
+                                        }
+                                        else if (posicao == 2)
+                                        {
+                                            <span class="badge bg-secondary">
+                                                🥈
+                                            </span>
+                                        }
+                                        else if (posicao == 3)
+                                        {
+                                            <span class="badge bg-danger">
+                                                🥉
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <strong>
+                                                @posicao
+                                            </strong>
+                                        }
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        @produto.Produto
+                                    </strong>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <span class="badge bg-primary">
+
+                                        @produto.QuantidadeVendida
+
+                                        @(produto.QuantidadeVendida == 1
+                                                                            ? " unidade"
+                                                                            : " unidades")
+
+                                </span>
+
+                                    </td>
+
+
+                                    <td class="text-end">
+
+                                        <strong class="text-success">
+
+                                            @(((decimal)produto.Faturamento).ToString("C2"))
+
+                                        </strong>
+
+                                    </td>
+
+                                </tr>
+
+                                                posicao++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+
+                    <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Ainda não existem vendas concluídas no período selecionado.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- VENDAS POR FORMA DE PAGAMENTO -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <h5 class="fw-bold mb-1">
+
+                    <i class="bi bi-credit-card"></i>
+
+                    Vendas por forma de pagamento
+
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Distribuição das vendas realizadas por forma de pagamento.
+                </p>
+
+            </div>
+
+            @if (ViewBag.VendasPorPagamento != null &&
+                        ViewBag.VendasPorPagamento.Count > 0)
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Forma de pagamento
+                                </th>
+
+                                <th class="text-center">
+                                    Quantidade de vendas
+                                </th>
+
+                                <th class="text-end">
+                                    Faturamento
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var pagamento in ViewBag.VendasPorPagamento)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            @pagamento.FormaPagamento
+                                        </strong>
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <span class="badge bg-primary">
+
+                                            @pagamento.QuantidadeVendas
+
+                                            @(pagamento.QuantidadeVendas == 1
+                                                                                ? " venda"
+                                                                                : " vendas")
+
+                                </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <strong class="text-success">
+
+                                            @(((decimal)pagamento.Faturamento).ToString("C2"))
+
+                                        </strong>
+
+                                    </td>
+
+                                </tr>
+                                                }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+
+                    <i class="bi bi-credit-card fs-1 text-muted"></i>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Não existem vendas no período selecionado.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- GRÁFICO DE FATURAMENTO -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-bar-chart-line"></i>
+
+                Faturamento por dia
+
+            </h5>
+
+            <p class="text-muted mb-4">
+                Evolução do faturamento das vendas concluídas.
+            </p>
+
+            <div style="height: 350px;">
+
+                <canvas id="graficoFaturamento"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const labels = [
+            @foreach (var item in ViewBag.FaturamentoPorDia)
+            {
+                        <text>
+                            "@item.Data.ToString("dd/MM")",
+                        </text>
+            }
+        ];
+
+        const valores = [
+            @foreach (var item in ViewBag.FaturamentoPorDia)
+            {
+                        <text>
+                            @item.Faturamento.ToString(
+                                System.Globalization.CultureInfo.InvariantCulture
+                                                                                                        ),
+                </text>
+                                                                        }
+        ];
+
+        const ctx =
+            document.getElementById('graficoFaturamento');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+                        label: 'Faturamento',
+
+                        data: valores,
+
+                        borderWidth: 1
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            callback: function(value) {
+
+                                return 'R$ ' +
+                                    value.toLocaleString(
+                                        'pt-BR',
+                                        {
+                                            minimumFractionDigits: 2
+                                        }
+                                    );
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                plugins: {
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label: function(context) {
+
+                                return 'Faturamento: R$ ' +
+                                    context.parsed.y.toLocaleString(
+                                        'pt-BR',
+                                        {
+                                            minimumFractionDigits: 2
+                                        }
+                                    );
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+    <!-- GRÁFICO DE LUCRO -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-graph-up-arrow"></i>
+
+                Lucro por dia
+
+            </h5>
+
+            <p class="text-muted mb-4">
+                Evolução do lucro bruto das vendas concluídas.
+            </p>
+
+            <div style="height: 350px;">
+
+                <canvas id="graficoLucro"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const labelsLucro = [
+            @foreach (var item in ViewBag.LucroPorDia)
+            {
+                    <text>
+                        "@item.Data.ToString("dd/MM")",
+                    </text>
+            }
+        ];
+
+        const valoresLucro = [
+            @foreach (var item in ViewBag.LucroPorDia)
+            {
+                    <text>
+                        @item.Lucro.ToString(
+                            System.Globalization.CultureInfo.InvariantCulture
+                                        ),
+                </text>
+                        }
+        ];
+
+        const ctxLucro =
+            document.getElementById('graficoLucro');
+
+        new Chart(ctxLucro, {
+
+            type: 'line',
+
+            data: {
+
+                labels: labelsLucro,
+
+                datasets: [
+
+                    {
+                        label: 'Lucro bruto',
+
+                        data: valoresLucro,
+
+                        borderWidth: 2,
+
+                        tension: 0.3,
+
+                        fill: false
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            callback: function(value) {
+
+                                return 'R$ ' +
+                                    value.toLocaleString(
+                                        'pt-BR',
+                                        {
+                                            minimumFractionDigits: 2
+                                        }
+                                    );
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                plugins: {
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label: function(context) {
+
+                                return 'Lucro: R$ ' +
+                                    context.parsed.y.toLocaleString(
+                                        'pt-BR',
+                                        {
+                                            minimumFractionDigits: 2
+                                        }
+                                    );
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+    <!-- RESUMO FINANCEIRO -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-bar-chart"></i>
+
+                Resumo financeiro
+
+            </h5>
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0">
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Faturamento
+                            </td>
+
+                            <td class="text-end fw-semibold">
+
+                                @(((decimal)ViewBag.Faturamento).ToString("C2"))
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Custo das mercadorias
+                            </td>
+
+                            <td class="text-end fw-semibold text-danger">
+
+                                @(((decimal)ViewBag.CustoTotal).ToString("C2"))
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Lucro bruto
+                            </td>
+
+                            <td class="text-end fw-bold text-success">
+
+                                @(((decimal)ViewBag.LucroBruto).ToString("C2"))
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Margem de lucro
+                            </td>
+
+                            <td class="text-end fw-bold text-primary">
+
+                                @(((decimal)ViewBag.MargemLucro).ToString("N2"))%
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

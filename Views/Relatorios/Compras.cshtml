@@ -1,0 +1,631 @@
+﻿@model IEnumerable<LojaWeb_2.Models.MovimentacaoEstoque>
+
+@{
+    ViewData["Title"] = "Relatório de Compras";
+}
+
+<div class="container mt-4">
+
+    <!-- ========================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-truck"></i>
+
+                Relatório de Compras
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Consulte as compras realizadas com os fornecedores.
+
+            </p>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <!-- EXCEL -->
+
+            <a asp-action="ExportarComprasExcel"
+               asp-route-dataInicial="@ViewBag.DataInicial"
+               asp-route-dataFinal="@ViewBag.DataFinal"
+               asp-route-fornecedorId="@ViewBag.FornecedorId"
+               asp-route-produtoId="@ViewBag.ProdutoId"
+               asp-route-marcaId="@ViewBag.MarcaId"
+               class="btn btn-success">
+
+                <i class="bi bi-file-earmark-excel me-1"></i>
+                Exportar Excel
+
+            </a>
+
+
+            <!-- PDF -->
+
+            <a asp-action="ExportarComprasPdf"
+               asp-route-dataInicial="@ViewBag.DataInicial"
+               asp-route-dataFinal="@ViewBag.DataFinal"
+               asp-route-fornecedorId="@ViewBag.FornecedorId"
+               asp-route-produtoId="@ViewBag.ProdutoId"
+               asp-route-marcaId="@ViewBag.MarcaId"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf me-1"></i>
+                Exportar PDF
+
+            </a>
+
+
+            <!-- VOLTAR -->
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FILTROS -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-funnel"></i>
+
+                Filtros
+
+            </h5>
+
+
+            <form asp-action="Compras" method="get">
+
+                <div class="row g-3">
+
+
+                    <!-- DATA INICIAL -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Data inicial
+                        </label>
+
+                        <input type="date"
+                               name="dataInicial"
+                               value="@ViewBag.DataInicial"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- DATA FINAL -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Data final
+                        </label>
+
+                        <input type="date"
+                               name="dataFinal"
+                               value="@ViewBag.DataFinal"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- FORNECEDOR -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Fornecedor
+                        </label>
+
+                        <select name="fornecedorId"
+                                class="form-select">
+
+                            <option value="">
+                                Todos os fornecedores
+                            </option>
+
+                            @foreach (var fornecedor in ViewBag.Fornecedores)
+                            {
+                                if (ViewBag.FornecedorId == fornecedor.Id)
+                                {
+                                    <option value="@fornecedor.Id" selected>
+                                        @fornecedor.Nome
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@fornecedor.Id">
+                                        @fornecedor.Nome
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRODUTO -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Produto
+                        </label>
+
+                        <select name="produtoId"
+                                class="form-select">
+
+                            <option value="">
+                                Todos os produtos
+                            </option>
+
+                            @foreach (var produto in ViewBag.Produtos)
+                            {
+                                if (ViewBag.ProdutoId == produto.Id)
+                                {
+                                    <option value="@produto.Id" selected>
+                                        @produto.Nome
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@produto.Id">
+                                        @produto.Nome
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MARCA -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Marca
+                        </label>
+
+                        <select name="marcaId"
+                                class="form-select">
+
+                            <option value="">
+                                Todas as marcas
+                            </option>
+
+                            @foreach (var marca in ViewBag.Marcas)
+                            {
+                                if (ViewBag.MarcaId == marca.Id)
+                                {
+                                    <option value="@marca.Id" selected>
+                                        @marca.Nome
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@marca.Id">
+                                        @marca.Nome
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+
+                    <div class="col-md-3 d-flex align-items-end">
+
+                        <div>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-search"></i>
+
+                                Filtrar
+
+                            </button>
+
+
+                            <a asp-action="Compras"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-x-circle"></i>
+
+                                Limpar
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INDICADORES -->
+    <!-- ========================================= -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- COMPRAS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Entradas de compra
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        @ViewBag.TotalCompras
+
+                    </h3>
+
+                    <small class="text-muted">
+                        registros
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIDADES -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Unidades compradas
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        @ViewBag.TotalUnidades
+
+                    </h3>
+
+                    <small class="text-muted">
+                        unidades
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORNECEDORES -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Fornecedores
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+
+                        @ViewBag.TotalFornecedores
+
+                    </h3>
+
+                    <small class="text-muted">
+                        fornecedores
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VALOR -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Total comprado
+                    </small>
+
+                    <h4 class="fw-bold text-primary mt-2">
+
+                        @(((decimal)ViewBag.ValorTotalComprado).ToString("C"))
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- TABELA -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Data
+                                </th>
+
+                                <th>
+                                    Fornecedor
+                                </th>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    Marca
+                                </th>
+
+                                <th>
+                                    Tamanho
+                                </th>
+
+                                <th>
+                                    Cor
+                                </th>
+
+                                <th>
+                                    Quantidade
+                                </th>
+
+                                <th>
+                                    Preço compra
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Observação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                decimal totalItem =
+                                item.Quantidade *
+                                item.PrecoCompraUnitario;
+
+
+                                <tr>
+
+                                    <!-- DATA -->
+
+                                    <td>
+
+                                        @item.Data.ToString(
+                                        "dd/MM/yyyy HH:mm")
+
+                            </td>
+
+
+                            <!-- FORNECEDOR -->
+
+                            <td>
+
+                                <strong>
+
+                                    @(item.Fornecedor?.Nome
+                                                                        ?? "Não informado")
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- PRODUTO -->
+
+                            <td>
+
+                                @(item.Produto?.Nome
+                                                                ?? "Produto não encontrado")
+
+                            </td>
+
+
+                            <!-- MARCA -->
+
+                            <td>
+
+                                @(item.Marca?.Nome
+                                                                ?? "Marca não encontrada")
+
+                            </td>
+
+
+                                    <!-- TAMANHO -->
+
+                                    <td>
+
+                                        <span class="badge bg-primary">
+
+                                            @item.Tamanho
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- COR -->
+
+                                    <td>
+
+                                        @item.Cor
+
+                                    </td>
+
+
+                                    <!-- QUANTIDADE -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            @item.Quantidade
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- PREÇO -->
+
+                                    <td>
+
+                                        @item.PrecoCompraUnitario.ToString("C")
+
+                                    </td>
+
+
+                                    <!-- TOTAL -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            @totalItem.ToString("C")
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- OBSERVAÇÃO -->
+
+                                    <td>
+
+                                @if (!string.IsNullOrWhiteSpace(
+                                                                item.Observacao))
+                                        {
+                                            @item.Observacao
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                —
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-cart-x fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+
+                        Nenhuma compra encontrada
+
+                    </h5>
+
+                    <p class="text-muted">
+
+                        Não existem compras para os filtros selecionados.
+
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

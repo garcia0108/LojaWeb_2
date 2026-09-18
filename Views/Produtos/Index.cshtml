@@ -1,0 +1,523 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Produto>
+
+@{
+    ViewData["Title"] = "Produtos";
+}
+
+
+<!--CABEÇALHO-->
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-shop"></i> Produtos
+            </h2>
+
+            <p class="text-muted mb-0">
+                Gerencie os produtos cadastrados na loja.
+            </p>
+        </div>
+
+        @if (User.IsInRole("Administrador"))
+        {
+            <a asp-action="Create"
+               class="btn btn-success">
+
+                <i class="bi bi-plus-circle"></i>
+                Novo Produto
+
+            </a>
+        }
+
+    </div>
+
+    <!--MENSAGENS DE ALERTAS-->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div id="mensagem"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <strong>@TempData["Sucesso"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Fechar">
+            </button>
+
+        </div>
+    }
+
+    <!-- FILTROS -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <div class="mb-3">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-funnel"></i>
+                Filtros
+
+            </h5>
+
+            <small class="text-muted">
+                Pesquise e filtre os produtos cadastrados.
+            </small>
+
+        </div>
+
+
+        <form asp-action="Index"
+              method="get">
+
+            <!-- PESQUISA -->
+
+            <div class="row">
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Pesquisa
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-search"></i>
+
+                        </span>
+
+                        <input type="text"
+                               name="pesquisa"
+                               value="@ViewBag.Pesquisa"
+                               class="form-control"
+                               placeholder="Pesquisar produto pelo nome..." />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTROS ESPECÍFICOS -->
+
+            <div class="row">
+
+                <!-- CATEGORIA -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Categoria
+                    </label>
+
+                    <select name="categoriaId"
+                            class="form-select">
+
+                        <option value="">
+                            Todas
+                        </option>
+
+                        @foreach (var categoria in ViewBag.Categorias)
+                        {
+                            <option value="@categoria.Id"
+                                    selected="@(ViewBag.CategoriaId == categoria.Id)">
+                                @categoria.Nome
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- MARCA -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Marca
+                    </label>
+
+                    <select name="marcaId"
+                            class="form-select">
+
+                        <option value="">
+                            Todas
+                        </option>
+
+                        @foreach (var marca in ViewBag.Marcas)
+                        {
+                            <option value="@marca.Id"
+                                    selected="@(ViewBag.MarcaId == marca.Id)">
+                                @marca.Nome
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- FORNECEDOR -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Fornecedor
+                    </label>
+
+                    <select name="fornecedorId"
+                            class="form-select">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        @foreach (var fornecedor in ViewBag.Fornecedores)
+                        {
+                            <option value="@fornecedor.Id"
+                                    selected="@(ViewBag.FornecedorId == fornecedor.Id)">
+                                @fornecedor.Nome
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- SITUAÇÃO -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Situação
+                    </label>
+
+                    <select name="situacao"
+                            class="form-select">
+
+                        <option value="">
+                            Todas
+                        </option>
+
+                        <option value="Ativo"
+                                selected="@(ViewBag.Situacao == "Ativo")">
+                            Ativos
+                        </option>
+
+                        <option value="Inativo"
+                                selected="@(ViewBag.Situacao == "Inativo")">
+                            Inativos
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="d-flex justify-content-end gap-2 mt-2">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-x-circle"></i>
+                    Limpar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-search"></i>
+                    Filtrar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+    <!--CARDS DA TABELA-->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Imagem</th>
+
+                            <th>Produto</th>
+
+                            <th>Categoria</th>
+
+                            <th>Marca</th>
+
+                            <th>Preço</th>
+
+                            <th>Status</th>
+
+                            <th class="text-end">
+                                Ações
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+    @if (Model.Any())
+    {
+        @foreach (var produto in Model)
+        {
+            <tr>
+
+                <td>
+                    @produto.Id
+                </td>
+
+                <td>
+
+                    @if (!string.IsNullOrEmpty(produto.Imagem))
+                    {
+                        <img src="@produto.Imagem"
+                             width="70"
+                             height="70"
+                             class="img-thumbnail"
+                             style="object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Sem imagem
+                        </span>
+                    }
+
+                </td>
+
+                <td>
+
+                    <strong>
+                        @produto.Nome
+                    </strong>
+
+                    @if (!string.IsNullOrEmpty(produto.Tamanho) ||
+                         !string.IsNullOrEmpty(produto.Cor))
+                    {
+                        <div class="small text-muted">
+
+                            @if (!string.IsNullOrEmpty(produto.Tamanho))
+                            {
+                                <span>
+                                    Tamanho: @produto.Tamanho
+                                </span>
+                            }
+
+                            @if (!string.IsNullOrEmpty(produto.Cor))
+                            {
+                                <span class="ms-2">
+                                    Cor: @produto.Cor
+                                </span>
+                            }
+
+                        </div>
+                    }
+
+                </td>
+
+                <td>
+
+                    @if (produto.Categoria != null)
+                    {
+                        @produto.Categoria.Nome
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Sem categoria
+                        </span>
+                    }
+
+                </td>
+
+                <td>
+
+                    @if (produto.Marca != null)
+                    {
+                        @produto.Marca.Nome
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Sem marca
+                        </span>
+                    }
+
+                </td>
+
+                <td>
+                    <strong>
+                        @produto.Preco.ToString("C")
+                    </strong>
+                </td>
+
+                <td>
+
+                    @if (produto.Ativo)
+                    {
+                        <span class="badge bg-success">
+                            Ativo
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            Inativo
+                        </span>
+                    }
+
+                </td>
+
+                <td class="text-end">
+
+                    <div class="btn-group">
+
+                        <a asp-action="Details"
+                           asp-route-id="@produto.Id"
+                           class="btn btn-sm btn-outline-info"
+                           title="Visualizar">
+
+                            <i class="bi bi-eye"></i>
+
+                        </a>
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@produto.Id"
+                               class="btn btn-sm btn-outline-warning"
+                               title="Editar">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-action="Delete"
+                               asp-route-id="@produto.Id"
+                               class="btn btn-sm btn-outline-danger"
+                               title="Excluir">
+
+                                <i class="bi bi-trash"></i>
+
+                            </a>
+                        }
+
+                    </div>
+
+                </td>
+
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+
+            <td colspan="8">
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-search fs-1 text-muted"></i>
+
+                    <h5 class="mt-3 fw-bold">
+                        Nenhum produto encontrado
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        Não encontramos produtos para os filtros selecionados.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Limpar filtros
+
+                    </a>
+
+                </div>
+
+            </td>
+
+        </tr>
+    }
+
+</tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        setTimeout(function () {
+
+            const mensagem =
+                document.getElementById("mensagem");
+
+            if (mensagem) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(mensagem);
+
+                alerta.close();
+
+            }
+
+        }, 4000);
+
+    </script>
+
+}

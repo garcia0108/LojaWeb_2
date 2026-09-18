@@ -1,0 +1,779 @@
+﻿@model LojaWeb_2.Models.Produto
+
+@{
+    ViewData["Title"] = "Novo Produto";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-box-seam"></i> Novo Produto
+            </h2>
+
+            <p class="text-muted mb-0">
+                Cadastre um novo produto na loja.
+            </p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+
+                <!-- NOME -->
+                <div class="mb-3">
+
+                    <label asp-for="Nome"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="Nome"
+                           class="form-control"
+                           placeholder="Ex: Camisa Polo Masculina" />
+
+                    <span asp-validation-for="Nome"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- CATEGORIA, MARCA E FORNECEDOR-->
+                <div class="row">
+
+                    <!-- CATEGORIA -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="CategoriaId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="CategoriaId"
+                                asp-items="ViewBag.CategoriaId"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione uma categoria
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="CategoriaId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!--PÚBLICO-->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Publico" class="form-label"></label>
+
+                        <select asp-for="Publico" class="form-select">
+
+                            <option value="">Selecione...</option>
+
+                            <option value="Masculino">Masculino</option>
+
+                            <option value="Feminino">Feminino</option>
+
+                            <option value="Unissex">Unissex</option>
+
+                        </select>
+
+                        <span asp-validation-for="Publico" class="text-danger"></span>
+
+                    </div>
+
+                    <!-- MARCA -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="MarcaId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="MarcaId"
+                                asp-items="ViewBag.MarcaId"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione uma marca
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="MarcaId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!--Fornecedor-->
+                    <div class="col-md-4 mb-3">
+
+                        <label asp-for="FornecedorId"
+                               class="form-label">
+                            Fornecedor
+                        </label>
+
+                        <select asp-for="FornecedorId"
+                                asp-items="ViewBag.FornecedorId"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione um fornecedor
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="FornecedorId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- CORES DO PRODUTO -->
+                <!-- ========================================= -->
+
+                <div class="card bg-light border-0 p-3 mb-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <div>
+                            <h5 class="fw-bold mb-1">
+                                <i class="bi bi-palette me-2"></i>
+                                Cores do produto
+                            </h5>
+
+                            <p class="text-muted small mb-0">
+                                Cadastre as cores disponíveis para este produto.
+                            </p>
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-success"
+                                id="btnAdicionarCor">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Adicionar cor
+                        </button>
+
+                    </div>
+
+
+                    <!-- CORES SERÃO INSERIDAS AQUI -->
+
+                    <div id="listaCores">
+                    </div>
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- TAMANHO -->
+                <!-- ========================================= -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Tamanho"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <select asp-for="Tamanho"
+                            class="form-select">
+
+                        <option value="">
+                            Selecione o tamanho
+                        </option>
+
+                        <option value="PP">PP</option>
+                        <option value="P">P</option>
+                        <option value="M">M</option>
+                        <option value="G">G</option>
+                        <option value="GG">GG</option>
+                        <option value="XG">XG</option>
+
+                    </select>
+
+                    <span asp-validation-for="Tamanho"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- PREÇO -->
+                <div class="mb-3">
+
+                    <label asp-for="Preco"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="Preco"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="0,00" />
+
+                    <span asp-validation-for="Preco"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- ========================================= -->
+                <!-- DIMENSÕES PARA CÁLCULO DE FRETE -->
+                <!-- ========================================= -->
+
+                <div class="card bg-light border-0 p-3 mb-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-truck me-2"></i>
+
+                        Informações para envio
+
+                    </h5>
+
+                    <p class="text-muted small">
+                        Informe o peso e as dimensões do produto para o cálculo do frete.
+                    </p>
+
+                    <div class="row">
+
+                        <!-- PESO -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Peso"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Peso"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.001"
+                                   min="0.001"
+                                   placeholder="Ex: 0,350" />
+
+                            <span asp-validation-for="Peso"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ALTURA -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Altura"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Altura"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1"
+                                   placeholder="Ex: 5" />
+
+                            <span asp-validation-for="Altura"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- LARGURA -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Largura"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Largura"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1"
+                                   placeholder="Ex: 20" />
+
+                            <span asp-validation-for="Largura"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- COMPRIMENTO -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label asp-for="Comprimento"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Comprimento"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.1"
+                                   placeholder="Ex: 30" />
+
+                            <span asp-validation-for="Comprimento"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- PROMOÇÃO -->
+
+                <div class="form-check mb-3">
+
+                    <input asp-for="EmPromocao"
+                           class="form-check-input"
+                           id="EmPromocao" />
+
+                    <label asp-for="EmPromocao"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+
+                <div class="mb-3" id="campoPrecoPromocional">
+
+                    <label asp-for="PrecoPromocional"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="PrecoPromocional"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="Ex: 79,90" />
+
+                    <span asp-validation-for="PrecoPromocional"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- TIPO DA PROMOÇÃO -->
+
+                <div class="mb-3" id="camposTipoPromocao">
+
+                    <label asp-for="TipoPromocao"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="TipoPromocao"
+                            class="form-select"
+                            id="TipoPromocao">
+
+                        <option value="Unitario">Unitário</option>
+
+                        <option value="Quantidade">
+                            Promoção por quantidade
+                        </option>
+
+                        <option value="Combo">Combo</option>
+
+                    </select>
+
+                </div>
+
+                <!--QUANTIDADE POR PROMOÇÕES-->
+                <div id="camposQuantidadePromocao">
+
+                    <div class="mb-3">
+
+                        <label asp-for="QuantidadeMinimaPromocao"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="QuantidadeMinimaPromocao"
+                               class="form-control"
+                               type="number"
+                               min="2"
+                               placeholder="Ex: 10" />
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label asp-for="PrecoQuantidadePromocional"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="PrecoQuantidadePromocional"
+                               class="form-control"
+                               type="number"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Ex: 50,00" />
+
+                    </div>
+
+                </div>
+
+                <!-- ========================================= -->
+                <!-- KIT / COMBO -->
+                <!-- ========================================= -->
+
+                <div id="camposKitCombo">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label asp-for="QuantidadeKitCombo"
+                                   class="form-label"></label>
+
+                            <input asp-for="QuantidadeKitCombo"
+                                   class="form-control"
+                                   type="number"
+                                   min="1" />
+
+                            <span asp-validation-for="QuantidadeKitCombo"
+                                  class="text-danger"></span>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label asp-for="PrecoKitCombo"
+                                   class="form-label"></label>
+
+                            <input asp-for="PrecoKitCombo"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.01" />
+
+                            <span asp-validation-for="PrecoKitCombo"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- DESCRIÇÃO -->
+                <div class="mb-3">
+
+                    <label asp-for="Descricao"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Descrição do produto">
+                    </textarea>
+
+                    <span asp-validation-for="Descricao"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- IMAGEM -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Imagem principal do produto
+                    </label>
+
+                    <input type="file"
+                           name="imagens"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.webp"
+                           multiple />
+
+                    <div class="form-text">
+                        Você pode selecionar várias imagens do produto.
+                        Formatos permitidos: JPG, JPEG, PNG e WEBP.
+                    </div>
+
+                </div>
+
+                <!--Destaques-->
+                <div class="form-check mb-3">
+
+                    <input asp-for="Destaque" class="form-check-input" />
+
+                    <label asp-for="Destaque" class="form-check-label"></label>
+
+                </div>
+
+                <!-- ATIVO -->
+                <div class="form-check mb-4">
+
+                    <input asp-for="Ativo"
+                           class="form-check-input" />
+
+                    <label asp-for="Ativo"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-save"></i>
+                        Salvar Produto
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const emPromocao =
+                document.getElementById("EmPromocao");
+
+            const tipoPromocao =
+                document.getElementById("TipoPromocao");
+
+            const campoPrecoPromocional =
+                document.getElementById("campoPrecoPromocional");
+
+            const camposTipoPromocao =
+                document.getElementById("camposTipoPromocao");
+
+            const camposQuantidade =
+                document.getElementById("camposQuantidadePromocao");
+
+            const camposKitCombo =
+                document.getElementById("camposKitCombo");
+
+
+            function atualizarCamposPromocao() {
+
+                // Esconde tudo
+
+                campoPrecoPromocional.style.display = "none";
+                camposTipoPromocao.style.display = "none";
+                camposQuantidade.style.display = "none";
+                camposKitCombo.style.display = "none";
+
+
+                // Se não estiver marcado como promoção
+                // não mostra nada
+
+                if (!emPromocao.checked) {
+                    return;
+                }
+
+
+                // Produto está em promoção
+
+                campoPrecoPromocional.style.display = "block";
+                camposTipoPromocao.style.display = "block";
+
+
+                const tipo = tipoPromocao.value;
+
+
+                // Promoção por quantidade
+
+                if (tipo === "Quantidade") {
+
+                    camposQuantidade.style.display = "block";
+
+                }
+
+
+                // Kit ou Combo
+
+                if (tipo === "Kit" || tipo === "Combo") {
+
+                    camposKitCombo.style.display = "block";
+
+                }
+
+            }
+
+
+            emPromocao.addEventListener(
+                "change",
+                atualizarCamposPromocao
+            );
+
+
+            tipoPromocao.addEventListener(
+                "change",
+                atualizarCamposPromocao
+            );
+
+
+            atualizarCamposPromocao();
+
+        });
+
+        // =========================================
+        // CORES DO PRODUTO
+        // =========================================
+
+        const btnAdicionarCor =
+            document.getElementById("btnAdicionarCor");
+
+        const listaCores =
+            document.getElementById("listaCores");
+
+        let indiceCor = 0;
+
+
+        btnAdicionarCor.addEventListener("click", function () {
+
+            const numeroCor = indiceCor++;
+
+            const blocoCor = document.createElement("div");
+
+            blocoCor.className = "card border mb-3";
+
+            blocoCor.innerHTML = `
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h6 class="fw-bold mb-0">
+                            <i class="bi bi-palette me-2"></i>
+                            Cor ${numeroCor + 1}
+                        </h6>
+
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm btnRemoverCor">
+
+                            <i class="bi bi-trash"></i>
+                            Remover
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Nome da cor
+                        </label>
+
+                        <input type="text"
+                               name="cores[${numeroCor}].Nome"
+                               class="form-control"
+                               placeholder="Ex: Verde Olive"
+                               required />
+
+                    </div>
+
+
+                    <div class="mb-2">
+
+                        <label class="form-label fw-semibold">
+                            Imagens desta cor
+                        </label>
+
+                        <input type="file"
+                               name="cores[${numeroCor}].Imagens"
+                               class="form-control"
+                               accept=".jpg,.jpeg,.png,.webp"
+                               multiple />
+
+                        <div class="form-text">
+                            Você pode selecionar várias imagens para esta cor.
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            listaCores.appendChild(blocoCor);
+
+
+            // =====================================
+            // REMOVER COR
+            // =====================================
+
+            const btnRemover =
+                blocoCor.querySelector(".btnRemoverCor");
+
+            btnRemover.addEventListener("click", function () {
+
+                blocoCor.remove();
+
+            });
+
+        });
+
+    </script>
+
+}

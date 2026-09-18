@@ -1,0 +1,114 @@
+@model LojaWeb_2.Models.Marca
+
+@{
+    ViewData["Title"] = "Excluir Marca";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold text-danger">
+            <i class="bi bi-trash"></i> Excluir Marca
+        </h2>
+
+        <p class="text-muted">
+            Confirme abaixo se deseja excluir esta marca.
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                <strong>Atenção!</strong>
+
+                Esta ação não poderá ser desfeita.
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label text-muted fw-semibold">
+                        ID
+                    </label>
+
+                    <div class="fs-5">
+                        @Model.Id
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label text-muted fw-semibold">
+                        Nome da Marca
+                    </label>
+
+                    <div class="fs-5 fw-bold">
+                        @Model.Nome
+                    </div>
+
+                </div>
+
+                <div class="col-12 mb-4">
+
+                    <label class="form-label text-muted fw-semibold">
+                        Descrição
+                    </label>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+                    {
+                        <div class="fs-5">
+                            @Model.Descricao
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            Nenhuma descrição informada.
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <form asp-action="Delete" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash"></i>
+                        Confirmar Exclusão
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

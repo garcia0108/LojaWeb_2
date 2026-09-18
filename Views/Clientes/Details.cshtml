@@ -1,0 +1,309 @@
+﻿@model LojaWeb_2.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-person-vcard"></i>
+                Detalhes do Cliente
+            </h2>
+
+            <p class="text-muted mb-0">
+                Visualize as informações completas do cliente.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <!-- DADOS PESSOAIS -->
+
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-person"></i>
+                Dados do cliente
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Nome
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.Nome
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        CPF/CNPJ
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.CpfCnpj)
+                                                ? "Não informado"
+                                                : Model.CpfCnpj)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        E-mail
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                                                ? "Não informado"
+                                                : Model.Email)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Telefone
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Telefone)
+                                                ? "Não informado"
+                                                : Model.Telefone)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- ENDEREÇO -->
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-geo-alt"></i>
+                Endereço
+
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-8 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Endereço
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Endereco)
+                                                ? "Não informado"
+                                                : Model.Endereco)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Número
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Numero)
+                                                ? "Não informado"
+                                                : Model.Numero)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Bairro
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Bairro)
+                                                ? "Não informado"
+                                                : Model.Bairro)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Cidade
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Cidade)
+                                                ? "Não informado"
+                                                : Model.Cidade)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Estado
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Estado)
+                                                ? "Não informado"
+                                                : Model.Estado)
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        CEP
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @(string.IsNullOrWhiteSpace(Model.Cep)
+                                                ? "Não informado"
+                                                : Model.Cep)
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- INFORMAÇÕES DO SISTEMA -->
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-info-circle"></i>
+                Informações
+
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Data de cadastro
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.DataCadastro.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Status
+                    </label>
+
+                    <div>
+
+                        @if (Model.Ativo)
+                        {
+                            <span class="badge bg-success fs-6">
+                                <i class="bi bi-check-circle"></i>
+                                Ativo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger fs-6">
+                                <i class="bi bi-x-circle"></i>
+                                Inativo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AÇÕES -->
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+
+                </a>
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-warning">
+
+                    <i class="bi bi-pencil"></i>
+                    Editar
+
+                </a>
+
+                <a asp-action="Delete"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-danger">
+
+                    <i class="bi bi-trash"></i>
+                    Excluir
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

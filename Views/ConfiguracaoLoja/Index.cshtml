@@ -1,0 +1,451 @@
+﻿@model LojaWeb_2.Models.ConfiguracaoLoja
+
+@{
+    ViewData["Title"] = "Configurações da Loja";
+}
+
+<div class="container-fluid mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-gear me-2"></i>
+
+                Configurações da Loja
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Configure as informações gerais da sua loja.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENSAGEM -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+
+            @TempData["Sucesso"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <form asp-action="Index"
+          method="post"
+    enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+
+        <!-- ================================ -->
+        <!-- DADOS DA LOJA -->
+        <!-- ================================ -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-shop me-2"></i>
+
+                    Dados da Loja
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-8">
+
+                        <label asp-for="NomeLoja"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="NomeLoja"
+                               class="form-control" />
+
+                        <span asp-validation-for="NomeLoja"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label asp-for="CnpjCpf"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="CnpjCpf"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">
+                            Logo da loja
+                        </label>
+
+                        <input type="file"
+                               name="logoArquivo"
+                               class="form-control"
+                               accept="image/*" />
+
+                        <small class="text-muted">
+                            Selecione uma imagem para a logo da loja.
+                        </small>
+
+                        @if (!string.IsNullOrEmpty(Model.Logo))
+                        {
+                            <div class="mt-3">
+                                <p class="fw-semibold mb-2">
+                                    Logo atual:
+                                </p>
+
+                                <img src="@Model.Logo"
+                                     alt="Logo da loja"
+                                     style="max-height: 100px; max-width: 250px;"
+                                     class="img-thumbnail" />
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================ -->
+        <!-- CONTATO -->
+        <!-- ================================ -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-telephone me-2"></i>
+
+                    Contato
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Email"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               type="email" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label asp-for="Telefone"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Telefone"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label asp-for="WhatsApp"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="WhatsApp"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================ -->
+        <!-- ENDEREÇO -->
+        <!-- ================================ -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-geo-alt me-2"></i>
+
+                    Endereço
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+
+                        <label asp-for="Cep"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Cep"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-7">
+
+                        <label asp-for="Endereco"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Endereco"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-2">
+
+                        <label asp-for="Numero"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Numero"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Bairro"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Bairro"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-5">
+
+                        <label asp-for="Cidade"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Cidade"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label asp-for="Estado"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Estado"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================ -->
+        <!-- REDES SOCIAIS -->
+        <!-- ================================ -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-share me-2"></i>
+
+                    Redes Sociais
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Instagram"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Instagram"
+                               class="form-control"
+                               placeholder="https://instagram.com/..." />
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label asp-for="Facebook"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Facebook"
+                               class="form-control"
+                               placeholder="https://facebook.com/..." />
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label asp-for="WhatsApp"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="WhatsApp"
+                               class="form-control"
+                               placeholder="(47) 99999-9999" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================ -->
+        <!-- RODAPÉ -->
+        <!-- ================================ -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-layout-text-window me-2"></i>
+
+                    Rodapé
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <label asp-for="TextoRodape"
+                       class="form-label fw-semibold">
+                </label>
+
+                <textarea asp-for="TextoRodape"
+                          class="form-control"
+                          rows="4"
+                          placeholder="Texto que será exibido no rodapé da loja">
+                </textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================ -->
+        <!-- BOTÕES -->
+        <!-- ================================ -->
+
+        <div class="d-flex justify-content-end gap-2">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Voltar
+
+            </a>
+
+
+            <button type="submit"
+                    class="btn btn-success">
+
+                <i class="bi bi-save me-1"></i>
+
+                Salvar configurações
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

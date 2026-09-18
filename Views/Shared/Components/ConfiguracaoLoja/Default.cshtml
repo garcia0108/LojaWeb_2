@@ -1,0 +1,23 @@
+﻿@model LojaWeb_2.Models.ConfiguracaoLoja
+
+@if (Model != null)
+{
+    @if (!string.IsNullOrWhiteSpace(Model.Logo))
+    {
+        <img src="@Model.Logo"
+             alt="@Model.NomeLoja"
+             style="height: 40px; width: auto; object-fit: contain;"
+             class="me-2" />
+    }
+    else
+    {
+        <i class="bi bi-shop me-2"></i>
+    }
+
+    <span>@Model.NomeLoja</span>
+}
+else
+{
+    <i class="bi bi-shop me-2"></i>
+    <span>LojaWeb</span>
+}

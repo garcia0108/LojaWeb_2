@@ -1,0 +1,687 @@
+﻿@model LojaWeb_2.Models.Combo
+
+@{
+    ViewData["Title"] = "Novo Combo";
+}
+
+<div class="container mt-4">
+
+    <!-- ========================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-box-seam"></i>
+                Novo Combo
+
+            </h2>
+
+            <p class="text-muted">
+
+                Monte um combo utilizando produtos já cadastrados na loja.
+
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <form asp-action="Create"
+          method="post"
+          enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- DADOS DO COMBO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+
+                    Informações do Combo
+
+                </h5>
+
+
+                <div class="row">
+
+                    <!-- NOME -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Nome"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Nome"
+                               class="form-control"
+                               placeholder="Ex: Combo 10 Camisas" />
+
+                        <span asp-validation-for="Nome"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PREÇO -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Preco"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Preco"
+                               class="form-control"
+                               type="number"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Ex: 499.90" />
+
+                        <span asp-validation-for="Preco"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Descricao"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Descreva o que acompanha este combo.">
+                    </textarea>
+
+                </div>
+
+
+                <!-- IMAGEM -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Imagem do Combo
+
+                    </label>
+
+                    <input type="file"
+                           name="imagemArquivo"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.webp" />
+
+                    <div class="form-text">
+
+                        Selecione uma imagem para representar o combo.
+
+                    </div>
+
+                </div>
+
+
+                <!-- ATIVO -->
+
+                <div class="form-check">
+
+                    <input asp-for="Ativo"
+                           class="form-check-input" />
+
+                    <label asp-for="Ativo"
+                           class="form-check-label">
+
+                    </label>
+
+                </div>
+
+                <!--Promoçõa-->
+                <div class="form-check mt-2">
+
+                    <input asp-for="EmPromocao"
+                           class="form-check-input" />
+
+                    <label asp-for="EmPromocao"
+                           class="form-check-label">
+
+                        Em promoção
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- PRODUTOS DO COMBO -->
+        <!-- ========================================= -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+
+                            Produtos do Combo
+
+                        </h5>
+
+                        <p class="text-muted mb-0">
+
+                            Selecione o produto, a cor, o tamanho
+                            e a quantidade.
+
+                        </p>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="btn btn-success"
+                            id="btnAdicionarProduto">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Adicionar produto
+
+                    </button>
+
+                </div>
+
+
+                <div id="listaProdutos">
+
+
+                    <!-- ================================= -->
+                    <!-- LINHA DO PRODUTO -->
+                    <!-- ================================= -->
+
+                    <div class="row produto-item align-items-end mb-3">
+
+
+                        <!-- PRODUTO -->
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+
+                                Produto
+
+                            </label>
+
+                            <select name="produtoIds"
+                                    class="form-select select-produto">
+
+                                <option value="">
+
+                                    Selecione um produto
+
+                                </option>
+
+                                @foreach (var produto in ViewBag.Produtos)
+                                {
+                                    <option value="@produto.Value">
+
+                                        @produto.Text
+
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- COR -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+
+                                Cor
+
+                            </label>
+
+                            <select name="cores"
+                                    class="form-select select-cor"
+                                    disabled>
+
+                                <option value="">
+
+                                    Selecione
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- TAMANHO -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+
+                                Tamanho
+
+                            </label>
+
+                            <select name="tamanhos"
+                                    class="form-select select-tamanho"
+                                    disabled>
+
+                                <option value="">
+
+                                    Selecione
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- QUANTIDADE -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+
+                                Quantidade
+
+                            </label>
+
+                            <input type="number"
+                                   name="quantidades"
+                                   class="form-control"
+                                   min="1"
+                                   value="1" />
+
+                        </div>
+
+
+                        <!-- REMOVER -->
+
+                        <div class="col-md-2">
+
+                            <button type="button"
+                                    class="btn btn-danger w-100 btn-remover">
+
+                                <i class="bi bi-trash"></i>
+
+                                Remover
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- BOTÕES -->
+        <!-- ========================================= -->
+
+        <div class="d-flex gap-2">
+
+            <button type="submit"
+                    class="btn btn-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                Salvar Combo
+
+            </button>
+
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const listaProdutos =
+                document.getElementById("listaProdutos");
+
+            const btnAdicionarProduto =
+                document.getElementById("btnAdicionarProduto");
+
+
+            // =========================================
+            // FUNÇÃO PARA CARREGAR VARIAÇÕES
+            // =========================================
+
+            async function carregarVariacoes(item) {
+
+                const selectProduto =
+                    item.querySelector(".select-produto");
+
+                const selectCor =
+                    item.querySelector(".select-cor");
+
+                const selectTamanho =
+                    item.querySelector(".select-tamanho");
+
+
+                const produtoId =
+                    selectProduto.value;
+
+
+                // Limpa os campos
+
+                selectCor.innerHTML =
+                    '<option value="">Selecione</option>';
+
+                selectTamanho.innerHTML =
+                    '<option value="">Selecione</option>';
+
+
+                selectCor.disabled = true;
+
+                selectTamanho.disabled = true;
+
+
+                if (!produtoId) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const resposta =
+                        await fetch(
+                            `/Combos/VariacoesProduto?produtoId=${produtoId}`
+                        );
+
+
+                    if (!resposta.ok) {
+
+                        throw new Error(
+                            "Erro ao carregar variações."
+                        );
+
+                    }
+
+
+                    const dados =
+                        await resposta.json();
+
+
+                    // =================================
+                    // CORES
+                    // =================================
+
+                    dados.cores.forEach(function (cor) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = cor;
+
+                        option.textContent = cor;
+
+                        selectCor.appendChild(option);
+
+                    });
+
+
+                    // =================================
+                    // TAMANHOS
+                    // =================================
+
+                    dados.tamanhos.forEach(function (tamanho) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = tamanho;
+
+                        option.textContent = tamanho;
+
+                        selectTamanho.appendChild(option);
+
+                    });
+
+
+                    selectCor.disabled =
+                        dados.cores.length === 0;
+
+                    selectTamanho.disabled =
+                        dados.tamanhos.length === 0;
+
+                }
+                catch (erro) {
+
+                    console.error(erro);
+
+                    alert(
+                        "Não foi possível carregar as variações do produto."
+                    );
+
+                }
+
+            }
+
+
+            // =========================================
+            // ALTERAÇÃO DO PRODUTO
+            // =========================================
+
+            listaProdutos.addEventListener(
+                "change",
+                function (event) {
+
+                    if (
+                        event.target.classList.contains(
+                            "select-produto"
+                        )
+                    ) {
+
+                        const item =
+                            event.target.closest(
+                                ".produto-item"
+                            );
+
+                        carregarVariacoes(item);
+
+                    }
+
+                }
+            );
+
+
+            // =========================================
+            // ADICIONAR NOVO PRODUTO
+            // =========================================
+
+            btnAdicionarProduto.addEventListener(
+                "click",
+                function () {
+
+                    const primeiroItem =
+                        document.querySelector(
+                            ".produto-item"
+                        );
+
+
+                    const novoItem =
+                        primeiroItem.cloneNode(true);
+
+
+                    // Limpa produto
+
+                    const selectProduto =
+                        novoItem.querySelector(
+                            ".select-produto"
+                        );
+
+                    selectProduto.value = "";
+
+
+                    // Limpa cor
+
+                    const selectCor =
+                        novoItem.querySelector(
+                            ".select-cor"
+                        );
+
+                    selectCor.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectCor.value = "";
+
+                    selectCor.disabled = true;
+
+
+                    // Limpa tamanho
+
+                    const selectTamanho =
+                        novoItem.querySelector(
+                            ".select-tamanho"
+                        );
+
+                    selectTamanho.innerHTML =
+                        '<option value="">Selecione</option>';
+
+                    selectTamanho.value = "";
+
+                    selectTamanho.disabled = true;
+
+
+                    // Quantidade
+
+                    const quantidade =
+                        novoItem.querySelector(
+                            'input[name="quantidades"]'
+                        );
+
+                    quantidade.value = 1;
+
+
+                    listaProdutos.appendChild(
+                        novoItem
+                    );
+
+                }
+            );
+
+
+            // =========================================
+            // REMOVER PRODUTO
+            // =========================================
+
+            listaProdutos.addEventListener(
+                "click",
+                function (event) {
+
+                    const botaoRemover =
+                        event.target.closest(
+                            ".btn-remover"
+                        );
+
+
+                    if (!botaoRemover) {
+
+                        return;
+
+                    }
+
+
+                    const itens =
+                        document.querySelectorAll(
+                            ".produto-item"
+                        );
+
+
+                    // Mantém pelo menos um
+
+                    if (itens.length === 1) {
+
+                        alert(
+                            "O combo deve possuir pelo menos um produto."
+                        );
+
+                        return;
+
+                    }
+
+
+                    botaoRemover
+                        .closest(".produto-item")
+                        .remove();
+
+                }
+            );
+
+        });
+
+    </script>
+
+}

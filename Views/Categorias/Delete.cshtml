@@ -1,0 +1,58 @@
+﻿@model LojaWeb_2.Models.Categoria
+
+@{
+    ViewData["Title"] = "Excluir";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow border-danger">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3>Excluir Categoria</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <h5>Tem certeza que deseja excluir esta categoria?</h5>
+
+            <hr />
+
+            <p>
+
+                <strong>Nome:</strong>
+
+                @Model.Nome
+
+            </p>
+
+            <p>
+
+                <strong>Descrição:</strong>
+
+                @Model.Descricao
+
+            </p>
+
+            <form asp-action="Delete">
+
+                <input type="hidden" asp-for="Id" />
+
+                <button type="submit" class="btn btn-danger">
+                    Excluir
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

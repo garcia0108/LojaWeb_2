@@ -1,0 +1,199 @@
+﻿@model LojaWeb_2.Models.UsuarioViewModel
+
+@{
+    ViewData["Title"] = "Excluir Usuário";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+
+                <i class="bi bi-person-x"></i>
+
+                Excluir Usuário
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confirme a exclusão do usuário.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="alert alert-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <strong>Atenção!</strong>
+
+                Esta ação não poderá ser desfeita.
+
+            </div>
+
+
+            <h5 class="fw-bold mb-4">
+                Tem certeza que deseja excluir este usuário?
+            </h5>
+
+
+            <table class="table table-bordered align-middle">
+
+                <tr>
+
+                    <th style="width: 180px;">
+                        Usuário
+                    </th>
+
+                    <td>
+                        <strong>
+                            @Model.UserName
+                        </strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        E-mail
+                    </th>
+
+                    <td>
+                        @Model.Email
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Perfil
+                    </th>
+
+                    <td>
+
+                        @if (Model.Perfil == "Administrador")
+                        {
+                            <span class="badge bg-primary">
+
+                                <i class="bi bi-shield-check"></i>
+
+                                Administrador
+
+                            </span>
+                        }
+                        else if (Model.Perfil == "Funcionário")
+                        {
+                            <span class="badge bg-info text-dark">
+
+                                <i class="bi bi-person-badge"></i>
+
+                                Funcionário
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @Model.Perfil
+                            </span>
+                        }
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <td>
+
+                        @if (Model.Ativo)
+                        {
+                            <span class="badge bg-success">
+
+                                <i class="bi bi-check-circle"></i>
+
+                                Ativo
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+
+                                <i class="bi bi-x-circle"></i>
+
+                                Inativo
+
+                            </span>
+                        }
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <div class="d-flex justify-content-between mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Cancelar
+
+                </a>
+
+
+                <form asp-action="DeleteConfirmed"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           asp-for="Id" />
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash"></i>
+
+                        Excluir Usuário
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

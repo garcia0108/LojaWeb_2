@@ -1,0 +1,646 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Venda>
+
+@{
+    ViewData["Title"] = "Relatório de Vendas";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-bar-chart"></i>
+
+                Relatório de Vendas
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Consulte e analise as vendas realizadas na loja.
+
+            </p>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <!-- EXCEL -->
+            <a asp-action="ExportarVendasExcel"
+               asp-route-dataInicial="@ViewBag.DataInicial"
+               asp-route-dataFinal="@ViewBag.DataFinal"
+               asp-route-formaPagamento="@ViewBag.FormaPagamento"
+               asp-route-status="@ViewBag.Status"
+               class="btn btn-success">
+
+                <i class="bi bi-file-earmark-excel me-1"></i>
+                Exportar Excel
+
+            </a>
+
+
+            <!-- PDF -->
+            <a asp-action="ExportarVendasPdf"
+               asp-route-dataInicial="@ViewBag.DataInicial"
+               asp-route-dataFinal="@ViewBag.DataFinal"
+               asp-route-formaPagamento="@ViewBag.FormaPagamento"
+               asp-route-status="@ViewBag.Status"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf me-1"></i>
+                Exportar PDF
+
+            </a>
+
+
+            <!-- VOLTAR -->
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Voltar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FILTROS -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-funnel"></i>
+
+                Filtros
+
+            </h5>
+
+
+            <form asp-action="Vendas" method="get">
+
+                <div class="row g-3">
+
+                    <!-- DATA INICIAL -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Data inicial
+                        </label>
+
+                        <input type="date"
+                               name="dataInicial"
+                               value="@ViewBag.DataInicial"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- DATA FINAL -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Data final
+                        </label>
+
+                        <input type="date"
+                               name="dataFinal"
+                               value="@ViewBag.DataFinal"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- FORMA DE PAGAMENTO -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Forma de pagamento
+                        </label>
+
+                        <select name="formaPagamento"
+                                class="form-select">
+
+                            @if (string.IsNullOrEmpty(
+                                                        ViewBag.FormaPagamento))
+                            {
+                                <option value="" selected>
+                                    Todas
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    Todas
+                                </option>
+                            }
+
+
+                            @if (ViewBag.FormaPagamento == "Pix")
+                            {
+                                <option value="Pix" selected>
+                                    Pix
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Pix">
+                                    Pix
+                                </option>
+                            }
+
+
+                            @if (ViewBag.FormaPagamento == "Cartão de crédito")
+                            {
+                                <option value="Cartão de crédito" selected>
+                                    Cartão de crédito
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Cartão de crédito">
+                                    Cartão de crédito
+                                </option>
+                            }
+
+
+                            @if (ViewBag.FormaPagamento == "Cartão de débito")
+                            {
+                                <option value="Cartão de débito" selected>
+                                    Cartão de débito
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Cartão de débito">
+                                    Cartão de débito
+                                </option>
+                            }
+
+
+                            @if (ViewBag.FormaPagamento == "Boleto")
+                            {
+                                <option value="Boleto" selected>
+                                    Boleto
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Boleto">
+                                    Boleto
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select name="status"
+                                class="form-select">
+
+                            @if (string.IsNullOrEmpty(ViewBag.Status))
+                            {
+                                <option value="" selected>
+                                    Todos
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    Todos
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Status == "Concluída")
+                            {
+                                <option value="Concluída" selected>
+                                    Concluída
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Concluída">
+                                    Concluída
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Status == "Cancelada")
+                            {
+                                <option value="Cancelada" selected>
+                                    Cancelada
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Cancelada">
+                                    Cancelada
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+
+                    <div class="col-12">
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="bi bi-search"></i>
+
+                            Gerar relatório
+
+                        </button>
+
+
+                        <a asp-action="Vendas"
+                           class="btn btn-secondary">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Limpar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INDICADORES -->
+    <!-- ========================================= -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- TOTAL DE VENDAS -->
+
+        <div class="col-md-4 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Total de vendas
+                    </small>
+
+                    <h3 class="fw-bold mt-2">
+                        @ViewBag.TotalVendas
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONCLUÍDAS -->
+
+        <div class="col-md-4 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Concluídas
+                    </small>
+
+                    <h3 class="fw-bold text-success mt-2">
+                        @ViewBag.TotalConcluidas
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CANCELADAS -->
+
+        <div class="col-md-4 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Canceladas
+                    </small>
+
+                    <h3 class="fw-bold text-danger mt-2">
+                        @ViewBag.TotalCanceladas
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FATURAMENTO -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Faturamento
+                    </small>
+
+                    <h5 class="fw-bold text-primary mt-2">
+
+                        @(((decimal)ViewBag.Faturamento).ToString("C"))
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LUCRO -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Lucro bruto
+                    </small>
+
+                    <h5 class="fw-bold text-success mt-2">
+
+                        @(((decimal)ViewBag.LucroBruto).ToString("C"))
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TICKET MÉDIO -->
+
+        <div class="col-md-6 col-lg-2">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Ticket médio
+                    </small>
+
+                    <h5 class="fw-bold mt-2">
+
+                        @(((decimal)ViewBag.TicketMedio).ToString("C"))
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- TABELA DE VENDAS -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Venda
+                                </th>
+
+                                <th>
+                                    Data
+                                </th>
+
+                                <th>
+                                    Cliente
+                                </th>
+
+                                <th>
+                                    Pagamento
+                                </th>
+
+                                <th>
+                                    Itens
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var venda in Model)
+                            {
+                                <tr>
+
+                                    <!-- ID -->
+
+                                    <td>
+
+                                        <strong>
+                                            #@venda.Id
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- DATA -->
+
+                                    <td>
+
+                                        @venda.DataVenda.ToString(
+                                        "dd/MM/yyyy HH:mm")
+
+                            </td>
+
+
+                            <!-- CLIENTE -->
+
+                            <td>
+
+                                @if (venda.Cliente != null)
+                                        {
+                                            @venda.Cliente.Nome
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Cliente não encontrado
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- PAGAMENTO -->
+
+                                    <td>
+
+                                        @venda.FormaPagamento
+
+                                    </td>
+
+
+                                    <!-- QUANTIDADE DE ITENS -->
+
+                                    <td>
+
+                                        @venda.Itens.Sum(
+                                        i => i.Quantidade)
+
+                            </td>
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <strong>
+                                    @venda.Total.ToString("C")
+                                </strong>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                @if (venda.Status == "Concluída")
+                                        {
+                                            <span class="badge bg-success">
+
+                                                Concluída
+
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Cancelada")
+                                        {
+                                            <span class="badge bg-danger">
+
+                                                Cancelada
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+
+                                                @venda.Status
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-bar-chart fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        Nenhuma venda encontrada
+                    </h5>
+
+                    <p class="text-muted">
+                        Não existem vendas para os filtros selecionados.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

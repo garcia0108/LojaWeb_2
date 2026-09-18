@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Pedido realizado com sucesso";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center p-5">
+
+                    <!-- ÍCONE -->
+                    <div class="mb-4">
+
+                        <i class="bi bi-check-circle-fill text-success"
+                           style="font-size: 80px;">
+                        </i>
+
+                    </div>
+
+
+                    <!-- TÍTULO -->
+                    <h1 class="fw-bold mb-3">
+
+                        Pedido realizado com sucesso!
+
+                    </h1>
+
+
+                    <!-- TEXTO -->
+                    <p class="text-muted fs-5 mb-4">
+
+                        Obrigado pela sua compra! Seu pedido foi
+                        registrado e será processado em breve.
+
+                    </p>
+
+
+                    <div class="alert alert-success">
+
+                        <i class="bi bi-bag-check"></i>
+
+                        Você pode acompanhar o andamento do seu
+                        pedido na área <strong>Meus Pedidos</strong>.
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+                    <div class="d-flex
+                                flex-column
+                                flex-md-row
+                                justify-content-center
+                                gap-3
+                                mt-4">
+
+                        <a asp-controller="Produtos"
+                           asp-action="Loja"
+                           class="btn btn-outline-secondary px-4">
+
+                            <i class="bi bi-shop"></i>
+
+                            Continuar comprando
+
+                        </a>
+
+
+                        <a asp-controller="MinhaConta"
+                           asp-action="Pedidos"
+                           class="btn btn-primary px-4">
+
+                            <i class="bi bi-receipt"></i>
+
+                            Meus pedidos
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,229 @@
+﻿@model LojaWeb_2.Models.Estoque
+
+@{
+    ViewData["Title"] = "Saída de Estoque";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger">
+                <i class="bi bi-box-arrow-up"></i>
+                Saída de Estoque
+            </h2>
+
+            <p class="text-muted mb-0">
+                Registre a saída de produtos do estoque.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- AVISO -->
+
+    <div class="alert alert-warning" role="alert">
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        Confira o produto, tamanho, cor e quantidade antes de confirmar a saída.
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-action="Saida"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- ERROS -->
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+
+                <!-- PRODUTO -->
+
+                <div class="mb-4">
+
+                    <label asp-for="ProdutoId"
+                           class="form-label fw-semibold">
+
+                        Produto
+
+                    </label>
+
+                    <select asp-for="ProdutoId"
+                            class="form-select"
+                            asp-items="ViewBag.Produtos">
+
+                        <option value="">
+                            Selecione um produto
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="ProdutoId"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- MARCA -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Marca
+                    </label>
+
+                    <select asp-for="MarcaId"
+                            class="form-select"
+                            asp-items="ViewBag.Marcas">
+
+                        <option value="">
+                            Selecione uma marca
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="MarcaId"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- TAMANHO / COR -->
+
+                <div class="row">
+
+                    <!-- TAMANHO -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Tamanho"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="Tamanho"
+                                class="form-select">
+
+                            <option value="">
+                                Selecione o tamanho
+                            </option>
+
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+
+                        </select>
+
+                        <span asp-validation-for="Tamanho"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- COR -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Cor"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Cor"
+                               class="form-control"
+                               placeholder="Ex: Preto" />
+
+                        <span asp-validation-for="Cor"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUANTIDADE -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Quantidade"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="Quantidade"
+                           type="number"
+                           min="1"
+                           class="form-control"
+                           placeholder="Informe a quantidade" />
+
+                    <span asp-validation-for="Quantidade"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-dash-circle"></i>
+                        Confirmar Saída
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+}

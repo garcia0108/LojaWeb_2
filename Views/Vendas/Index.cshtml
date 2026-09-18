@@ -1,0 +1,608 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Venda>
+
+@{
+    ViewData["Title"] = "Vendas";
+}
+
+<div class="container mt-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-cart3"></i>
+                Vendas
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulte e gerencie as vendas realizadas.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-success">
+
+            <i class="bi bi-plus-circle"></i>
+            Nova Venda
+
+        </a>
+
+    </div>
+
+    <!-- FILTROS -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-funnel"></i>
+
+                Filtros
+
+            </h5>
+
+            <form asp-action="Index"
+                  method="get">
+
+                <div class="row g-3">
+
+                    <!-- CLIENTE -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Cliente
+                        </label>
+
+                        <input type="text"
+                               name="busca"
+                               value="@ViewBag.Busca"
+                               class="form-control"
+                               placeholder="Nome do cliente..." />
+
+                    </div>
+
+
+                    <!-- DATA INICIAL -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Data inicial
+                        </label>
+
+                        <input type="date"
+                               name="dataInicial"
+                               value="@ViewBag.DataInicial"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- DATA FINAL -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Data final
+                        </label>
+
+                        <input type="date"
+                               name="dataFinal"
+                               value="@ViewBag.DataFinal"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- PAGAMENTO -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Pagamento
+                        </label>
+
+                        <select name="formaPagamento"
+                                class="form-select">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="Dinheiro"
+                                    selected="@(ViewBag.FormaPagamento == "Dinheiro")">
+
+                                Dinheiro
+
+                            </option>
+
+                            <option value="PIX"
+                                    selected="@(ViewBag.FormaPagamento == "PIX")">
+
+                                PIX
+
+                            </option>
+
+                            <option value="Cartão de Débito"
+                                    selected="@(ViewBag.FormaPagamento == "Cartão de Débito")">
+
+                                Cartão de Débito
+
+                            </option>
+
+                            <option value="Cartão de Crédito"
+                                    selected="@(ViewBag.FormaPagamento == "Cartão de Crédito")">
+
+                                Cartão de Crédito
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select name="status"
+                                class="form-select">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="Concluída"
+                                    selected="@(ViewBag.Status == "Concluída")">
+
+                                Concluída
+
+                            </option>
+
+                            <option value="Cancelada"
+                                    selected="@(ViewBag.Status == "Cancelada")">
+
+                                Cancelada
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Limpar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-search"></i>
+
+                        Pesquisar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- RESUMO -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Vendas encontradas
+                    </small>
+
+                    <h3 class="fw-bold mb-0">
+
+                        @ViewBag.TotalVendas
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Concluídas
+                    </small>
+
+                    <h3 class="fw-bold text-success mb-0">
+
+                        @ViewBag.TotalConcluidas
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Canceladas
+                    </small>
+
+                    <h3 class="fw-bold text-danger mb-0">
+
+                        @ViewBag.TotalCanceladas
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Faturamento
+                    </small>
+
+                    <h3 class="fw-bold text-success mb-0">
+
+                        @(((decimal)ViewBag.Faturamento).ToString("C2"))
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MENSAGENS -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div id="mensagemSucesso"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <strong>@TempData["Sucesso"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div id="mensagemErro"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            <strong>@TempData["Erro"]</strong>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- TABELA -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Nº
+                                </th>
+
+                                <th>
+                                    Data
+                                </th>
+
+                                <th>
+                                    Cliente
+                                </th>
+
+                                <th>
+                                    Pagamento
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th class="text-end">
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var venda in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            #@venda.Id
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        @venda.DataVenda.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+
+                                    <td>
+
+                                        @if (venda.Cliente != null)
+                                        {
+                                            <span>
+                                                <i class="bi bi-person"></i>
+                                                @venda.Cliente.Nome
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Cliente não encontrado
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @venda.FormaPagamento
+                                    </td>
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (venda.Status == "Pedido realizado")
+                                        {
+                                            <span class="badge bg-warning text-dark px-3 py-2">
+                                                <i class="bi bi-receipt me-1"></i>
+                                                Pedido realizado
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Pagamento aprovado")
+                                        {
+                                            <span class="badge bg-primary px-3 py-2">
+                                                <i class="bi bi-credit-card me-1"></i>
+                                                Pagamento aprovado
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Em preparação")
+                                        {
+                                            <span class="badge bg-purple px-3 py-2">
+                                                <i class="bi bi-box-seam me-1"></i>
+                                                Em preparação
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Enviado")
+                                        {
+                                            <span class="badge bg-info text-dark px-3 py-2">
+                                                <i class="bi bi-truck me-1"></i>
+                                                Enviado
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Entregue")
+                                        {
+                                            <span class="badge bg-success px-3 py-2">
+                                                <i class="bi bi-check-circle me-1"></i>
+                                                Entregue
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Cancelado" ||
+                                        venda.Status == "Cancelada")
+                                        {
+                                            <span class="badge bg-danger px-3 py-2">
+                                                <i class="bi bi-x-circle me-1"></i>
+                                                Cancelado
+                                            </span>
+                                        }
+                                        else if (venda.Status == "Concluída")
+                                        {
+                                            <span class="badge bg-success px-3 py-2">
+                                                <i class="bi bi-check-circle me-1"></i>
+                                                Concluída
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary px-3 py-2">
+                                                @venda.Status
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- TOTAL -->
+
+                                    <td>
+
+                                        <strong>
+                                            @venda.Total.ToString("C2")
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- AÇÕES -->
+
+                                    <td class="text-end">
+
+                                        <div class="btn-group">
+
+                                            <a asp-action="Details"
+                                               asp-route-id="@venda.Id"
+                                               class="btn btn-sm btn-outline-info"
+                                               title="Visualizar">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-cart-x fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        Nenhuma venda registrada
+                    </h5>
+
+                    <p class="text-muted">
+                        Quando uma venda for realizada,
+                        ela aparecerá nesta lista.
+                    </p>
+
+                    <a asp-action="Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Registrar primeira venda
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+             .bg-purple {
+            background-color: #6f42c1 !important;
+            color: white !important;
+        }
+
+        setTimeout(function () {
+
+            const sucesso =
+                document.getElementById("mensagemSucesso");
+
+            const erro =
+                document.getElementById("mensagemErro");
+
+            if (sucesso) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(sucesso);
+
+                alerta.close();
+            }
+
+            if (erro) {
+
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(erro);
+
+                alerta.close();
+            }
+
+        }, 4000);
+
+    </script>
+
+}

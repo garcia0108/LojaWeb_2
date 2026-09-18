@@ -1,0 +1,462 @@
+﻿@model LojaWeb_2.Models.Combo
+
+@{
+    ViewData["Title"] = Model.Nome;
+
+    var imagensProdutos = Model.Itens
+        .Where(i => i.Produto != null)
+        .Select(i => i.Produto!)
+        .ToList();
+}
+
+<div class="container py-5">
+
+    <!-- CAMINHO -->
+
+    <div class="mb-4">
+
+        <a asp-action="Combos"
+           class="text-decoration-none">
+
+            <i class="bi bi-arrow-left"></i>
+            Voltar para Combos
+
+        </a>
+
+    </div>
+
+
+    <div class="row g-5">
+
+        <!-- ================================= -->
+        <!-- GALERIA -->
+        <!-- ================================= -->
+
+        <div class="col-lg-6">
+
+            <!-- IMAGEM PRINCIPAL -->
+
+            <div class="combo-imagem-container">
+
+                @if (!string.IsNullOrEmpty(Model.Imagem))
+                {
+                    <img id="imagemPrincipal"
+                         src="@Model.Imagem"
+                         class="combo-imagem"
+                         alt="@Model.Nome" />
+                }
+                else if (imagensProdutos.Any() &&
+                !string.IsNullOrEmpty(imagensProdutos.First().Imagem))
+                {
+                    <img id="imagemPrincipal"
+                         src="@imagensProdutos.First().Imagem"
+                         class="combo-imagem"
+                         alt="@imagensProdutos.First().Nome" />
+                }
+                else
+                {
+                    <div class="combo-sem-imagem">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- MINIATURAS -->
+
+            <div class="row g-3 mt-2">
+
+                @if (!string.IsNullOrEmpty(Model.Imagem))
+                {
+                    <div class="col-6">
+
+                        <button type="button"
+                                class="galeria-item active"
+                                onclick="trocarImagem(
+                                        '@Model.Imagem',
+                                        '@Model.Nome',
+                                        this
+                                    )">
+
+                            <img src="@Model.Imagem"
+                                 alt="@Model.Nome" />
+
+                        </button>
+
+                    </div>
+                }
+
+
+                @foreach (var produto in imagensProdutos)
+                {
+                    @if (!string.IsNullOrEmpty(produto.Imagem))
+                    {
+                        <div class="col-6">
+
+                            <button type="button"
+                                    class="galeria-item"
+                                    onclick="trocarImagem(
+                                                '@produto.Imagem',
+                                                '@produto.Nome',
+                                                this
+                                            )">
+
+                                <img src="@produto.Imagem"
+                                     alt="@produto.Nome" />
+
+                            </button>
+
+                        </div>
+                    }
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- INFORMAÇÕES -->
+        <!-- ================================= -->
+
+        <div class="col-lg-6">
+
+            <!-- BADGES -->
+
+            <div class="mb-3">
+
+                @if (Model.PercentualDesconto > 0)
+                {
+                    <span class="badge bg-danger fs-6 me-1">
+
+                        @Model.PercentualDesconto.ToString("0")% OFF
+
+                    </span>
+                }
+
+                @if (Model.FreteGratis)
+                {
+                    <span class="badge bg-success fs-6">
+
+                       
+                        Frete grátis
+
+                    </span>
+                }
+
+            </div>
+
+
+            <h1 class="fw-bold">
+                @Model.Nome
+            </h1>
+
+
+            @if (!string.IsNullOrEmpty(Model.Descricao))
+            {
+                <p class="text-muted fs-5 mt-3">
+                    @Model.Descricao
+                </p>
+            }
+
+
+            <!-- QUANTIDADE -->
+
+            <div class="mt-4 mb-4">
+
+                <span class="badge bg-primary fs-6">
+
+                    @Model.Itens.Sum(i => i.Quantidade)
+
+                    @(Model.Itens.Sum(i => i.Quantidade) == 1
+                                        ? " item"
+                                        : " itens")
+
+                </span>
+
+            </div>
+
+
+            <!-- PRODUTOS -->
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-boxes"></i>
+                        O que vem no combo?
+
+                    </h5>
+
+
+                    @foreach (var item in Model.Itens)
+                    {
+                        <div class="d-flex align-items-center
+                                        justify-content-between
+                                        border-bottom py-3">
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                @if (!string.IsNullOrEmpty(item.Produto?.Imagem))
+                                {
+                                    <img src="@item.Produto.Imagem"
+                                         class="produto-miniatura"
+                                         alt="@item.Produto.Nome" />
+                                }
+                                else
+                                {
+                                    <div class="produto-miniatura
+                                                        d-flex
+                                                        align-items-center
+                                                        justify-content-center
+                                                        bg-light">
+
+                                        <i class="bi bi-image text-muted"></i>
+
+                                    </div>
+                                }
+
+
+                            <div>
+
+                                <strong>
+                                    @item.Produto?.Nome
+                                </strong>
+
+                                <div class="text-muted small">
+
+                                    Quantidade:
+                                    @item.Quantidade
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="fw-bold">
+
+                            @((item.Produto?.Preco ?? 0)
+                                                        .ToString("C"))
+
+                        </span>
+
+                        </div>
+                                        }
+
+                </div>
+
+            </div>
+
+
+            <!-- PREÇO -->
+
+            <div class="mb-4">
+
+                @if (Model.PercentualDesconto > 0)
+                {
+                    <div class="text-muted
+                                    text-decoration-line-through">
+
+                        De @Model.ValorOriginal.ToString("C")
+
+                    </div>
+                }
+
+                <span class="text-muted">
+                    Preço do Combo
+                </span>
+
+                <div class="preco-combo">
+
+                    @Model.Preco.ToString("C")
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÃO -->
+
+            <form asp-controller="Carrinho"
+                  asp-action="AdicionarCombo"
+                  method="post">
+
+                <input type="hidden"
+                       name="comboId"
+                       value="@Model.Id" />
+
+                <input type="hidden"
+                       name="quantidade"
+                       value="1" />
+
+                <button type="submit"
+                        class="btn btn-primary btn-lg w-100">
+
+                    <i class="bi bi-cart-plus"></i>
+
+                    Adicionar ao carrinho
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* ================================= */
+    /* IMAGEM PRINCIPAL */
+    /* ================================= */
+
+    .combo-imagem-container {
+        width: 100%;
+        height: 500px;
+        background: #f8f9fa;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+
+    .combo-imagem {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+
+
+    .combo-imagem-container:hover .combo-imagem {
+        transform: scale(1.04);
+    }
+
+
+    .combo-sem-imagem {
+        font-size: 6rem;
+        color: #adb5bd;
+    }
+
+
+    /* ================================= */
+    /* GALERIA */
+    /* ================================= */
+
+    .galeria-item {
+        width: 100%;
+        height: 180px;
+        padding: 0;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+
+        .galeria-item:hover {
+            border-color: #0d6efd;
+            transform: translateY(-2px);
+        }
+
+
+        .galeria-item.active {
+            border-color: #0d6efd;
+        }
+
+
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+
+    /* ================================= */
+    /* MINIATURA */
+    /* ================================= */
+
+    .produto-miniatura {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+
+    /* ================================= */
+    /* PREÇO */
+    /* ================================= */
+
+    .preco-combo {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #198754;
+    }
+
+
+    /* ================================= */
+    /* RESPONSIVO */
+    /* ================================= */
+
+    @@media (max-width: 768px) {
+
+        .combo-imagem-container {
+            height: 350px;
+        }
+
+        .galeria-item {
+            height: 140px;
+        }
+    }
+
+</style>
+
+
+<script>
+
+    function trocarImagem(url, nome, elemento) {
+
+        const imagem =
+            document.getElementById("imagemPrincipal");
+
+        if (!imagem) {
+            return;
+        }
+
+        imagem.src = url;
+        imagem.alt = nome;
+
+
+        // Remove seleção anterior
+
+        document
+            .querySelectorAll(".galeria-item")
+            .forEach(item => {
+
+                item.classList.remove("active");
+
+            });
+
+
+        // Marca imagem selecionada
+
+        elemento.classList.add("active");
+    }
+
+</script>

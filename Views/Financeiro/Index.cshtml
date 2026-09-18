@@ -1,0 +1,902 @@
+﻿@model LojaWeb_2.Models.DashboardFinanceiroViewModel
+
+@{
+    ViewData["Title"] = "Dashboard Financeiro";
+}
+
+<div class="container-fluid mt-4 mb-5">
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-cash-stack me-2"></i>
+
+                Dashboard Financeiro
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Visão geral da situação financeira da loja.
+            </p>
+
+        </div>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            Voltar
+
+        </a>
+
+    </div>
+
+
+    <!-- FILTRO DE PERÍODO -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form asp-action="Index"
+                  method="get"
+                  class="row g-3 align-items-end">
+
+                <div class="col-md-4">
+
+                    <label class="form-label fw-semibold">
+                        Data inicial
+                    </label>
+
+                    <input type="date"
+                           name="dataInicio"
+                           value="@Model.DataInicio?.ToString("yyyy-MM-dd")"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label fw-semibold">
+                        Data final
+                    </label>
+
+                    <input type="date"
+                           name="dataFim"
+                           value="@Model.DataFim?.ToString("yyyy-MM-dd")"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="col-md-4 d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-search me-1"></i>
+
+                        Filtrar
+
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-x-circle me-1"></i>
+
+                        Limpar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESUMO FINANCEIRO -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- RECEITAS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Receitas
+                            </small>
+
+                            <h3 class="fw-bold text-success mt-2">
+
+                                @Model.TotalReceitas.ToString("C")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-arrow-down-circle fs-2 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DESPESAS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Despesas
+                            </small>
+
+                            <h3 class="fw-bold text-danger mt-2">
+
+                                @Model.TotalDespesas.ToString("C")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-arrow-up-circle fs-2 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SALDO -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Saldo
+                            </small>
+
+                            <h3 class="fw-bold text-primary mt-2">
+
+                                @Model.Saldo.ToString("C")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-wallet2 fs-2 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LUCRO -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Resultado
+                            </small>
+
+                            <h3 class="fw-bold text-info mt-2">
+
+                                @Model.Lucro.ToString("C")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-graph-up-arrow fs-2 text-info"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CAIXA ATUAL -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    @if (Model.CaixaAberto != null)
+                    {
+                        <!-- CAIXA ABERTO -->
+
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+
+                                    <i class="bi bi-unlock me-2 text-success"></i>
+
+                                    Caixa Atual
+
+                                    <span class="badge bg-success ms-2">
+                                        Aberto
+                                    </span>
+
+                                </h5>
+
+                                <p class="text-muted mb-0">
+
+                                    Aberto em
+                                    @Model.CaixaAberto.DataAbertura.ToString("dd/MM/yyyy HH:mm")
+
+                                </p>
+
+                            </div>
+
+
+                            <a asp-controller="FechamentoCaixa"
+                               asp-action="Details"
+                               asp-route-id="@Model.CaixaAberto.Id"
+                               class="btn btn-outline-primary">
+
+                                <i class="bi bi-eye me-1"></i>
+
+                                Ver caixa
+
+                            </a>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <div class="row g-3">
+
+                            <!-- SALDO INICIAL -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saldo inicial
+                                </small>
+
+                                <h5 class="fw-bold mt-1">
+
+                                    @Model.CaixaAberto.SaldoInicial.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- ENTRADAS -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Entradas
+                                </small>
+
+                                <h5 class="fw-bold text-success mt-1">
+
+                                    @Model.CaixaAberto.TotalEntradas.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- SAÍDAS -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saídas
+                                </small>
+
+                                <h5 class="fw-bold text-danger mt-1">
+
+                                    @Model.CaixaAberto.TotalSaidas.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- SALDO ESPERADO -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saldo esperado
+                                </small>
+
+                                <h5 class="fw-bold text-primary mt-1">
+
+                                    @Model.CaixaAberto.SaldoEsperado.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+                        </div>
+
+                    }
+                    else if (Model.UltimoCaixaFechado != null)
+                    {
+                        <!-- ÚLTIMO CAIXA FECHADO -->
+
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+
+                                    <i class="bi bi-lock me-2 text-secondary"></i>
+
+                                    Caixa Atual
+
+                                    <span class="badge bg-secondary ms-2">
+                                        Fechado
+                                    </span>
+
+                                </h5>
+
+                                <p class="text-muted mb-0">
+
+                                    Último fechamento:
+                                    @Model.UltimoCaixaFechado.DataFechamento?.ToString("dd/MM/yyyy HH:mm")
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="d-flex gap-2">
+
+                                <a asp-controller="FechamentoCaixa"
+                                   asp-action="Details"
+                                   asp-route-id="@Model.UltimoCaixaFechado.Id"
+                                   class="btn btn-primary">
+
+                                    <i class="bi bi-eye me-1"></i>
+
+                                    Ver fechamento
+
+                                </a>
+
+
+                                <a asp-controller="FechamentoCaixa"
+                                   asp-action="Create"
+                                   class="btn btn-success">
+
+                                    <i class="bi bi-unlock me-1"></i>
+
+                                    Abrir Caixa
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <div class="row g-3">
+
+                            <!-- SALDO INICIAL -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saldo inicial
+                                </small>
+
+                                <h5 class="fw-bold mt-1">
+
+                                    @Model.UltimoCaixaFechado.SaldoInicial.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- ENTRADAS -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Entradas
+                                </small>
+
+                                <h5 class="fw-bold text-success mt-1">
+
+                                    @Model.UltimoCaixaFechado.TotalEntradas.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- SAÍDAS -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saídas
+                                </small>
+
+                                <h5 class="fw-bold text-danger mt-1">
+
+                                    @Model.UltimoCaixaFechado.TotalSaidas.ToString("C")
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- SALDO FINAL -->
+
+                            <div class="col-md-3">
+
+                                <small class="text-muted">
+                                    Saldo final
+                                </small>
+
+                                <h5 class="fw-bold text-primary mt-1">
+
+                                    @(
+                                                                    (Model.UltimoCaixaFechado.SaldoInformado
+                                                                    ?? Model.UltimoCaixaFechado.SaldoEsperado)
+                                                                    .ToString("C")
+                                                                    )
+                                                                   
+
+                            </h5>
+
+                            </div>
+
+                        </div>
+
+                                        }
+                    else
+                    {
+                        <!-- NENHUM CAIXA -->
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+
+                                    <i class="bi bi-lock me-2 text-secondary"></i>
+
+                                    Caixa Atual
+
+                                    <span class="badge bg-secondary ms-2">
+                                        Não iniciado
+                                    </span>
+
+                                </h5>
+
+                                <p class="text-muted mb-0">
+
+                                    Nenhum caixa foi aberto ainda.
+
+                                </p>
+
+                            </div>
+
+
+                            <a asp-controller="FechamentoCaixa"
+                               asp-action="Create"
+                               class="btn btn-success">
+
+                                <i class="bi bi-unlock me-1"></i>
+
+                                Abrir Caixa
+
+                            </a>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CONTAS -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- A RECEBER -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5 class="fw-bold">
+
+                                <i class="bi bi-arrow-down-left me-2"></i>
+
+                                Contas a Receber
+
+                            </h5>
+
+                            <h3 class="text-success fw-bold">
+
+                                @Model.ContasReceber.ToString("C")
+
+                            </h3>
+
+                            <p class="text-muted mb-0">
+
+                                @Model.QuantidadeContasReceber
+                                conta(s) pendente(s)
+
+                            </p>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <small class="text-muted">
+                                Vencidas
+                            </small>
+
+                            <div class="fw-bold text-danger">
+
+                                @Model.ContasReceberVencidas.ToString("C")
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- A PAGAR -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5 class="fw-bold">
+
+                                <i class="bi bi-arrow-up-right me-2"></i>
+
+                                Contas a Pagar
+
+                            </h5>
+
+                            <h3 class="text-danger fw-bold">
+
+                                @Model.ContasPagar.ToString("C")
+
+                            </h3>
+
+                            <p class="text-muted mb-0">
+
+                                @Model.QuantidadeContasPagar
+                                conta(s) pendente(s)
+
+                            </p>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <small class="text-muted">
+                                Vencidas
+                            </small>
+
+                            <div class="fw-bold text-danger">
+
+                                @Model.ContasPagarVencidas.ToString("C")
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VENDAS -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold">
+
+                        <i class="bi bi-cart-check me-2"></i>
+
+                        Vendas no período
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Quantidade de vendas concluídas
+
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-3 text-md-center">
+
+                    <div class="fw-bold fs-4">
+
+                        @Model.QuantidadeVendas
+
+                    </div>
+
+                    <small class="text-muted">
+                        vendas
+                    </small>
+
+                </div>
+
+
+                <div class="col-md-3 text-md-end">
+
+                    <div class="fw-bold fs-4 text-success">
+
+                        @Model.TotalVendas.ToString("C")
+
+                    </div>
+
+                    <small class="text-muted">
+                        faturamento
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ÚLTIMOS LANÇAMENTOS -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-clock-history me-2"></i>
+
+                Últimos lançamentos
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            @if (Model.UltimosLancamentos.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Data</th>
+
+                                <th>Descrição</th>
+
+                                <th>Categoria</th>
+
+                                <th>Tipo</th>
+
+                                <th>Status</th>
+
+                                <th class="text-end">
+                                    Valor
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var lancamento in Model.UltimosLancamentos)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @lancamento.Data.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+
+                                    <td>
+                                        @lancamento.Descricao
+                                    </td>
+
+                                    <td>
+                                        @lancamento.Categoria
+                                    </td>
+
+                                    <td>
+
+                                        @if (lancamento.Tipo ==
+                                                                        TipoLancamentoFinanceiro.Receita)
+                                        {
+                                            <span class="badge bg-success">
+                                                Receita
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Despesa
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (lancamento.Status ==
+                                                                        StatusLancamentoFinanceiro.Pago)
+                                        {
+                                            <span class="badge bg-success">
+                                                Pago
+                                            </span>
+                                        }
+                                        else if (lancamento.Status ==
+                                        StatusLancamentoFinanceiro.Pendente)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Pendente
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Cancelado
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="text-end fw-semibold">
+
+                                        @lancamento.Valor.ToString("C")
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-wallet2 fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        Nenhum lançamento financeiro encontrado.
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Os lançamentos aparecerão aqui quando forem cadastrados.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

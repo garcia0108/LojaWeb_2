@@ -1,0 +1,916 @@
+﻿@using LojaWeb_2.Data
+@using LojaWeb_2.Models
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@inject ApplicationDbContext Context
+
+@inject ApplicationDbContext Context
+
+@{
+    var configuracaoLoja = await Context.ConfiguracoesLoja
+        .FirstOrDefaultAsync();
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    
+        <title>
+            @ViewData["Title"] -
+            @(configuracaoLoja?.NomeLoja ?? "LojaWeb")
+        </title>
+   
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+<body class="bg-light">
+
+    @{
+        int quantidadeCarrinho = 0;
+
+        if (User.Identity?.IsAuthenticated == true &&
+        User.IsInRole("Cliente"))
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                var cliente = await Context.Clientes
+                .FirstOrDefaultAsync(c => c.Email == email);
+
+                if (cliente != null)
+                {
+                    var quantidadeProdutos =
+                    await Context.CarrinhoItens
+                    .Where(i => i.ClienteId == cliente.Id)
+                    .SumAsync(i => (int?)i.Quantidade) ?? 0;
+
+                    var quantidadeCombos =
+                    await Context.CarrinhoComboItens
+                    .Where(i => i.ClienteId == cliente.Id)
+                    .SumAsync(i => (int?)i.Quantidade) ?? 0;
+
+                    quantidadeCarrinho =
+                    quantidadeProdutos + quantidadeCombos;
+                }
+            }
+        }
+    }
+
+    <!-- ===================================================== -->
+    <!-- NAVBAR -->
+    <!-- ===================================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+
+        <div class="container">
+
+
+            <!-- ================================================= -->
+            <!-- BOTÃO MENU ADMINISTRATIVO -->
+            <!-- APARECE SOMENTE PARA FUNCIONÁRIO/ADMINISTRADOR -->
+            <!-- ================================================= -->
+            @if (User.Identity?.IsAuthenticated == true &&
+                        (User.IsInRole("Funcionário") ||
+                        User.IsInRole("Administrador")))
+            {
+                <div class="dropdown me-3">
+
+                    <button class="btn btn-dark border-0"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            title="Menu administrativo">
+
+                        <i class="bi bi-list fs-3"></i>
+
+                    </button>
+
+
+                    <ul class="dropdown-menu shadow">
+
+
+                        <!-- CADASTROS -->
+
+                        <li>
+                            <h6 class="dropdown-header">
+
+                                <i class="bi bi-folder2-open"></i>
+
+                                Cadastros
+
+                            </h6>
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Produtos"
+                               asp-action="Index">
+
+                                <i class="bi bi-box"></i>
+
+                                Produtos
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Combos"
+                               asp-action="Index">
+
+                                <i class="bi bi-box-seam"></i>
+                                Combos
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Clientes"
+                               asp-action="Index">
+
+                                <i class="bi bi-people"></i>
+
+                                Clientes
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Fornecedores"
+                               asp-action="Index">
+
+                                <i class="bi bi-truck"></i>
+
+                                Fornecedores
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Categorias"
+                               asp-action="Index">
+
+                                <i class="bi bi-folder"></i>
+
+                                Categorias
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Marcas"
+                               asp-action="Index">
+
+                                <i class="bi bi-tags"></i>
+
+                                Marcas
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        <!-- ESTOQUE -->
+
+                        <li>
+                            <h6 class="dropdown-header">
+
+                                <i class="bi bi-boxes"></i>
+
+                                Estoque
+
+                            </h6>
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Estoque"
+                               asp-action="Index">
+
+                                <i class="bi bi-boxes"></i>
+
+                                Controle de Estoque
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Estoque"
+                               asp-action="Historico">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                Histórico
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        <!-- VENDAS -->
+
+                        <li>
+                            <h6 class="dropdown-header">
+
+                                <i class="bi bi-cart3"></i>
+
+                                Vendas
+
+                            </h6>
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-controller="Vendas"
+                               asp-action="Index">
+
+                                <i class="bi bi-cart3"></i>
+
+                                Vendas
+
+                            </a>
+
+                        </li>
+
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-controller="Vendas"
+                                   asp-action="Dashboard">
+
+                                    <i class="bi bi-speedometer2"></i>
+
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+                        }
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <!-- RELATÓRIOS -->
+                            <li class="nav-item dropdown"></li>
+
+                                <li>
+                                <h6 class="dropdown-header">
+
+                                    <i class="bi bi-bar-chart-line"></i>
+
+                                    Relatórios
+
+                                </h6>
+
+                            </li>
+
+							<li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Relatorios"
+                                           asp-action="Vendas">
+
+                                            <i class="bi bi-cart3"></i>
+                                            Vendas
+
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Relatorios"
+                                           asp-action="Estoque">
+
+                                            <i class="bi bi-boxes"></i>
+                                            Estoque
+
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Relatorios"
+                                           asp-action="Movimentacoes">
+
+                                            <i class="bi bi-arrow-left-right"></i>
+                                            Movimentações
+
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Relatorios"
+                                           asp-action="Compras">
+
+                                            <i class="bi bi-cart-check"></i>
+                                            Compras
+
+                                        </a>
+                                    </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Relatorios"
+                                   asp-action="Clientes">
+
+                                    <i class="bi bi-people"></i>
+                                    Clientes
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                    asp-controller="RelatorioFinanceiro"
+                                   asp-action="Index">
+                                   
+                                    <i class="bi bi-file-earmark-bar-graph me-2"></i>
+
+                                    Financeiro
+
+                                </a>
+                            </li>
+
+                            
+                        }
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <!-- Financeiro -->
+                            <li class="nav-item dropdown"></li>
+
+                            <li>
+                                <h6 class="dropdown-header">
+
+                                    <i class="bi bi-cash-stack me-2"></i>
+                                    Fluxo de Caixa
+
+                                </h6>
+
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Financeiro"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-bar-chart-line me-2"></i>
+                                    Dashboard Financeiro
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="ContasReceber"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-arrow-down-left-circle me-2"></i>
+                                    Contas a Receber
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="ContasPagar"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-wallet2 me-2"></i>
+                                    Contas a Pagar
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="FluxoCaixa"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-arrow-left-right me-2"></i>
+                                    Fluxo de Caixa
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="FechamentoCaixa"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-lock me-2"></i>
+
+                                    Fechamento de Caixa
+
+                                </a>
+                            </li>
+
+                        }
+
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+
+                            <!-- ADMINISTRAÇÃO -->
+
+                            <li>
+                                <h6 class="dropdown-header">
+
+                                    <i class="bi bi-gear"></i>
+
+                                    Administração
+
+                                </h6>
+                            </li>
+
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-controller="Usuarios"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-people"></i>
+
+                                    Usuários
+
+                                </a>
+
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <h6 class="dropdown-header">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    Campanhas/Promoções
+
+                                </h6>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Newsletters"
+                                   asp-action="Campanhas">
+
+                                    <i class="bi bi-megaphone"></i>
+                                    Campanhas
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Newsletters"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-people"></i>
+                                    Lista de Clientes
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="ConfiguracaoLoja"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-gear me-2"></i>
+
+                                    Configurações
+
+                                </a>
+                            </li>
+
+                        }
+
+                    </ul>
+
+                </div>
+            }
+
+
+            <!-- ================================================= -->
+            <!-- LOGO -->
+            <!-- ================================================= -->
+
+            <a class="navbar-brand fw-bold"
+               asp-controller="Home"
+               asp-action="Index">
+
+                
+
+                @await Component.InvokeAsync("ConfiguracaoLoja")
+
+            </a>
+
+
+            <!-- ================================================= -->
+            <!-- BOTÃO MOBILE -->
+            <!-- ================================================= -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- MENU PRINCIPAL -->
+            <!-- ================================================= -->
+
+            <div class="collapse navbar-collapse" id="menu">
+
+                <!-- MENU CENTRAL -->
+                <ul class="navbar-nav menu-central mx-auto">
+
+                    <!-- INÍCIO -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link"
+                           asp-controller="Home"
+                           asp-action="Index">
+
+                            <i class="bi bi-house"></i>
+                            Início
+
+                        </a>
+                    </li>
+
+
+                    <!-- LOJA -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link"
+                           asp-controller="Loja"
+                           asp-action="Index">
+
+                            <i class="bi bi-shop"></i>
+                            Loja
+
+                        </a>
+                    </li>
+
+
+                    <!-- PROMOÇÕES -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link"
+                           asp-controller="Loja"
+                           asp-action="Promocoes">
+
+                            <i class="bi bi-tag"></i>
+                            Promoções
+
+                        </a>
+                    </li>>
+
+
+                    <!-- NOVIDADES -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link"
+                           href="#">
+
+                            <i class="bi bi-stars"></i>
+                            Novidades
+
+                        </a>
+                    </li>
+
+
+                    <!-- CONTATO -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link"
+                           href="#">
+
+                            <i class="bi bi-envelope"></i>
+                            Contato
+
+                        </a>
+                    </li>
+
+                </ul>
+
+
+                <!-- ÁREA DIREITA -->
+                <div class="d-flex align-items-center menu-direita">
+
+                    <!-- CARRINHO -->
+                    <a class="nav-link menu-link me-3"
+                        asp-controller="Carrinho"
+                       asp-action="Index">
+                      
+
+                        <i class="bi bi-cart3"></i>
+
+                        <span class="carrinho-badge">
+                            @quantidadeCarrinho
+                        </span>
+
+                    </a>
+
+
+                    <!-- ================================================= -->
+                    <!-- MENU DA CONTA -->
+                    <!-- ================================================= -->
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="dropdown ms-3">
+
+                            <button class="btn btn-dark border-0 dropdown-toggle d-flex align-items-center"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                <i class="bi bi-person-circle me-2 fs-5"></i>
+
+                                <span>
+                                    Olá, @User.Identity.Name
+                                </span>
+
+                            </button>
+
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                                <!-- MINHA CONTA -->
+                                <li>
+                                    <h6 class="dropdown-header">
+
+                                        <i class="bi bi-person me-2"></i>
+
+                                        Minha Contao
+
+                                    </h6>
+                                   
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <!-- MEUS DADOS -->
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="MinhaConta"
+                                       asp-action="Index">
+
+                                        <i class="bi bi-person-vcard me-2"></i>
+
+                                        Meus Dados
+
+                                    </a>
+
+                                </li>
+
+
+                                <!-- MEUS PEDIDOS - SOMENTE CLIENTE -->
+                                @if (User.IsInRole("Cliente"))
+                                {
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-controller="MinhaConta"
+                                           asp-action="Pedidos">
+
+                                            <i class="bi bi-box-seam me-2"></i>
+
+                                            Meus Pedidos
+
+                                        </a>
+
+                                    </li>
+                                }
+
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+
+                                <!-- SAIR -->
+                                <li>
+
+                                    <form class="px-2"
+                                          asp-area="Identity"
+                                          asp-page="/Account/Logout"
+                                          asp-route-returnUrl="@Url.Action("Index", "Home")">
+
+                                        <button type="submit"
+                                                class="dropdown-item text-danger">
+
+                                            <i class="bi bi-box-arrow-right me-2"></i>
+
+                                            Sair
+
+                                        </button>
+
+                                    </form>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- VISITANTE NÃO LOGADO -->
+
+                        <div class="dropdown ms-3">
+
+                            <button class="btn btn-dark border-0 dropdown-toggle d-flex align-items-center"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                <i class="bi bi-person-circle me-2 fs-5"></i>
+
+                               
+
+                            </button>
+
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                                <!-- ENTRAR -->
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-area="Identity"
+                                       asp-page="/Account/Login">
+
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                                        Entrar
+
+                                    </a>
+
+                                </li>
+
+
+                                <!-- CRIAR CONTA -->
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-area="Identity"
+                                       asp-page="/Account/Register">
+
+                                        <i class="bi bi-person-plus me-2"></i>
+
+                                        Criar Conta
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTEÚDO -->
+    <!-- ===================================================== -->
+    @if (ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" &&
+        ViewContext.RouteData.Values["Action"]?.ToString() == "Index")
+    {
+        <main>
+            @RenderBody()
+        </main>
+    }
+    else
+    {
+        <main class="container mt-4">
+            @RenderBody()
+        </main>
+    }
+
+
+    <!-- ===================================================== -->
+    <!-- RODAPÉ -->
+    <!-- ===================================================== -->
+
+    <footer class="bg-dark text-white p-4 mt-5">
+
+        @await Component.InvokeAsync("ConfiguracaoRodape")
+
+        <hr class="my-4">
+
+        <div class="text-center">
+
+            <small>
+                © @DateTime.Now.Year
+                Todos os direitos reservados.
+            </small>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ===================================================== -->
+    <!-- SCRIPTS -->
+    <!-- ===================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>
