@@ -88,11 +88,24 @@
 
                                     </small>
 
-                                    <h5 class="fw-bold mb-0">
+                                    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
 
                                         <i class="bi bi-receipt me-1"></i>
 
                                         #@pedido.Id
+
+                                        @if (pedido.Itens != null && pedido.Itens.Any())
+                                        {
+                                            foreach (var item in pedido.Itens.Take(3))
+                                            {
+                                                if (!string.IsNullOrEmpty(item.Produto?.Imagem))
+                                                {
+                                                    <img src="@item.Produto.Imagem"
+                                                         alt="@item.Produto.Nome"
+                                                         class="pedido-produto-miniatura" />
+                                                }
+                                            }
+                                        }
 
                                     </h5>
 
@@ -360,5 +373,13 @@
             transform: translateY(-3px);
             box-shadow: 0 .5rem 1rem rgba(0,0,0,.12) !important;
         }
+
+.pedido-produto-miniatura {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
 
 </style>

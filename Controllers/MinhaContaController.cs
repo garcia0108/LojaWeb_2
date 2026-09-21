@@ -153,6 +153,8 @@ namespace LojaWeb_2.Controllers
 
             var pedidos = await _context.Vendas
                 .Where(v => v.ClienteId == cliente.Id)
+                .Include(v => v.Itens)
+                    .ThenInclude(i => i.Produto)
                 .OrderByDescending(v => v.DataVenda)
                 .ToListAsync();
 
