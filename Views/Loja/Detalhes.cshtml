@@ -283,6 +283,89 @@
             text-decoration: line-through;
         }
 
+/* =========================================================
+   TAMANHO RECOMENDADO
+   ========================================================= */
+
+.tamanho-produto-section {
+    padding-top: 5px;
+}
+
+.tamanho-recomendado {
+    margin-top: 12px;
+    margin-bottom: 18px;
+    padding: 14px 18px;
+    border: 1px solid #dfe3e8;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
+
+.tamanho-recomendado-label {
+    font-size: .85rem;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.tamanho-recomendado-valor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.tamanho-recomendado-valor i {
+    color: #198754;
+    font-size: 1.1rem;
+}
+
+.tamanho-recomendado small {
+    color: #666;
+}
+
+
+/* =========================================================
+   BOTÕES DO TAMANHO
+   ========================================================= */
+
+.tamanho-ajuda-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.tamanho-ajuda-btn {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+    border-radius: 7px;
+    transition: all .2s ease;
+}
+
+.tamanho-ajuda-btn:hover {
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@@media (max-width: 575px) {
+
+    .tamanho-ajuda-container {
+        flex-direction: column;
+    }
+
+    .tamanho-ajuda-btn {
+        width: 100%;
+    }
+
+}
+
     /* =========================================================
            ESTOQUE
            ========================================================= */
@@ -368,6 +451,921 @@
             height: 43px;
         }
     }
+
+/* =========================================================
+   PROVADOR VIRTUAL
+   ========================================================= */
+
+.modal-provador-dialog {
+    width: calc(100% - 30px);
+    max-width: 1100px;
+    height: 600px;
+    margin: auto;
+}
+
+.modal-provador-content {
+    position: relative;
+    overflow: hidden;
+    height: 600px;
+    border: none;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+
+/* =========================================================
+   FUNDO DO MODAL
+   ========================================================= */
+
+.modal-backdrop.show {
+    opacity: .72;
+}
+
+
+/* =========================================================
+   BOTÃO FECHAR
+   ========================================================= */
+
+.modal-provador-fechar {
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    z-index: 20;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 8px;
+
+    border-radius: 50%;
+
+    background-color: rgba(255, 255, 255, .95);
+
+    opacity: .85;
+}
+
+.modal-provador-fechar:hover {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ESTRUTURA
+   ========================================================= */
+
+.provador-layout {
+    display: grid;
+
+    grid-template-columns: 42% 58%;
+
+    min-height: 500px;
+}
+
+
+/* =========================================================
+   IMAGEM
+   ========================================================= */
+
+.provador-imagem {
+    position: relative;
+
+    min-height: 500px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: #f5f5f5;
+}
+
+.provador-produto-img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.provador-sem-imagem {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #aaa;
+
+    font-size: 70px;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.provador-conteudo {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 50px 50px 35px;
+}
+
+.provador-titulo {
+    margin: 0 0 10px;
+
+    color: #111;
+
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.provador-subtitulo {
+    margin: 0 0 30px;
+
+    color: #666;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SEXO
+   ========================================================= */
+
+.provador-sexo {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 28px;
+}
+
+.sexo-opcao {
+    min-width: 120px;
+
+    padding: 9px 20px;
+
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #b8b8b8;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+}
+
+.sexo-opcao:hover {
+    color: #666;
+}
+
+.sexo-opcao.genero-selecionado {
+    border: 1px solid #212529;
+    color: #212529;
+    background: #fff;
+    font-weight: 700;
+}
+
+.sexo-opcao.genero-nao-selecionado {
+    border: 1px solid transparent;
+    color: #b8b8b8;
+    background: transparent;
+    font-weight: 500;
+}
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+
+.provador-campo {
+    margin-bottom: 18px;
+}
+
+.provador-campo label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #222;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.provador-input-unidade {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.provador-input-unidade .form-control {
+    width: 100px;
+    height: 40px;
+
+    padding: 6px 10px;
+
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+
+    color: #222;
+
+    font-size: 14px;
+
+    box-shadow: none;
+}
+
+.provador-input-unidade .form-control:focus {
+    border-color: #212529;
+
+    box-shadow: 0 0 0 .15rem rgba(33, 37, 41, .10);
+}
+
+.provador-input-unidade > span {
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   IDADE / INFORMAÇÃO
+   ========================================================= */
+
+.provador-idade {
+    gap: 9px;
+}
+
+.provador-info {
+    padding: 3px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.provador-info:hover {
+    color: #222;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+.provador-footer {
+    margin-top: auto;
+
+    padding-top: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.provador-indicadores {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.provador-indicador {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #d5d5d5;
+}
+
+.provador-indicador.ativo {
+    background: #222;
+}
+
+.provador-btn-proximo {
+    min-width: 110px;
+    height: 42px;
+
+    border-radius: 5px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVO - PROVADOR VIRTUAL
+   ========================================================= */
+
+@@media (max-width: 767px) {
+
+    .modal-provador-dialog {
+        width: calc(100% - 20px);
+    }
+
+    .provador-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .provador-imagem {
+        min-height: 260px;
+        max-height: 300px;
+    }
+
+    .provador-produto-img {
+        object-fit: contain;
+    }
+
+    .provador-conteudo {
+        padding: 35px 25px 25px;
+    }
+
+    .provador-titulo {
+        font-size: 23px;
+    }
+
+    .provador-footer {
+        margin-top: 10px;
+    }
+}
+
+/* =========================================
+   PASSO 2 - PROVADOR VIRTUAL
+   ========================================= */
+
+.provador-passo2 {
+    width: 100%;
+}
+
+.passo2-cabecalho {
+    margin-bottom: 18px;
+}
+
+.passo2-cabecalho .provador-subtitulo {
+    max-width: 470px;
+    margin-bottom: 0;
+}
+
+.passo2-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    min-height: 360px;
+}
+
+
+/* =========================================
+   LADO ESQUERDO - AVATAR
+   ========================================= */
+
+.passo2-avatar-area {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    padding: 10px 10px 10px 20px;
+}
+
+.passo2-avatar-area .avatar-3d-container {
+    flex: 1;
+    min-width: 0;
+}
+
+/* =========================================
+   LADO DIREITO
+   ========================================= */
+
+.passo2-direita {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 55px 20px 35px;
+    min-width: 0;
+}
+
+.passo2-cabecalho {
+    margin-bottom: 25px;
+}
+
+.passo2-cabecalho .provador-titulo {
+    margin-bottom: 10px;
+}
+
+.passo2-cabecalho .provador-subtitulo {
+    max-width: 420px;
+    margin-bottom: 0;
+}
+
+
+/* =========================================
+   MEDIDAS
+   ========================================= */
+
+.passo2-medidas {
+    width: 100%;
+    max-width: 380px;
+}
+
+.medida-provador {
+    margin-bottom: 27px;
+}
+
+.medida-provador:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================
+   AVATAR
+   ========================================= */
+
+.passo2-avatar-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    min-width: 0;
+    padding-left: 20px;
+}
+
+.avatar-provador {
+    --avatar-cor: #966345;
+
+    position: relative;
+    width: 125px;
+    height: 245px;
+
+    transform: scale(1.35);
+    transform-origin: center center;
+}
+
+
+/* Cabeça */
+
+.avatar-cabeca {
+    position: absolute;
+    width: 58px;
+    height: 70px;
+    background: var(--avatar-cor);
+    border-radius: 48% 48% 45% 45%;
+    top: 0;
+    left: 34px;
+}
+
+
+/* Pescoço */
+
+.avatar-pescoco {
+    position: absolute;
+    width: 30px;
+    height: 25px;
+    background: var(--avatar-cor);
+    top: 57px;
+    left: 47px;
+}
+
+
+/* =========================================================
+   CORPO DO AVATAR
+   ========================================================= */
+
+.avatar-corpo {
+    position: absolute;
+
+    width: 92px;
+    height: 125px;
+
+    top: 72px;
+    left: 17px;
+
+    background: transparent;
+
+    transition: none;
+}
+
+
+/* =========================================================
+   TÓRAX
+   ========================================================= */
+
+.avatar-torax {
+    position: absolute;
+
+    width: 92px;
+    height: 65px;
+
+    top: 0;
+    left: 0;
+
+    background: var(--avatar-cor);
+
+    border-radius: 42% 42% 28% 28%;
+
+    transition:
+        width .25s ease,
+        left .25s ease;
+}
+
+
+/* =========================================================
+   CINTURA
+   ========================================================= */
+
+.avatar-cintura {
+    position: absolute;
+
+    width: 84px;
+    height: 45px;
+
+    top: 48px;
+    left: 4px;
+
+    background: var(--avatar-cor);
+
+    border-radius: 20%;
+
+    transition:
+        width .25s ease,
+        left .25s ease;
+}
+
+
+/* =========================================================
+   QUADRIL
+   ========================================================= */
+
+.avatar-quadril {
+    position: absolute;
+
+    width: 92px;
+    height: 52px;
+
+    top: 76px;
+    left: 0;
+
+    background: var(--avatar-cor);
+
+    border-radius: 25% 25% 42% 42%;
+
+    transition:
+        width .25s ease,
+        left .25s ease;
+}
+
+
+/* Braços */
+
+.avatar-braco {
+    position: absolute;
+    width: 24px;
+    height: 112px;
+    background: var(--avatar-cor);
+    border-radius: 15px;
+    top: 78px;
+
+    transition:
+        transform .25s ease;
+}
+
+.avatar-braco-esquerdo {
+    left: 3px;
+    transform: rotate(8deg);
+}
+
+.avatar-braco-direito {
+    right: 3px;
+    transform: rotate(-8deg);
+}
+
+
+/* Pernas */
+
+.avatar-perna {
+    position: absolute;
+    width: 36px;
+    height: 75px;
+    background: var(--avatar-cor);
+    border-radius: 15px;
+    top: 183px;
+
+    transition:
+        width .25s ease,
+        transform .25s ease;
+}
+
+.avatar-perna-esquerda {
+    left: 28px;
+}
+
+.avatar-perna-direita {
+    right: 28px;
+}
+
+
+/* =========================================
+   CORES DO AVATAR
+   ========================================= */
+
+.avatar-cores {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.avatar-cor-opcao {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+.avatar-cor-opcao:hover {
+    transform: scale(1.12);
+}
+
+.avatar-cor-opcao.avatar-cor-selecionada {
+    border-color: #555;
+    box-shadow: 0 0 0 1px #fff;
+}
+
+
+/* =========================================
+   MEDIDAS
+   ========================================= */
+
+.passo2-medidas {
+    width: 330px;
+}
+
+.medida-provador {
+    margin-bottom: 24px;
+}
+
+.medida-provador:last-child {
+    margin-bottom: 0;
+}
+
+.medida-titulo {
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 7px;
+}
+
+.medida-controle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.medida-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .10);
+    font-size: 21px;
+    line-height: 1;
+    color: #333;
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
+}
+
+.medida-btn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.medida-btn:disabled:hover {
+    background: #fff;
+}
+
+.medida-btn:hover {
+    background: #f5f5f5;
+}
+
+.medida-btn:active {
+    transform: scale(.94);
+}
+
+
+/* =========================================
+   RÉGUA
+   ========================================= */
+
+.medida-regua {
+    position: relative;
+    width: 240px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.regua-linha {
+    position: absolute;
+    top: 11px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #555;
+}
+
+
+/* Os 5 risquinhos */
+
+.regua-marcas {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    height: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.regua-marcas span {
+    width: 1px;
+    height: 13px;
+    background: #555;
+}
+
+
+/* Bolinha */
+
+.regua-indicador {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #333;
+
+    top: 5px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    transition:
+        left .2s ease;
+}
+
+
+/* =========================================
+   NAVEGAÇÃO
+   ========================================= */
+.provador-passo2 {
+    position: relative !important;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.passo2-footer {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    padding: 0 55px !important;
+    margin: 40px !important;
+
+    z-index: 100 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.passo2-navegacao {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+
+    position: relative !important;
+    z-index: 101 !important;
+}
+
+.passo2-footer .provador-btn-voltar,
+.passo2-footer .provador-btn-proximo {
+    display: inline-flex !important;
+
+    position: relative !important;
+    z-index: 102 !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.passo2-footer .provador-indicadores {
+    position: absolute !important;
+
+    left: 50% !important;
+    bottom: 15px !important;
+
+    transform: translateX(-50%) !important;
+
+    display: flex !important;
+    z-index: 101 !important;
+}
+
+/* =========================================================
+   PASSO 2 - LAYOUT EM TELA ÚNICA
+   ========================================================= */
+
+.provador-layout.passo2-ativo {
+    grid-template-columns: 1fr;
+}
+
+.provador-layout.passo2-ativo .provador-imagem {
+    display: none;
+}
+
+.provador-layout.passo2-ativo .provador-conteudo {
+    width: 100%;
+    min-width: 0;
+    padding: 1px 60px 20px;
+}
+
+/* =========================================================
+   AVATAR 3D
+   ========================================================= */
+
+.avatar-3d-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent;
+}
+
+#avatar3DCanvas {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+.avatar-3d-carregando {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 13px;
+    color: #777;
+
+    white-space: nowrap;
+}
 </style>
 
 <div class="container produto-detalhes">
@@ -536,19 +1534,96 @@
                             </div>
                         }
 
-
                         <!-- ==============================
                              TAMANHO
                              ============================== -->
 
-                        <div class="mt-4">
+                        <div class="mt-4 tamanho-produto-section">
 
-                            <div class="selecao-titulo">
-                                Tamanho
+                            <div class="selecao-titulo mb-2">
+                                <i class="bi bi-question-circle"></i>
+                                Ficou com dúvidas sobre o seu tamanho?
                             </div>
 
-                            <div id="tamanhosContainer"
-                                 class="tamanhos-container">
+
+                            <!-- ==============================
+                                 TAMANHO RECOMENDADO
+                                 FICA OCULTO ATÉ O CLIENTE
+                                 CONCLUIR O PROVADOR
+                                 ============================== -->
+
+                            <div id="tamanhoRecomendado"
+                                 class="tamanho-recomendado d-none">
+
+                                <div class="tamanho-recomendado-label">
+                                    Tamanho recomendado
+                                </div>
+
+                                <div class="tamanho-recomendado-valor">
+
+                                    <span id="tamanhoRecomendadoValor">
+                                        G
+                                    </span>
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                </div>
+
+                                <small>
+                                    Ideal para suas medidas
+                                </small>
+
+                            </div>
+
+
+                            <!-- ==============================
+                                 BOTÕES DO PROVADOR
+                                 ============================== -->
+
+                            <div class="tamanho-ajuda-container">
+
+                                <button type="button"
+                                        class="btn btn-outline-dark tamanho-ajuda-btn"
+                                        id="btnDescobrirTamanho">
+
+                                    <i class="bi bi-person-standing me-2"></i>
+
+                                    <span>
+                                        Descubra seu tamanho
+                                    </span>
+
+                                </button>
+
+
+                                <button type="button"
+                                        class="btn btn-outline-dark tamanho-ajuda-btn"
+                                        id="btnTabelaMedidas">
+
+                                    <i class="bi bi-rulers me-2"></i>
+
+                                    <span>
+                                        Tabela de medidas
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+
+                            <!-- ==============================
+                                 TAMANHOS DISPONÍVEIS
+                                 ============================== -->
+
+                            <div class="mt-3">
+
+                                <div class="small text-muted mb-2">
+                                    Tamanhos disponíveis
+                                </div>
+
+                                <div id="tamanhosContainer"
+                                     class="tamanhos-container">
+                                </div>
+
                             </div>
 
                         </div>
@@ -695,7 +1770,6 @@
 
 </div>
 
-
 <!-- =============================================================
      MODAL IMAGEM
      ============================================================= -->
@@ -736,6 +1810,558 @@
 
     </div>
 
+</div>
+
+
+<!-- =============================================================
+     PROVADOR VIRTUAL
+     ============================================================= -->
+
+<div class="modal fade"
+     id="modalProvadorVirtual"
+     tabindex="-1"
+     aria-labelledby="modalProvadorVirtualLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-provador-dialog">
+
+        <div class="modal-content modal-provador-content">
+
+            <!-- BOTÃO FECHAR -->
+
+            <button type="button"
+                    class="btn-close modal-provador-fechar"
+                    data-bs-dismiss="modal"
+                    aria-label="Fechar">
+            </button>
+
+
+            <div class="modal-body p-0">
+
+                <div class="provador-layout">
+
+
+                    <!-- =================================================
+                         FOTO DO PRODUTO
+                         ================================================= -->
+
+                    <div class="provador-imagem">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Imagem))
+                        {
+                            <img id="imagemProvadorVirtual"
+                                 src="@Model.Imagem"
+                                 alt="@Model.Nome"
+                                 class="provador-produto-img" />
+                        }
+                        else
+                        {
+                            <div class="provador-sem-imagem">
+
+                                <i class="bi bi-image"></i>
+
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <!-- =================================================
+                         CONTEÚDO
+                         ================================================= -->
+
+                    <div class="provador-conteudo">
+
+                        <!-- ============================= -->
+                        <!-- PASSO 1 - DADOS PESSOAIS -->
+                        <!-- ============================= -->
+                        <div id="provadorPasso1">
+
+                        <h2 id="modalProvadorVirtualLabel"
+                            class="provador-titulo">
+
+                            Provador Virtual
+
+                        </h2>
+
+
+                        <p class="provador-subtitulo">
+
+                            Preencha os dados para experimentar este produto.
+
+                        </p>
+
+
+                        <!-- =================================================
+                             SEXO
+                             ================================================= -->
+
+                        <div class="provador-sexo">
+
+                            <button type="button"
+                                    class="sexo-opcao"
+                                    id="sexoFeminino"
+                                    data-sexo="Feminino">
+
+                                Feminino
+
+                            </button>
+
+
+                            <button type="button"
+                                    class="sexo-opcao"
+                                    id="sexoMasculino"
+                                    data-sexo="Masculino">
+
+                                Masculino
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             ALTURA
+                             ================================================= -->
+
+                        <div class="provador-campo">
+
+                            <label for="provadorAltura">
+                                Altura
+                            </label>
+
+                            <div class="provador-input-unidade">
+
+                                <input type="number"
+                                       id="provadorAltura"
+                                       class="form-control"
+                                       min="50"
+                                       max="250"
+                                       step="1"
+                                       placeholder="Ex.: 175" />
+
+                                <span>cm</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             PESO
+                             ================================================= -->
+
+                        <div class="provador-campo">
+
+                            <label for="provadorPeso">
+                                Peso
+                            </label>
+
+                            <div class="provador-input-unidade">
+
+                                <input type="number"
+                                       id="provadorPeso"
+                                       class="form-control"
+                                       min="20"
+                                       max="300"
+                                       step="0.1"
+                                       placeholder="Ex.: 75" />
+
+                                <span>kg</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             IDADE
+                             ================================================= -->
+
+                        <div class="provador-campo">
+
+                            <label for="provadorIdade">
+                                Idade
+                            </label>
+
+                            <div class="provador-input-unidade provador-idade">
+
+                                <input type="number"
+                                       id="provadorIdade"
+                                       class="form-control"
+                                       min="10"
+                                       max="120"
+                                       step="1"
+                                       placeholder="Ex.: 37" />
+
+                                <span>anos</span>
+
+                                <button type="button"
+                                        class="provador-info"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="A idade pode influenciar as proporções corporais e ajuda o provador a calcular uma recomendação mais adequada.">
+
+                                    <i class="bi bi-info-circle-fill"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             RODAPÉ
+                             ================================================= -->
+
+                        <div class="provador-footer">
+
+                            <div class="provador-indicadores">
+
+                                <span class="provador-indicador ativo"></span>
+
+                                <span class="provador-indicador"></span>
+
+                            </div>
+
+
+                            <button type="button"
+                                    class="btn btn-dark provador-btn-proximo"
+                                    id="btnProvadorProximo"
+                                     disabled>
+
+                                Próximo
+
+                            </button>
+
+                        </div>
+
+                    </div> <!-- FIM DO PASSO 1 -->
+
+                 <!-- ============================= -->
+                <!-- PASSO 2 - MEDIDAS CORPORAIS -->
+                <!-- ============================= -->
+                <div id="provadorPasso2" class="provador-passo2 d-none">
+
+                    <!-- =========================================
+                     PASSO 2 - CONTEÚDO PRINCIPAL
+                     ========================================= -->
+
+                <div class="passo2-layout">
+
+                    <!-- =====================================
+                         LADO ESQUERDO - AVATAR
+                         ===================================== -->
+
+                    <div class="passo2-avatar-area">
+
+                        <!-- AVATAR 3D -->
+                        
+                            <div id="avatar3DContainer" class="avatar-3d-container">
+
+                                <canvas id="avatar3DCanvas"></canvas>
+
+                                <div id="avatar3DCarregando" class="avatar-3d-carregando">
+                                    Carregando modelo...
+                                </div>
+
+                            </div>
+                        
+
+                        <div class="avatar-provador d-none">
+
+                            <div class="avatar-cabeca"></div>
+
+                            <div class="avatar-pescoco"></div>
+
+                            <div class="avatar-corpo">
+
+                                <div class="avatar-torax"></div>
+
+                                <div class="avatar-cintura"></div>
+
+                                <div class="avatar-quadril"></div>
+
+                            </div>
+
+                            <div class="avatar-braco avatar-braco-esquerdo"></div>
+
+                            <div class="avatar-braco avatar-braco-direito"></div>
+
+                            <div class="avatar-perna avatar-perna-esquerda"></div>
+
+                            <div class="avatar-perna avatar-perna-direita"></div>
+
+                        </div>
+
+
+                        <!-- CORES DO AVATAR -->
+
+                        <div class="avatar-cores">
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#eadbd0"
+                                    style="background-color: #eadbd0;"
+                                    aria-label="Tom de pele 1">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#dfc4a8"
+                                    style="background-color: #dfc4a8;"
+                                    aria-label="Tom de pele 2">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#c99a76"
+                                    style="background-color: #c99a76;"
+                                    aria-label="Tom de pele 3">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#ad7955"
+                                    style="background-color: #ad7955;"
+                                    aria-label="Tom de pele 4">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao avatar-cor-selecionada"
+                                    data-cor-avatar="#966345"
+                                    style="background-color: #966345;"
+                                    aria-label="Tom de pele 5">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#74432f"
+                                    style="background-color: #74432f;"
+                                    aria-label="Tom de pele 6">
+                            </button>
+
+                            <button type="button"
+                                    class="avatar-cor-opcao"
+                                    data-cor-avatar="#4a2921"
+                                    style="background-color: #4a2921;"
+                                    aria-label="Tom de pele 7">
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         LADO DIREITO - TEXTOS E MEDIDAS
+                         ===================================== -->
+
+                    <div class="passo2-direita">
+
+                        <div class="passo2-cabecalho">
+
+                            <h2 class="provador-titulo">
+                                Ajuste o formato do corpo
+                            </h2>
+
+                            <p class="provador-subtitulo">
+                                Ajuste o formato aproximado do corpo para encontrarmos
+                                o tamanho mais adequado para você.
+                            </p>
+
+                        </div>
+
+
+                        <!-- =================================
+                             MEDIDAS
+                             ================================= -->
+
+                        <div class="passo2-medidas">
+
+                            <!-- TÓRAX -->
+
+                            <div class="medida-provador">
+
+                                <div class="medida-titulo">
+                                    Tórax
+                                </div>
+
+                                <div class="medida-controle">
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnToraxMenos">
+                                        −
+                                    </button>
+
+                                    <div class="medida-regua">
+
+                                        <div class="regua-linha"></div>
+
+                                        <div class="regua-marcas">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+
+                                        <div class="regua-indicador"
+                                             id="indicadorTorax">
+                                        </div>
+
+                                    </div>
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnToraxMais">
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- CINTURA -->
+
+                            <div class="medida-provador">
+
+                                <div class="medida-titulo">
+                                    Cintura
+                                </div>
+
+                                <div class="medida-controle">
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnCinturaMenos">
+                                        −
+                                    </button>
+
+                                    <div class="medida-regua">
+
+                                        <div class="regua-linha"></div>
+
+                                        <div class="regua-marcas">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+
+                                        <div class="regua-indicador"
+                                             id="indicadorCintura">
+                                        </div>
+
+                                    </div>
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnCinturaMais">
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- QUADRIL -->
+
+                            <div class="medida-provador">
+
+                                <div class="medida-titulo">
+                                    Quadril
+                                </div>
+
+                                <div class="medida-controle">
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnQuadrilMenos">
+                                        −
+                                    </button>
+
+                                    <div class="medida-regua">
+
+                                        <div class="regua-linha"></div>
+
+                                        <div class="regua-marcas">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+
+                                        <div class="regua-indicador"
+                                             id="indicadorQuadril">
+                                        </div>
+
+                                    </div>
+
+                                    <button type="button"
+                                            class="medida-btn"
+                                            id="btnQuadrilMais">
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                    <!-- RODAPÉ DO PASSO 2 -->
+                    <div class="provador-footer passo2-footer">
+
+                        <div class="provador-indicadores">
+
+                            <span class="provador-indicador"></span>
+
+                            <span class="provador-indicador ativo"></span>
+
+                        </div>
+
+                        <div class="passo2-navegacao">
+
+                            <button type="button"
+                                    class="btn btn-light provador-btn-voltar"
+                                    id="btnProvadorVoltar">
+                                
+                                Voltar
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-dark provador-btn-proximo"
+                                    id="btnProvadorProximoPasso2">
+                                Próximo
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                    </div> <!-- FIM DO provador-conteudo -->
+
+                </div>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+</div>
 </div>
 
 
@@ -1454,6 +3080,1384 @@
             }
         );
 
+ // =========================
+// PROVADOR VIRTUAL
+// =========================
+
+const btnDescobrirTamanho = document.getElementById('btnDescobrirTamanho');
+const modalProvadorElement = document.getElementById('modalProvadorVirtual');
+
+const imagemProvadorVirtual = document.getElementById('imagemProvadorVirtual');
+
+const btnGeneroFeminino = document.getElementById('sexoFeminino');
+const btnGeneroMasculino = document.getElementById('sexoMasculino');
+
+const alturaProvador = document.getElementById('provadorAltura');
+const pesoProvador = document.getElementById('provadorPeso');
+const idadeProvador = document.getElementById('provadorIdade');
+
+const btnProximoProvador = document.getElementById('btnProvadorProximo');
+
+// ---------------------------------------------------------
+// FUNÇÃO: Habilitar botão PROXIMO
+// ---------------------------------------------------------
+function verificarDadosProvador() {
+
+    const sexoPreenchido =
+        generoSelecionado &&
+        generoSelecionado.trim() !== "";
+
+    const alturaPreenchida =
+        alturaProvador &&
+        alturaProvador.value.trim() !== "";
+
+    const pesoPreenchido =
+        pesoProvador &&
+        pesoProvador.value.trim() !== "";
+
+    const idadePreenchida =
+        idadeProvador &&
+        idadeProvador.value.trim() !== "";
+
+    const formularioCompleto =
+        sexoPreenchido &&
+        alturaPreenchida &&
+        pesoPreenchido &&
+        idadePreenchida;
+
+    if (btnProximoProvador) {
+        btnProximoProvador.disabled = !formularioCompleto;
+    }
+}
+
+[alturaProvador, pesoProvador, idadeProvador].forEach(campo => {
+
+    if (campo) {
+        campo.addEventListener('input', verificarDadosProvador);
+    }
+
+});
+// ---------------------------------------------------------
+// FUNÇÃO: obter imagem da cor atualmente selecionada
+// ---------------------------------------------------------
+function obterImagemAtualProvador() {
+
+    // Imagem principal do produto como fallback
+    let imagem = '@Model.Imagem';
+
+    // Verifica se existe uma cor selecionada
+    if (corSelecionada &&
+        typeof imagensPorCor !== 'undefined') {
+
+        const dadosCor = imagensPorCor[corSelecionada];
+
+        // Se a cor possui uma imagem principal
+        if (dadosCor && dadosCor.Principal) {
+
+            imagem = dadosCor.Principal;
+        }
+
+        // Se não houver principal, tenta a primeira imagem da galeria
+        else if (
+            dadosCor &&
+            dadosCor.Imagens &&
+            dadosCor.Imagens.length > 0
+        ) {
+
+            imagem = dadosCor.Imagens[0];
+        }
+    }
+
+    return imagem;
+}
+
+// ---------------------------------------------------------
+// ABRIR PROVADOR
+// ---------------------------------------------------------
+
+if (btnDescobrirTamanho && modalProvadorElement) {
+
+    btnDescobrirTamanho.addEventListener('click', function () {
+
+        // Descobre a imagem correspondente à cor selecionada
+        const imagemAtual = obterImagemAtualProvador();
+
+        // Atualiza a imagem do Provador
+        if (imagemProvadorVirtual) {
+            imagemProvadorVirtual.src = imagemAtual;
+        }
+
+        // Abre o modal
+        const modal = bootstrap.Modal.getOrCreateInstance(
+            modalProvadorElement
+        );
+
+        modal.show();
+    });
+}
+
+
+// ---------------------------------------------------------
+// GÊNERO
+// ---------------------------------------------------------
+
+let generoSelecionado = '@Model.Publico';
+
+if (btnGeneroFeminino && btnGeneroMasculino) {
+
+    function atualizarGeneroVisual() {
+
+        btnGeneroFeminino.classList.remove('genero-selecionado');
+        btnGeneroMasculino.classList.remove('genero-selecionado');
+
+        btnGeneroFeminino.classList.add('genero-nao-selecionado');
+        btnGeneroMasculino.classList.add('genero-nao-selecionado');
+
+        if (generoSelecionado.toLowerCase().includes('fem')) {
+
+            btnGeneroFeminino.classList.remove('genero-nao-selecionado');
+            btnGeneroFeminino.classList.add('genero-selecionado');
+
+        } else if (generoSelecionado.toLowerCase().includes('masc')) {
+
+            btnGeneroMasculino.classList.remove('genero-nao-selecionado');
+            btnGeneroMasculino.classList.add('genero-selecionado');
+        }
+    }
+
+
+    btnGeneroFeminino.addEventListener('click', function () {
+
+        generoSelecionado = 'Feminino';
+
+        atualizarGeneroVisual();
+    });
+
+
+    btnGeneroMasculino.addEventListener('click', function () {
+
+        generoSelecionado = 'Masculino';
+
+        atualizarGeneroVisual();
+    });
+
+
+    atualizarGeneroVisual();
+}
+
+
+// =========================================================
+// ATUALIZAÇÃO DINÂMICA DO AVATAR AO MUDAR FORMULÁRIO
+// =========================================================
+
+function atualizarAvatarDinamicamente() {
+
+    // Apenas atualiza se o modelo já foi carregado
+    if (!window.avatar3DPronto) {
+        return;
+    }
+
+    const altura = parseFloat(alturaProvador?.value || 0);
+    const peso = parseFloat(pesoProvador?.value || 0);
+
+    if (!altura || !peso) {
+        return;
+    }
+
+    // Atualiza o objeto de dados globais
+    window.dadosProvador = window.dadosProvador || {};
+    window.dadosProvador.altura = altura;
+    window.dadosProvador.peso = peso;
+
+    // Calcula volume corporal (peso) e atualiza avatar
+    if (typeof window.calcularVolumeCorporal === 'function' &&
+        typeof window.atualizarPesoAvatar3D === 'function') {
+
+        const intensidadeCorporal = window.calcularVolumeCorporal(altura, peso);
+        window.atualizarPesoAvatar3D(intensidadeCorporal);
+
+        console.log('Avatar atualizado dinamicamente - Vol corporal:', intensidadeCorporal);
+    }
+
+    // Atualiza a barriga
+    if (typeof window.atualizarBarriga3D === 'function') {
+
+        const intensidadeBarriga = Math.max(
+            0,
+            Math.min(0.90, (peso - 70) / 100)
+        );
+
+        window.atualizarBarriga3D(intensidadeBarriga);
+
+        console.log('Barriga atualizada - Intensidade:', intensidadeBarriga);
+    }
+}
+
+// Detectar mudanças em tempo real nos inputs
+if (alturaProvador) {
+    alturaProvador.addEventListener('input', atualizarAvatarDinamicamente);
+}
+
+if (pesoProvador) {
+    pesoProvador.addEventListener('input', atualizarAvatarDinamicamente);
+}
+
+// Idade também pode afetar proporções
+if (idadeProvador) {
+    idadeProvador.addEventListener('input', function () {
+        const idade = parseInt(idadeProvador?.value || 0);
+        if (window.dadosProvador) {
+            window.dadosProvador.idade = idade;
+        }
+        atualizarAvatarDinamicamente();
+    });
+}
+
+// Quando o sexo mudar, atualizar também
+if (btnGeneroFeminino) {
+    btnGeneroFeminino.addEventListener('click', function () {
+        if (typeof window.atualizarSexoAvatar3D === 'function') {
+            window.atualizarSexoAvatar3D('Feminino');
+        }
+    });
+}
+
+if (btnGeneroMasculino) {
+    btnGeneroMasculino.addEventListener('click', function () {
+        if (typeof window.atualizarSexoAvatar3D === 'function') {
+            window.atualizarSexoAvatar3D('Masculino');
+        }
+    });
+}
+
+// ---------------------------------------------------------
+// BOTÃO PRÓXIMO - PASSO 1 → PASSO 2
+// ---------------------------------------------------------
+if (btnProximoProvador) {
+
+    btnProximoProvador.addEventListener(
+        'click',
+        function () {
+
+            const altura = parseFloat(
+                alturaProvador?.value || 0
+            );
+
+            const peso = parseFloat(
+                pesoProvador?.value || 0
+            );
+
+            const idade = parseInt(
+                idadeProvador?.value || 0
+            );
+
+
+            // GÊNERO
+            if (!generoSelecionado) {
+
+                alert('Selecione o gênero.');
+
+                return;
+            }
+
+
+            // ALTURA
+            if (
+                !altura ||
+                altura < 100 ||
+                altura > 250
+            ) {
+
+                alert(
+                    'Informe uma altura válida.'
+                );
+
+                return;
+            }
+
+
+            // PESO
+            if (
+                !peso ||
+                peso < 30 ||
+                peso > 300
+            ) {
+
+                alert(
+                    'Informe um peso válido.'
+                );
+
+                return;
+            }
+
+
+            // IDADE
+            if (
+                !idade ||
+                idade < 10 ||
+                idade > 120
+            ) {
+
+                alert(
+                    'Informe uma idade válida.'
+                );
+
+                return;
+            }
+
+            // =========================================================
+            // GUARDA OS DADOS DO CLIENTE
+            // =========================================================
+
+            window.dadosProvador = {
+
+                altura: altura,
+
+                peso: peso,
+
+                idade: idade,
+
+                genero: generoSelecionado
+            };
+
+
+console.log(
+    'DADOS DO PROVADOR GUARDADOS:',
+    window.dadosProvador
+);
+
+
+            // =================================================
+            // PASSO 1 → PASSO 2
+            // =================================================
+
+            const passo1 =
+                document.getElementById(
+                    'provadorPasso1'
+                );
+
+            const passo2 =
+                document.getElementById(
+                    'provadorPasso2'
+                );
+
+
+            if (passo1 && passo2) {
+
+                passo1.classList.add(
+                    'd-none'
+                );
+
+                passo2.classList.remove(
+                    'd-none'
+                );
+
+
+                const layoutProvador =
+                    document.querySelector(
+                        '.provador-layout'
+                    );
+
+                    // =====================================================
+                    // AJUSTA O TAMANHO DO AVATAR DEPOIS QUE O PASSO 2 APARECE
+                    // =====================================================
+
+                    setTimeout(function () {
+
+                        if (
+                            typeof window.ajustarTamanhoAvatar3D ===
+                            'function'
+                        ) {
+
+                            window.ajustarTamanhoAvatar3D();
+
+                        }
+
+                    }, 100);
+
+                if (layoutProvador) {
+
+                    layoutProvador.classList.add(
+                        'passo2-ativo'
+                    );
+
+                }
+
+            }
+
+        }
+    );
+}
+
+// ---------------------------------------------------------
+// BOTÃO VOLTAR - PASSO 2 → PASSO 1
+// ---------------------------------------------------------
+
+const btnProvadorVoltar =
+    document.getElementById('btnProvadorVoltar');
+
+
+if (btnProvadorVoltar) {
+
+    btnProvadorVoltar.addEventListener('click', function () {
+
+        const passo1 =
+            document.getElementById('provadorPasso1');
+
+        const passo2 =
+            document.getElementById('provadorPasso2');
+
+        if (passo1 && passo2) {
+
+            passo2.classList.add('d-none');
+
+            passo1.classList.remove('d-none');
+
+            const layoutProvador =
+                document.querySelector('.provador-layout');
+
+            if (layoutProvador) {
+                layoutProvador.classList.remove('passo2-ativo');
+            }
+
+        }
+
+    });
+
+}
+
+// =========================================================
+// PASSO 2 - TÓRAX
+// =========================================================
+
+const indicadorTorax =
+    document.getElementById('indicadorTorax');
+
+const btnToraxMenos =
+    document.getElementById('btnToraxMenos');
+
+const btnToraxMais =
+    document.getElementById('btnToraxMais');
+
+const reguaTorax =
+    indicadorTorax?.closest('.medida-regua');
+
+
+// ---------------------------------------------------------
+// CONFIGURAÇÃO
+// ---------------------------------------------------------
+
+const toraxTotalPosicoes = 5;
+
+// Começa na posição central
+let toraxPosicao = 2;
+
+// Cada posição representa 0,5 cm internamente
+const toraxIncremento = 0.5;
+
+let toraxMedida =
+    toraxPosicao * toraxIncremento;
+
+
+// ---------------------------------------------------------
+// ATUALIZAR VISUAL
+// ---------------------------------------------------------
+
+function atualizarTorax() {
+
+    if (!indicadorTorax) {
+        return;
+    }
+
+
+    // Calcula a posição da bolinha
+    const percentual =
+        (toraxPosicao / (toraxTotalPosicoes - 1)) * 100;
+
+
+    indicadorTorax.style.left =
+        percentual + '%';
+
+
+    // -----------------------------------------------------
+    // BOTÃO MENOS
+    // -----------------------------------------------------
+
+    if (btnToraxMenos) {
+
+        btnToraxMenos.disabled =
+            toraxPosicao === 0;
+
+    }
+
+
+    // -----------------------------------------------------
+    // BOTÃO MAIS
+    // -----------------------------------------------------
+
+    if (btnToraxMais) {
+
+        btnToraxMais.disabled =
+            toraxPosicao === toraxTotalPosicoes - 1;
+
+    }
+
+
+    // Valor interno da medida
+    toraxMedida =
+    toraxPosicao * toraxIncremento;
+
+    if (typeof window.atualizarToraxAvatar3D === 'function') {
+    window.atualizarToraxAvatar3D(toraxPosicao);
+}
+
+// ---------------------------------------------------------
+// ALTERAR FORMATO DO AVATAR
+// ---------------------------------------------------------
+
+const avatarTorax =
+    document.querySelector('.avatar-torax');
+
+
+
+
+// Posição 0 = mais estreito
+// Posição 2 = normal
+// Posição 4 = mais largo
+
+const larguraCorpoTorax = [
+    '78px',
+    '85px',
+    '92px',
+    '100px',
+    '108px'
+];
+
+
+
+if (avatarTorax) {
+
+    avatarTorax.style.width =
+        larguraCorpoTorax[toraxPosicao];
+}
+
+const larguraTorax =
+    parseFloat(larguraCorpoTorax[toraxPosicao]);
+
+avatarTorax.style.left =
+    ((92 - larguraTorax) / 2) + 'px';
+
+
+console.log(
+    'Tórax:',
+    toraxMedida,
+    'cm de ajuste interno'
+);
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MENOS
+// ---------------------------------------------------------
+
+if (btnToraxMenos) {
+
+    btnToraxMenos.addEventListener(
+        'click',
+        function () {
+
+            if (toraxPosicao > 0) {
+
+                toraxPosicao--;
+
+                atualizarTorax();
+
+            }
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MAIS
+// ---------------------------------------------------------
+
+if (btnToraxMais) {
+
+    btnToraxMais.addEventListener(
+        'click',
+        function () {
+
+            if (
+                toraxPosicao <
+                toraxTotalPosicoes - 1
+            ) {
+
+                toraxPosicao++;
+
+                atualizarTorax();
+
+            }
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// CLIQUE NA RÉGUA
+// ---------------------------------------------------------
+
+if (reguaTorax) {
+
+    reguaTorax.addEventListener(
+        'click',
+        function (evento) {
+
+            // Não processa se clicou diretamente na bolinha
+            if (
+                evento.target === indicadorTorax
+            ) {
+                return;
+            }
+
+
+            const rect =
+                reguaTorax.getBoundingClientRect();
+
+
+            const posicaoX =
+                evento.clientX - rect.left;
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            percentual =
+                Math.max(
+                    0,
+                    Math.min(1, percentual)
+                );
+
+
+            toraxPosicao =
+                Math.round(
+                    percentual *
+                    (toraxTotalPosicoes - 1)
+                );
+
+
+            atualizarTorax();
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// ARRASTAR A BOLINHA
+// ---------------------------------------------------------
+
+let arrastandoTorax = false;
+
+
+if (indicadorTorax) {
+
+    indicadorTorax.addEventListener(
+        'pointerdown',
+        function (evento) {
+
+            arrastandoTorax = true;
+
+            indicadorTorax.setPointerCapture(
+                evento.pointerId
+            );
+
+            evento.preventDefault();
+
+        }
+    );
+
+
+    indicadorTorax.addEventListener(
+        'pointermove',
+        function (evento) {
+
+            if (!arrastandoTorax || !reguaTorax) {
+                return;
+            }
+
+
+            const rect =
+                reguaTorax.getBoundingClientRect();
+
+
+            let posicaoX =
+                evento.clientX - rect.left;
+
+
+            posicaoX =
+                Math.max(
+                    0,
+                    Math.min(
+                        rect.width,
+                        posicaoX
+                    )
+                );
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            toraxPosicao =
+                Math.round(
+                    percentual *
+                    (toraxTotalPosicoes - 1)
+                );
+
+
+            atualizarTorax();
+
+        }
+    );
+
+
+    indicadorTorax.addEventListener(
+        'pointerup',
+        function () {
+
+            arrastandoTorax = false;
+
+        }
+    );
+
+
+    indicadorTorax.addEventListener(
+        'pointercancel',
+        function () {
+
+            arrastandoTorax = false;
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// INICIALIZAÇÃO
+// ---------------------------------------------------------
+
+atualizarTorax();
+
+// =========================================================
+// PASSO 2 - CINTURA
+// =========================================================
+
+const indicadorCintura =
+    document.getElementById('indicadorCintura');
+
+const btnCinturaMenos =
+    document.getElementById('btnCinturaMenos');
+
+const btnCinturaMais =
+    document.getElementById('btnCinturaMais');
+
+const reguaCintura =
+    indicadorCintura?.closest('.medida-regua');
+
+
+// ---------------------------------------------------------
+// CONFIGURAÇÃO
+// ---------------------------------------------------------
+
+const cinturaTotalPosicoes = 5;
+
+// Começa na posição central
+let cinturaPosicao = 2;
+
+// Cada posição representa 0,5 cm internamente
+const cinturaIncremento = 0.5;
+
+let cinturaMedida =
+    cinturaPosicao * cinturaIncremento;
+
+
+// ---------------------------------------------------------
+// ATUALIZAR VISUAL
+// ---------------------------------------------------------
+
+function atualizarCintura() {
+
+    if (!indicadorCintura) {
+        return;
+    }
+
+    const percentual =
+        (cinturaPosicao / (cinturaTotalPosicoes - 1)) * 100;
+
+    indicadorCintura.style.left =
+        percentual + '%';
+
+
+    // Desabilita o botão "−" na primeira posição
+    if (btnCinturaMenos) {
+        btnCinturaMenos.disabled =
+            cinturaPosicao === 0;
+    }
+
+
+    // Desabilita o botão "+" na última posição
+    if (btnCinturaMais) {
+        btnCinturaMais.disabled =
+            cinturaPosicao === cinturaTotalPosicoes - 1;
+    }
+
+
+    // Valor interno
+    cinturaMedida =
+        cinturaPosicao * cinturaIncremento;
+
+    if (typeof window.atualizarCinturaAvatar3D === 'function') {
+    window.atualizarCinturaAvatar3D(cinturaPosicao);
+}
+
+   // ---------------------------------------------------------
+// ALTERAR FORMATO DO AVATAR - CINTURA
+// ---------------------------------------------------------
+
+const avatarCintura =
+    document.querySelector('.avatar-cintura');
+
+
+// Posição 0 = cintura mais estreita
+// Posição 2 = cintura normal
+// Posição 4 = cintura mais larga
+
+const larguraCintura = [
+    '70px',
+    '84px',
+    '90px',
+    '104px',
+    '125px'
+];
+
+
+if (avatarCintura) {
+
+    const larguraCinturaAtual =
+        parseFloat(larguraCintura[cinturaPosicao]);
+
+    avatarCintura.style.width =
+        larguraCintura[cinturaPosicao];
+
+    // Mantém a cintura centralizada
+    avatarCintura.style.left =
+        ((92 - larguraCinturaAtual) / 2) + 'px';
+}
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MENOS
+// ---------------------------------------------------------
+
+if (btnCinturaMenos) {
+
+    btnCinturaMenos.addEventListener(
+        'click',
+        function () {
+
+            if (cinturaPosicao > 0) {
+
+                cinturaPosicao--;
+
+                atualizarCintura();
+            }
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MAIS
+// ---------------------------------------------------------
+
+if (btnCinturaMais) {
+
+    btnCinturaMais.addEventListener(
+        'click',
+        function () {
+
+            if (
+                cinturaPosicao <
+                cinturaTotalPosicoes - 1
+            ) {
+
+                cinturaPosicao++;
+
+                atualizarCintura();
+            }
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// CLIQUE NA RÉGUA
+// ---------------------------------------------------------
+
+if (reguaCintura) {
+
+    reguaCintura.addEventListener(
+        'click',
+        function (evento) {
+
+            if (evento.target === indicadorCintura) {
+                return;
+            }
+
+            const rect =
+                reguaCintura.getBoundingClientRect();
+
+            const posicaoX =
+                evento.clientX - rect.left;
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            percentual =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        percentual
+                    )
+                );
+
+
+            cinturaPosicao =
+                Math.round(
+                    percentual *
+                    (cinturaTotalPosicoes - 1)
+                );
+
+
+            atualizarCintura();
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// ARRASTAR A BOLINHA
+// ---------------------------------------------------------
+
+let arrastandoCintura = false;
+
+
+if (indicadorCintura) {
+
+    indicadorCintura.addEventListener(
+        'pointerdown',
+        function (evento) {
+
+            arrastandoCintura = true;
+
+            indicadorCintura.setPointerCapture(
+                evento.pointerId
+            );
+
+            evento.preventDefault();
+        }
+    );
+
+
+    indicadorCintura.addEventListener(
+        'pointermove',
+        function (evento) {
+
+            if (
+                !arrastandoCintura ||
+                !reguaCintura
+            ) {
+                return;
+            }
+
+
+            const rect =
+                reguaCintura.getBoundingClientRect();
+
+
+            let posicaoX =
+                evento.clientX - rect.left;
+
+
+            posicaoX =
+                Math.max(
+                    0,
+                    Math.min(
+                        rect.width,
+                        posicaoX
+                    )
+                );
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            cinturaPosicao =
+                Math.round(
+                    percentual *
+                    (cinturaTotalPosicoes - 1)
+                );
+
+
+            atualizarCintura();
+        }
+    );
+
+
+    indicadorCintura.addEventListener(
+        'pointerup',
+        function () {
+
+            arrastandoCintura = false;
+        }
+    );
+
+
+    indicadorCintura.addEventListener(
+        'pointercancel',
+        function () {
+
+            arrastandoCintura = false;
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// INICIALIZAÇÃO
+// ---------------------------------------------------------
+
+atualizarCintura();
+
+// =========================================================
+// PASSO 2 - QUADRIL
+// =========================================================
+
+const indicadorQuadril =
+    document.getElementById('indicadorQuadril');
+
+const btnQuadrilMenos =
+    document.getElementById('btnQuadrilMenos');
+
+const btnQuadrilMais =
+    document.getElementById('btnQuadrilMais');
+
+const reguaQuadril =
+    indicadorQuadril?.closest('.medida-regua');
+
+
+// ---------------------------------------------------------
+// CONFIGURAÇÃO
+// ---------------------------------------------------------
+
+const quadrilTotalPosicoes = 5;
+
+// Começa na posição central
+let quadrilPosicao = 2;
+
+// Cada posição representa 0,5 cm internamente
+const quadrilIncremento = 0.5;
+
+let quadrilMedida =
+    quadrilPosicao * quadrilIncremento;
+
+
+// ---------------------------------------------------------
+// ATUALIZAR VISUAL
+// ---------------------------------------------------------
+
+function atualizarQuadril() {
+
+    if (!indicadorQuadril) {
+        return;
+    }
+
+    const percentual =
+        (quadrilPosicao / (quadrilTotalPosicoes - 1)) * 100;
+
+    indicadorQuadril.style.left =
+        percentual + '%';
+
+
+    // Desabilita o botão "−" na primeira posição
+    if (btnQuadrilMenos) {
+        btnQuadrilMenos.disabled =
+            quadrilPosicao === 0;
+    }
+
+
+    // Desabilita o botão "+" na última posição
+    if (btnQuadrilMais) {
+        btnQuadrilMais.disabled =
+            quadrilPosicao === quadrilTotalPosicoes - 1;
+    }
+
+
+    // Valor interno
+    quadrilMedida =
+        quadrilPosicao * quadrilIncremento;
+
+// ---------------------------------------------------------
+// ALTERAR FORMATO DO AVATAR - QUADRIL
+// ---------------------------------------------------------
+
+const avatarQuadril =
+    document.querySelector('.avatar-quadril');
+
+
+// Posição 0 = quadril mais estreito
+// Posição 2 = quadril normal
+// Posição 4 = quadril mais largo
+
+const larguraQuadril = [
+    '76px',
+    '84px',
+    '92px',
+    '100px',
+    '108px'
+];
+
+
+if (avatarQuadril) {
+
+    const larguraQuadrilAtual =
+        parseFloat(larguraQuadril[quadrilPosicao]);
+
+    avatarQuadril.style.width =
+        larguraQuadril[quadrilPosicao];
+
+    // Mantém o quadril centralizado
+    avatarQuadril.style.left =
+        ((92 - larguraQuadrilAtual) / 2) + 'px';
+}
+    console.log(
+        'Quadril:',
+        quadrilMedida,
+        'cm de ajuste interno'
+    );
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MENOS
+// ---------------------------------------------------------
+
+if (btnQuadrilMenos) {
+
+    btnQuadrilMenos.addEventListener(
+        'click',
+        function () {
+
+            if (quadrilPosicao > 0) {
+
+                quadrilPosicao--;
+
+                atualizarQuadril();
+            }
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// BOTÃO MAIS
+// ---------------------------------------------------------
+
+if (btnQuadrilMais) {
+
+    btnQuadrilMais.addEventListener(
+        'click',
+        function () {
+
+            if (
+                quadrilPosicao <
+                quadrilTotalPosicoes - 1
+            ) {
+
+                quadrilPosicao++;
+
+                atualizarQuadril();
+            }
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// CLIQUE NA RÉGUA
+// ---------------------------------------------------------
+
+if (reguaQuadril) {
+
+    reguaQuadril.addEventListener(
+        'click',
+        function (evento) {
+
+            if (evento.target === indicadorQuadril) {
+                return;
+            }
+
+            const rect =
+                reguaQuadril.getBoundingClientRect();
+
+            const posicaoX =
+                evento.clientX - rect.left;
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            percentual =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        percentual
+                    )
+                );
+
+
+            quadrilPosicao =
+                Math.round(
+                    percentual *
+                    (quadrilTotalPosicoes - 1)
+                );
+
+
+            atualizarQuadril();
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// ARRASTAR A BOLINHA
+// ---------------------------------------------------------
+
+let arrastandoQuadril = false;
+
+
+if (indicadorQuadril) {
+
+    indicadorQuadril.addEventListener(
+        'pointerdown',
+        function (evento) {
+
+            arrastandoQuadril = true;
+
+            indicadorQuadril.setPointerCapture(
+                evento.pointerId
+            );
+
+            evento.preventDefault();
+        }
+    );
+
+
+    indicadorQuadril.addEventListener(
+        'pointermove',
+        function (evento) {
+
+            if (
+                !arrastandoQuadril ||
+                !reguaQuadril
+            ) {
+                return;
+            }
+
+
+            const rect =
+                reguaQuadril.getBoundingClientRect();
+
+
+            let posicaoX =
+                evento.clientX - rect.left;
+
+
+            posicaoX =
+                Math.max(
+                    0,
+                    Math.min(
+                        rect.width,
+                        posicaoX
+                    )
+                );
+
+
+            let percentual =
+                posicaoX / rect.width;
+
+
+            quadrilPosicao =
+                Math.round(
+                    percentual *
+                    (quadrilTotalPosicoes - 1)
+                );
+
+
+            atualizarQuadril();
+        }
+    );
+
+
+    indicadorQuadril.addEventListener(
+        'pointerup',
+        function () {
+
+            arrastandoQuadril = false;
+        }
+    );
+
+
+    indicadorQuadril.addEventListener(
+        'pointercancel',
+        function () {
+
+            arrastandoQuadril = false;
+        }
+    );
+}
+
+
+// ---------------------------------------------------------
+// INICIALIZAÇÃO
+// ---------------------------------------------------------
+
+atualizarQuadril();
     </script>
 
 }
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+    }
+}</script>
+
+<script type="module" src="~/js/provador-3d.js"></script>
