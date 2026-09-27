@@ -1,0 +1,159 @@
+﻿@model LojaWeb_2.Models.Produto
+
+<div id="modalCadastro" class="provador-modal">
+
+    <div class="provador-container">
+
+        <button id="btnFecharCadastro"
+                type="button"
+                class="provador-fechar">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+        <div class="provador-esquerda">
+
+            @if (!string.IsNullOrWhiteSpace(Model.Imagem))
+            {
+                <img id="imagemProvadorVirtual"
+                     src="@Model.Imagem"
+                     alt="@Model.Nome"
+                     class="imagem-produto-provador" />
+            }
+            else
+            {
+                <div class="sem-imagem">
+                    <i class="bi bi-image"></i>
+                </div>
+            }
+
+        </div>
+
+
+        <div class="provador-direita">
+
+        <h2>Provador Virtual</h2>
+
+        <p class="provador-texto">
+
+            Preencha os dados para experimentarmos este produto.
+
+        </p>
+
+        <!-- GÊNERO -->
+
+        <div class="genero-provador">
+
+            <button id="btnGeneroFeminino"
+                    class="btn-genero">
+
+                Feminino
+
+            </button>
+
+            <button id="btnGeneroMasculino"
+                    class="btn-genero ativo">
+
+                Masculino
+
+            </button>
+
+        </div>
+
+        <!-- ALTURA -->
+
+        <div class="campo-provador">
+
+            <label>Altura</label>
+
+            <div class="input-unidade">
+
+                <input id="alturaProvador"
+                       type="number"
+                       min="100"
+                       max="250">
+
+                <span>cm</span>
+
+            </div>
+
+        </div>
+
+        <!-- PESO -->
+
+        <div class="campo-provador">
+
+            <label>Peso</label>
+
+            <div class="input-unidade">
+
+                <input id="pesoProvador"
+                       type="number"
+                       min="30"
+                       max="300">
+
+                <span>kg</span>
+
+            </div>
+
+        </div>
+
+        <!-- IDADE -->
+
+        <div class="campo-provador">
+
+            <label>Idade</label>
+
+            <div class="input-unidade">
+
+                <input id="idadeProvador"
+                       type="number"
+                       min="10"
+                       max="120">
+
+                <span>anos</span>
+
+                <i id="infoIdade"
+                   class="bi bi-info-circle-fill"></i>
+
+            </div>
+
+        </div>
+
+        <!-- TOOLTIP -->
+
+        <div id="tooltipIdade"
+             class="tooltip-idade">
+
+            O formato do corpo muda de acordo com a idade e isso afeta o nosso cálculo.
+
+        </div>
+
+        <!-- RODAPÉ -->
+
+        <div class="rodape-provador">
+
+            <div class="indicadores">
+
+                <span class="ativo"></span>
+
+                <span></span>
+
+            </div>
+
+            <button id="btnProximoProvador"
+                    class="btn-proximo"
+                    disabled>
+
+                Próximo
+
+            </button>
+
+        </div>
+
+    </div>
+
+    </div>
+
+</div>

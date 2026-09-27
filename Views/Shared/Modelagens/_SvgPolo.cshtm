@@ -1,0 +1,163 @@
+﻿<svg id="camisetaSvg"
+     viewBox="0 0 340 390"
+     class="img-fluid"
+     style="max-width:280px;">
+
+    <!-- Corpo -->
+    <path d="M118 42
+             C136 22 204 22 222 42
+             L246 62
+             L300 116
+             L270 144
+             L234 100
+             L228 324
+             L112 324
+             L106 100
+             L70 144
+             L40 116
+             L94 62 Z"
+          fill="#F8F8F8"
+          stroke="#444"
+          stroke-width="2.5"/>
+
+    <!-- Gola Polo -->
+    <path d="M136 42
+             L118 74
+             L154 60
+             L170 78
+             L186 60
+             L222 74
+             L204 42"
+          fill="#ECECEC"
+          stroke="#444"
+          stroke-width="2"/>
+
+    <!-- Carcela -->
+    <path d="M160 78 L160 128"
+          stroke="#444"
+          stroke-width="2"/>
+
+    <circle cx="160" cy="90" r="2.8" fill="#444"/>
+    <circle cx="160" cy="104" r="2.8" fill="#444"/>
+    <circle cx="160" cy="118" r="2.8" fill="#444"/>
+
+    <!-- Costuras -->
+    <path d="M106 100 L112 324"
+          stroke="#A0A0A0"
+          stroke-width="1"
+          stroke-dasharray="4 3"
+          fill="none"/>
+
+    <path d="M228 100 L234 324"
+          stroke="#A0A0A0"
+          stroke-width="1"
+          stroke-dasharray="4 3"
+          fill="none"/>
+
+    <path d="M112 324 L228 324"
+          stroke="#A0A0A0"
+          stroke-width="1"
+          stroke-dasharray="4 3"
+          fill="none"/>
+
+    <!-- A - Tórax -->
+    <line id="linhaA"
+          x1="82"
+          y1="136"
+          x2="258"
+          y2="136"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="82,136 92,131 92,141" fill="#D62828"/>
+    <polygon points="258,136 248,131 248,141" fill="#D62828"/>
+
+    <!-- B - Comprimento -->
+    <line id="linhaB"
+          x1="170"
+          y1="56"
+          x2="170"
+          y2="324"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="170,56 165,66 175,66" fill="#D62828"/>
+    <polygon points="170,324 165,314 175,314" fill="#D62828"/>
+
+    <!-- C - Barra -->
+    <line id="linhaC"
+          x1="112"
+          y1="336"
+          x2="228"
+          y2="336"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="112,336 122,331 122,341" fill="#D62828"/>
+    <polygon points="228,336 218,331 218,341" fill="#D62828"/>
+
+    <!-- D - Ombro -->
+    <line id="linhaD"
+          x1="106"
+          y1="50"
+          x2="234"
+          y2="50"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="106,50 116,45 116,55" fill="#D62828"/>
+    <polygon points="234,50 224,45 224,55" fill="#D62828"/>
+
+    <!-- E - Manga -->
+    <line id="linhaE"
+          x1="58"
+          y1="82"
+          x2="98"
+          y2="122"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="58,82 68,86 62,94" fill="#D62828"/>
+    <polygon points="98,122 88,116 94,108" fill="#D62828"/>
+
+    <!-- F - Abertura Manga -->
+    <line id="linhaF"
+          x1="44"
+          y1="106"
+          x2="72"
+          y2="134"
+          stroke="#D62828"
+          stroke-width="2.5"/>
+
+    <polygon points="44,106 54,110 48,118" fill="#D62828"/>
+    <polygon points="72,134 62,128 68,120" fill="#D62828"/>
+
+    <!-- Círculos -->
+    <g fill="#D62828">
+
+        <circle cx="170" cy="136" r="14"/>
+        <circle cx="184" cy="198" r="14"/>
+        <circle cx="170" cy="352" r="14"/>
+        <circle cx="170" cy="24" r="14"/>
+        <circle cx="36" cy="74" r="14"/>
+        <circle cx="24" cy="104" r="14"/>
+
+    </g>
+
+    <!-- Letras -->
+    <g fill="white"
+       font-size="12"
+       font-weight="bold"
+       text-anchor="middle"
+       dominant-baseline="middle">
+
+        <text x="170" y="136">A</text>
+        <text x="184" y="198">B</text>
+        <text x="170" y="352">C</text>
+        <text x="170" y="24">D</text>
+        <text x="36" y="74">E</text>
+        <text x="24" y="104">F</text>
+
+    </g>
+
+</svg>

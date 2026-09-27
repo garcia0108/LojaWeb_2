@@ -34,7 +34,12 @@ namespace LojaWeb_2.Models
         [Display(Name = "Imagem Feminina")]
         public string? ImagemFeminina { get; set; }
 
+        [Required]
+        [StringLength(30)]
+        public string TipoVisual { get; set; } = "malha";
+
         public ICollection<Produto> Produtos { get; set; }
             = new List<Produto>();
+
     }
 }

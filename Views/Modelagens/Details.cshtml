@@ -1,0 +1,227 @@
+﻿@model LojaWeb_2.Models.Modelagem
+
+@{
+    ViewData["Title"] = "Detalhes da Modelagem";
+}
+
+<div class="container-fluid">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-eye me-2"></i>Detalhes da Modelagem
+            </h2>
+
+            <small class="text-muted">
+                Visualização completa da tabela de medidas.
+            </small>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Card esquerdo -->
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    @if (Model.ModoIlustracao == "Imagem"
+                    && !string.IsNullOrEmpty(Model.ImagemReferencia))
+                    {
+                        <img src="@Model.ImagemReferencia"
+                             class="img-fluid rounded-3 shadow-sm mb-3"
+                             style="max-height:320px;" />
+                    }
+                    else
+                    {
+                        @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgBase.cshtml")
+                    }
+
+                    <p class="text-muted">
+                        Guia da modelagem.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Card direito -->
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded-3 p-3">
+
+                                <small class="text-muted d-block">
+                                    Marca
+                                </small>
+
+                                <strong>@Model.Marca.Nome</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded-3 p-3">
+
+                                <small class="text-muted d-block">
+                                    Categoria
+                                </small>
+
+                                <strong>@Model.Categoria.Nome</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded-3 p-3">
+
+                                <small class="text-muted d-block">
+                                    Modelagem
+                                </small>
+
+                                <strong>@Model.Nome</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded-3 p-3">
+
+                                <small class="text-muted d-block">
+                                    Tipo
+                                </small>
+
+                                <strong>@Model.ModoIlustracao</strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <h5 class="fw-bold mb-3">
+                        Tabela de Medidas
+                    </h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered text-center align-middle">
+
+                            <thead class="table-dark">
+
+                                <tr>
+
+                                    <th>Tamanho</th>
+
+                                    <th>A</th>
+
+                                    <th>B</th>
+
+                                    <th>C</th>
+
+                                    <th>D</th>
+
+                                    <th>E</th>
+
+                                    <th>F</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.Medidas
+                                    .Where(x =>
+                                        x.Torax > 0 ||
+                                        x.Comprimento > 0 ||
+                                        x.Barra > 0 ||
+                                        x.Ombro > 0 ||
+                                        x.ComprimentoManga > 0 ||
+                                        x.AberturaManga > 0)
+                                    .OrderBy(x => x.Id))
+                                {
+                                    <tr>
+
+                                        <td class="fw-semibold">@item.Tamanho</td>
+
+                                        <td>@item.Torax</td>
+
+                                        <td>@item.Comprimento</td>
+
+                                        <td>@item.Barra</td>
+
+                                        <td>@item.Ombro</td>
+
+                                        <td>@item.ComprimentoManga</td>
+
+                                        <td>@item.AberturaManga</td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-white border-0">
+
+                    <div class="d-flex justify-content-between">
+
+                        <a asp-action="Medidas"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-outline-info">
+
+                            <i class="bi bi-rulers"></i>
+                            Editar Medidas
+
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-primary">
+
+                            <i class="bi bi-pencil-square"></i>
+                            Editar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

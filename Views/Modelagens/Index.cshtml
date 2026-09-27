@@ -1,0 +1,222 @@
+﻿@model IEnumerable<LojaWeb_2.Models.Modelagem>
+
+@{
+    ViewData["Title"] = "Modelagens";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-rulers me-2"></i>Modelagens
+            </h2>
+
+            <small class="text-muted">
+                Gerencie as tabelas de medidas das marcas.
+            </small>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Nova Modelagem
+            </a>
+
+            <button class="btn btn-primary" disabled>
+                <i class="bi bi-file-earmark-excel"></i> Importar Excel
+            </button>
+
+            <button class="btn btn-secondary" disabled>
+                <i class="bi bi-download"></i> Modelo Excel
+            </button>
+
+        </div>
+
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Sucesso"]
+
+            <button class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th>Marca</th>
+                        <th>Categoria</th>
+                        <th>Modelagem</th>
+                        <th class="text-center">Tamanhos</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.Marca.Nome</td>
+
+                            <td>@item.Categoria.Nome</td>
+
+                            <td>
+                                <strong>@item.Nome</strong>
+                            </td>
+
+                            <td class="text-center">
+                                @item.Medidas.Count
+                            </td>
+
+                            <td class="text-center">
+
+                                <div class="btn-group">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-outline-primary btn-sm"
+                                       title="Editar">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                    <a asp-action="Medidas"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-outline-info btn-sm"
+                                       title="Medidas">
+
+                                        <i class="bi bi-rulers"></i>
+
+                                    </a>
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-outline-dark btn-sm"
+                                       title="Detalhes">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-id="@item.Id"
+                                            data-nome="@item.Nome"
+                                            title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal Excluir -->
+
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Excluir Modelagem
+                </h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Deseja realmente excluir a modelagem
+
+                <strong id="nomeModelagem"></strong>?
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Cancelar
+
+                </button>
+
+                <form asp-action="Delete" method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           id="idModelagem"
+                           name="id" />
+
+                    <button type="submit" class="btn btn-danger">
+                        Excluir
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const deleteModal = document.getElementById('deleteModal');
+
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+
+            const button = event.relatedTarget;
+
+            document.getElementById('idModelagem').value = button.dataset.id;
+
+            document.getElementById('nomeModelagem').textContent = button.dataset.nome;
+
+        });
+
+    </script>
+
+}

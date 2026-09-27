@@ -28,6 +28,25 @@
                     <span asp-validation-for="Nome" class="text-danger"></span>
                 </div>
 
+                <div class="col-md-3">
+
+                    <label asp-for="TipoVisual" class="form-label fw-semibold">
+                        Tipo Visual
+                    </label>
+
+                    <select asp-for="TipoVisual" class="form-select">
+
+                        <option value="malha">Camisa Malha</option>
+                        <option value="polo">Polo</option>
+                        <option value="social">Camisa Social</option>
+                        <option value="moletom">Moletom</option>
+                        <option value="regata">Regata</option>
+                        <option value="dryfit">Dry Fit</option>
+
+                    </select>
+
+                </div>
+
                 <div class="mb-3">
                     <label asp-for="Descricao"></label>
                     <textarea asp-for="Descricao" class="form-control"></textarea>

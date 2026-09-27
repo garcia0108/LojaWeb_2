@@ -24,6 +24,9 @@ namespace LojaWeb_2.Data
 
         public DbSet<Marca> Marcas { get; set; }
 
+        public DbSet<Modelagem> Modelagens { get; set; }
+        public DbSet<MedidaModelagem> MedidasModelagem { get; set; }
+
         public DbSet<Combo> Combos { get; set; }
 
         public DbSet<ComboItem> ComboItens { get; set; }
@@ -312,6 +315,69 @@ namespace LojaWeb_2.Data
                 .WithMany()
                 .HasForeignKey(pc => pc.ImagemPrincipalId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // =========================================
+            // RELACIONAMENTO MODELAGEM → MARCA
+            // =========================================
+            modelBuilder.Entity<Modelagem>()
+                .HasOne(m => m.Marca)
+                .WithMany()
+                .HasForeignKey(m => m.MarcaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =========================================
+            // RELACIONAMENTO MODELAGEM → CATEGORIA
+            // =========================================
+            modelBuilder.Entity<Modelagem>()
+                .HasOne(m => m.Categoria)
+                .WithMany()
+                .HasForeignKey(m => m.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =========================================
+            // RELACIONAMENTO MEDIDA MODELAGEM → MODELAGEM
+            // =========================================
+            modelBuilder.Entity<MedidaModelagem>()
+                .HasOne(m => m.Modelagem)
+                .WithMany(m => m.Medidas)
+                .HasForeignKey(m => m.ModelagemId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // =========================================
+            // RELACIONAMENTO PRODUTO → MODELAGEM
+            // =========================================
+            modelBuilder.Entity<Produto>()
+                .HasOne(p => p.Modelagem)
+                .WithMany()
+                .HasForeignKey(p => p.ModelagemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // =========================================
+            // Configurar precisão dos decimais
+            // =========================================
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.Torax)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.Comprimento)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.Barra)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.Ombro)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.ComprimentoManga)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MedidaModelagem>()
+                .Property(x => x.AberturaManga)
+                .HasPrecision(5, 2);
         }
     }
 }

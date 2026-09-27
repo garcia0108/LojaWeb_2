@@ -1,0 +1,182 @@
+﻿@model LojaWeb_2.Models.Produto
+
+
+
+<div id="modalAvatar" class="provador-modal">
+
+    <div class="provador-container avatar-layout">
+
+        <button id="btnFecharAvatar"
+                class="provador-fechar"
+                type="button">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+        <!-- LADO ESQUERDO -->
+
+        <div class="avatar-esquerda">
+
+            <div id="avatar3DContainer">
+
+                
+
+            </div>
+
+            <div class="cores-avatar">
+
+                <button class="cor-avatar ativo" data-cor="1"></button>
+                <button class="cor-avatar" data-cor="2"></button>
+                <button class="cor-avatar" data-cor="3"></button>
+                <button class="cor-avatar" data-cor="4"></button>
+                <button class="cor-avatar" data-cor="5"></button>
+                <button class="cor-avatar" data-cor="6"></button>
+                <button class="cor-avatar" data-cor="7"></button>
+
+            </div>
+
+        </div>
+
+        <!-- LADO DIREITO -->
+
+        <div class="avatar-direita">
+
+            <h2>Ajuste o formato do corpo</h2>
+
+            <p class="avatar-texto">
+
+                Este é o formato aproximado do corpo que geramos com suas medidas.
+                Ajuste somente se for necessário.
+
+            </p>
+
+            <!-- TÓRAX -->
+
+            <div class="controle-medida">
+
+                <label>Tórax</label>
+
+                <div class="regua" data-slider="torax">
+
+                    <button class="btn-regua menos"
+                            data-target="torax"
+                            type="button">
+
+                        −
+
+                    </button>
+
+                    <div class="trilho">
+
+                        <div class="marcas">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <div class="ponteiro"
+                             id="ponteiroTorax"></div>
+
+                    </div>
+
+                    <button class="btn-regua mais"
+                            data-target="torax"
+                            type="button">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- CINTURA -->
+
+            <div class="controle-medida">
+
+                <label>Cintura</label>
+
+                <div class="slider-personalizado">
+
+                    <button id="menosCintura" type="button">−</button>
+
+                    <input id="cinturaSlider"
+                           type="range"
+                           min="-100"
+                           max="100"
+                           value="0">
+
+                    <button id="maisCintura" type="button">+</button>
+
+                </div>
+
+            </div>
+
+            <!-- QUADRIL -->
+
+            <div class="controle-medida">
+
+                <label>Quadril</label>
+
+                <div class="slider-personalizado">
+
+                    <button id="menosQuadril" type="button">−</button>
+
+                    <input id="quadrilSlider"
+                           type="range"
+                           min="-100"
+                           max="100"
+                           value="0">
+
+                    <button id="maisQuadril" type="button">+</button>
+
+                </div>
+
+            </div>
+
+            <!-- RODAPÉ -->
+
+            <div class="rodape-provador">
+
+                <div class="indicadores">
+
+                    <span></span>
+
+                    <span class="ativo"></span>
+
+                </div>
+
+                <div class="acoes-rodape">
+
+                    <button id="btnVoltarCadastro"
+                            class="btn-secundario"
+                            type="button">
+
+                        Voltar
+
+                    </button>
+
+                    <button id="btnProximoAvatar"
+                            class="btn-proximo"
+                            type="button">
+
+                        Próximo
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+                    

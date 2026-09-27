@@ -52,6 +52,9 @@ namespace LojaWeb_2.Models
         [Display(Name = "Comprimento (cm)")]
         public decimal Comprimento { get; set; }
 
+        public int? ModelagemId { get; set; }
+        public Modelagem? Modelagem { get; set; }
+
         [Display(Name = "Produto em promoção")]
         public bool EmPromocao { get; set; } = false;
 

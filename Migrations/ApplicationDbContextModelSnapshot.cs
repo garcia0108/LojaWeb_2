@@ -192,6 +192,11 @@ namespace LojaWeb_2.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("TipoVisual")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
@@ -811,6 +816,94 @@ namespace LojaWeb_2.Migrations
                     b.ToTable("Marcas");
                 });
 
+            modelBuilder.Entity("LojaWeb_2.Models.MedidaModelagem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AberturaManga")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Barra")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Comprimento")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("ComprimentoManga")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("ModelagemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Ombro")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Tamanho")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<decimal>("Torax")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModelagemId");
+
+                    b.ToTable("MedidasModelagem");
+                });
+
+            modelBuilder.Entity("LojaWeb_2.Models.Modelagem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ImagemReferencia")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModoIlustracao")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("MarcaId");
+
+                    b.ToTable("Modelagens");
+                });
+
             modelBuilder.Entity("LojaWeb_2.Models.MovimentacaoEstoque", b =>
                 {
                     b.Property<int>("Id")
@@ -935,6 +1028,9 @@ namespace LojaWeb_2.Migrations
                     b.Property<int>("MarcaId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ModelagemId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -983,6 +1079,8 @@ namespace LojaWeb_2.Migrations
                     b.HasIndex("FornecedorId");
 
                     b.HasIndex("MarcaId");
+
+                    b.HasIndex("ModelagemId");
 
                     b.ToTable("Produtos");
                 });
@@ -1469,6 +1567,36 @@ namespace LojaWeb_2.Migrations
                     b.Navigation("Venda");
                 });
 
+            modelBuilder.Entity("LojaWeb_2.Models.MedidaModelagem", b =>
+                {
+                    b.HasOne("LojaWeb_2.Models.Modelagem", "Modelagem")
+                        .WithMany("Medidas")
+                        .HasForeignKey("ModelagemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Modelagem");
+                });
+
+            modelBuilder.Entity("LojaWeb_2.Models.Modelagem", b =>
+                {
+                    b.HasOne("LojaWeb_2.Models.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LojaWeb_2.Models.Marca", "Marca")
+                        .WithMany()
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Marca");
+                });
+
             modelBuilder.Entity("LojaWeb_2.Models.MovimentacaoEstoque", b =>
                 {
                     b.HasOne("LojaWeb_2.Models.Fornecedor", "Fornecedor")
@@ -1513,11 +1641,18 @@ namespace LojaWeb_2.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("LojaWeb_2.Models.Modelagem", "Modelagem")
+                        .WithMany()
+                        .HasForeignKey("ModelagemId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Categoria");
 
                     b.Navigation("Fornecedor");
 
                     b.Navigation("Marca");
+
+                    b.Navigation("Modelagem");
                 });
 
             modelBuilder.Entity("LojaWeb_2.Models.ProdutoCor", b =>
@@ -1636,6 +1771,11 @@ namespace LojaWeb_2.Migrations
             modelBuilder.Entity("LojaWeb_2.Models.Marca", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("LojaWeb_2.Models.Modelagem", b =>
+                {
+                    b.Navigation("Medidas");
                 });
 
             modelBuilder.Entity("LojaWeb_2.Models.Produto", b =>

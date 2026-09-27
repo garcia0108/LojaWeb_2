@@ -1,5 +1,8 @@
 ﻿@model LojaWeb_2.Models.Produto
 
+<link rel="stylesheet"
+      href="~/css/provador/provador.css"
+      asp-append-version="true" />
 @{
     ViewData["Title"] = Model.Nome;
 
@@ -368,6 +371,7 @@
             height: 43px;
         }
     }
+
 </style>
 
 <div class="container produto-detalhes">
@@ -536,6 +540,52 @@
                             </div>
                         }
 
+                        <!-- ==============================
+                             PROVADOR VIRTUAL
+                             ============================== -->
+                        <div class="box-provador-acao">
+
+                            <div id="recomendacaoTamanho"
+                                 class="recomendacao-tamanho d-none">
+
+                                Recomendamos o tamanho
+                                <strong id="tamanhoRecomendadoTexto"></strong>
+
+                            </div>
+
+                            <div class="duvida-tamanho">
+
+                                <i class="bi bi-question-circle-fill"></i>
+
+                                <span>Ficou com dúvidas sobre o seu tamanho?</span>
+
+                            </div>
+
+                            <div class="acoes-provador">
+
+                                <button id="btnAbrirProvador"
+                                        class="btn-provador"
+                                        type="button">
+
+                                    <i class="bi bi-hanger"></i>
+
+                                    Descubra seu tamanho
+
+                                </button>
+
+                                <button id="btnTabelaMedidas"
+                                        class="btn-medidas"
+                                        type="button">
+
+                                    <i class="bi bi-rulers"></i>
+
+                                    Tabela de Medidas
+
+                                </button>
+
+                            </div>
+
+                        </div>
 
                         <!-- ==============================
                              TAMANHO
@@ -738,10 +788,50 @@
 
 </div>
 
+    <!--
+     =========================================================
+            MODAL
+   =========================================================
+    -->
+ <partial name="Provador/ModalCadastro" model="Model" /> 
+ <partial name="Provador/ModalAvatar" model="Model"/>
 
 @section Scripts {
 
+    <!--
+    =========================================================
+    Bibliotecas do Three.js
+   =========================================================
+    -->
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+          }
+        }
+    </script>
+
+    <!--
+        =========================================================
+    PROVADOR
+   =========================================================
+    -->
+    <script src="~/js/provador/provador.js"
+            asp-append-version="true"></script>
+
+    <!--
+    =========================================================
+    Carregar como módulo AVATAR
+   =========================================================
+    -->
+
+    <script type="module"
+        src="~/js/provador/avatar-3d.js"
+        asp-append-version="true"></script>
     <script>
+
+        
 
         // =========================================================
         // DADOS DO PRODUTO

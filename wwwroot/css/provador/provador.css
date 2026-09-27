@@ -1,0 +1,458 @@
+﻿/* ==========================================
+   MODAL DO PROVADOR
+========================================== */
+
+.provador-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 25px;
+}
+
+    .provador-modal.ativo {
+        display: flex;
+    }
+
+.provador-container {
+    width: min(1080px,95vw);
+    height: min(640px,90vh);
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 42% 58%;
+    position: relative;
+}
+
+.provador-fechar {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   MODAL DO PROVADOR ESQUERDA
+========================================== */
+.provador-esquerda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.imagem-produto-provador {
+    max-width: 100%;
+    max-height: 560px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.sem-imagem {
+    color: #999;
+    font-size: 20px;
+}
+
+/* ==========================================
+   MODAL DO PROVADOR DIREITA
+========================================== */
+.provador-direita {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+    .provador-direita h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+.provador-texto {
+    color: #666;
+    margin-bottom: 28px;
+}
+
+.btn-teste-modal {
+    width: 170px;
+    height: 44px;
+    border: none;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* ==========================================
+   Botões Masculino/Feminino
+==========================================*/
+.genero-provador{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:28px;
+}
+
+.btn-genero{
+
+    flex:1;
+
+    height:40px;
+
+    border:none;
+
+    background:#f2f2f2;
+
+    color:#a8a8a8;
+
+    cursor:pointer;
+
+    transition:.18s;
+}
+
+.btn-genero.ativo{
+
+    background:#fff;
+
+    border:1px solid #222;
+
+    color:#111;
+
+    font-weight:600;
+}
+
+/* ==========================================
+  Campos
+==========================================*/
+.campo-provador {
+    margin-bottom: 18px;
+}
+
+    .campo-provador label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+.input-unidade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .input-unidade input {
+        width: 82px;
+        height: 32px;
+        border: 1px solid #777;
+        padding: 4px 8px;
+    }
+
+/* ==========================================
+ Tooltip
+==========================================*/
+#infoIdade {
+    cursor: pointer;
+    color: #666;
+}
+
+.tooltip-idade {
+    display: none;
+    position: absolute;
+    background: #444;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    width: 270px;
+    font-size: 14px;
+}
+
+    .tooltip-idade.ativo {
+        display: block;
+    }
+
+/* ==========================================
+ Rodapé
+==========================================*/
+.rodape-provador {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.indicadores {
+    display: flex;
+    gap: 8px;
+}
+
+    .indicadores span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #cfcfcf;
+    }
+
+    .indicadores .ativo {
+        background: #333;
+    }
+
+.btn-proximo {
+    width: 105px;
+    height: 42px;
+    border: none;
+    background: #b7b7b7;
+    color: #fff;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+    .btn-proximo:enabled {
+        background: #222;
+        cursor: pointer;
+    }
+
+/* ==========================================
+   MODAL AVATAR
+========================================== */
+
+.avatar-layout {
+    grid-template-columns: 42% 58%;
+}
+
+.avatar-esquerda {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background: #fff;
+    overflow: hidden;
+    padding: 0;
+}
+
+#avatar3DContainer {
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+    position: relative;
+    overflow: hidden;
+}
+
+    #avatar3DContainer canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+/* ==========================================
+ Paleta de pele
+========================================== */
+.cores-avatar {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+.cor-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: .15s;
+}
+
+    .cor-avatar:nth-child(1) {
+        background: #f1efea;
+    }
+
+    .cor-avatar:nth-child(2) {
+        background: #e6dcc2;
+    }
+
+    .cor-avatar:nth-child(3) {
+        background: #d5a983;
+    }
+
+    .cor-avatar:nth-child(4) {
+        background: #c78f63;
+    }
+
+    .cor-avatar:nth-child(5) {
+        background: #b68057;
+    }
+
+    .cor-avatar:nth-child(6) {
+        background: #8f5536;
+    }
+
+    .cor-avatar:nth-child(7) {
+        background: #3a2020;
+    }
+
+    .cor-avatar.ativo {
+        outline: 3px solid #4b5563;
+        outline-offset: 3px;
+        transform: scale(1.08);
+        box-shadow: 0 0 10px rgba(0,0,0,.18);
+    }
+
+/* ==========================================
+ Texto
+========================================== */
+.avatar-direita {
+    padding: 55px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .avatar-direita h2 {
+        font-size: 34px;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+.avatar-texto {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 35px;
+}
+
+/* ============================
+   RÉGUA PERSONALIZADA
+============================ */
+
+.regua {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    gap: 18px;
+}
+
+.btn-regua {
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.12);
+    font-size: 22px;
+    cursor: pointer;
+    transition: .15s;
+}
+
+    .btn-regua:hover {
+        transform: translateY(-1px);
+    }
+
+.trilho {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+    .trilho::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #444;
+    }
+
+.marcas {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .marcas span {
+        width: 2px;
+        height: 12px;
+        background: #555;
+    }
+
+.ponteiro {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #333;
+    cursor: grab;
+}
+
+    .ponteiro:active {
+        cursor: grabbing;
+    }
+
+/* ==========================================
+ Controles
+========================================== */
+.controle-medida {
+    margin-bottom: 26px;
+}
+
+    .controle-medida label {
+        display: block;
+        text-align: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+.slider-personalizado {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    gap: 18px;
+}
+
+    .slider-personalizado button {
+        width: 34px;
+        height: 34px;
+        border: none;
+        background: #fff;
+        box-shadow: 0 3px 10px rgba(0,0,0,.12);
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 22px;
+    }
+
+    .slider-personalizado input {
+        width: 100%;
+    }
+
+/* ==========================================
+ Rodapé
+========================================== */
+.acoes-rodape {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-secundario {
+    width: 95px;
+    height: 42px;
+    border: none;
+    background: #e5e5e5;
+    cursor: pointer;
+    border-radius: 6px;
+}

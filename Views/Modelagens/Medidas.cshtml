@@ -1,0 +1,250 @@
+﻿@model LojaWeb_2.Models.Modelagem
+
+@{
+    ViewData["Title"] = "Medidas da Modelagem";
+
+    var medidas = Model.Medidas
+        .OrderBy(x => x.Id)
+        .ToList();
+}
+
+<div class="container-fluid"
+     data-categoria="@Model.Categoria.Nome">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-rulers me-2"></i>Medidas da Modelagem
+            </h2>
+
+            <small class="text-muted">
+                @Model.Marca.Nome • @Model.Categoria.Nome
+            </small>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+
+    </div>
+
+    <form asp-action="SalvarMedidas" method="post">
+
+        <input asp-for="Id" type="hidden" />
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <!-- Cabeçalho do Card -->
+            <div class="card-header bg-white border-0 pt-4 px-4">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h3 class="fw-bold mb-1">@Model.Nome</h3>
+
+                        <small class="text-muted">
+                            Marca: @Model.Marca.Nome
+                        </small>
+                    </div>
+
+                    <span class="badge bg-primary fs-6">
+                        Guia de Medidas
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- Corpo -->
+            <div class="card-body p-4">
+
+                <div class="row g-4">
+
+                    <!-- Desenho Técnico -->
+                    <div class="col-lg-4 text-center">
+
+                        @if (Model.ModoIlustracao == "Imagem" &&
+                             !string.IsNullOrEmpty(Model.ImagemReferencia))
+                        {
+                            <img src="@Model.ImagemReferencia"
+                                 class="img-fluid rounded-3 shadow-sm"
+                                 alt="Guia de Medidas" />
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgBase.cshtml")
+                        }
+                        <p class="text-muted small mt-3">
+                            Referência das medidas da peça.
+                        </p>
+
+                    </div>
+
+                    <!-- Informações + Tabela -->
+                    <div class="col-lg-8">
+
+                        <div class="row g-3 mb-4">
+
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3">
+                                    <small class="text-muted d-block">Marca</small>
+                                    <strong>@Model.Marca.Nome</strong>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3">
+                                    <small class="text-muted d-block">Categoria</small>
+                                    <strong>@Model.Categoria.Nome</strong>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3">
+                                    <small class="text-muted d-block">Modelagem</small>
+                                    <strong>@Model.Nome</strong>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3">
+                                    <small class="text-muted d-block">Tamanhos</small>
+                                    <strong>@medidas.Count</strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Tabela -->
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered align-middle text-center">
+
+                                <thead class="table-dark">
+
+                                    <tr>
+                                        <th>Tamanho</th>
+
+                                        <th>A<br><small>Tórax</small></th>
+
+                                        <th>B<br><small>Comprimento</small></th>
+
+                                        <th>C<br><small>Barra</small></th>
+
+                                        <th>D<br><small>Ombro</small></th>
+
+                                        <th>E<br><small>Manga</small></th>
+
+                                        <th>F<br><small>Abertura</small></th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @for (int i = 0; i < medidas.Count; i++)
+                                    {
+                                        <tr>
+
+                                            <td class="fw-semibold">
+
+                                                @medidas[i].Tamanho
+
+                                                <input type="hidden" name="Medidas[@i].Id" value="@medidas[i].Id" />
+                                                <input type="hidden" name="Medidas[@i].ModelagemId" value="@medidas[i].ModelagemId" />
+                                                <input type="hidden" name="Medidas[@i].Tamanho" value="@medidas[i].Tamanho" />
+
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].Torax"
+                                                       value="@medidas[i].Torax" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].Comprimento"
+                                                       value="@medidas[i].Comprimento" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].Barra"
+                                                       value="@medidas[i].Barra" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].Ombro"
+                                                       value="@medidas[i].Ombro" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].ComprimentoManga"
+                                                       value="@medidas[i].ComprimentoManga" />
+                                            </td>
+
+                                            <td>
+                                                <input type="number" step="0.1"
+                                                       class="form-control text-center"
+                                                       name="Medidas[@i].AberturaManga"
+                                                       value="@medidas[i].AberturaManga" />
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Rodapé -->
+            <div class="card-footer bg-white border-0 rounded-bottom-4">
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i>
+                        Salvar Medidas
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/svg-modelagem.js"></script>
+
+}

@@ -1,0 +1,255 @@
+﻿@model LojaWeb_2.Models.Modelagem
+
+@{
+    ViewData["Title"] = "Editar Modelagem";
+}
+
+<div class="container-fluid">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-pencil-square me-2"></i>Editar Modelagem
+            </h2>
+
+            <small class="text-muted">
+                Atualize as informações da modelagem.
+            </small>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+
+    </div>
+
+    <form asp-action="Edit"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input asp-for="Id" type="hidden" />
+
+        <div class="row g-4">
+
+            <!-- Card esquerdo -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                    <div class="card-body text-center">
+
+                        @if (Model.ModoIlustracao == "Imagem"
+                        && !string.IsNullOrEmpty(Model.ImagemReferencia))
+                        {
+                            <img src="@Model.ImagemReferencia"
+                                 class="img-fluid rounded-3 shadow-sm mb-3"
+                                 style="max-height:320px;"
+                                 alt="Guia de Medidas" />
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgBase.cshtml")
+                        }
+
+                        <p class="text-muted mb-3">
+                            Pré-visualização da peça.
+                        </p>
+
+                        <div class="border rounded-3 p-3 text-start">
+
+                            <small class="text-muted d-block">Marca</small>
+                            <strong>@Model.Marca.Nome</strong>
+
+                            <hr>
+
+                            <small class="text-muted d-block">Categoria</small>
+                            <strong>@Model.Categoria.Nome</strong>
+
+                            <hr>
+
+                            <small class="text-muted d-block">Modelagem</small>
+                            <strong>@Model.Nome</strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Card direito -->
+            <div class="col-lg-8">
+
+                <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card-body">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger">
+                        </div>
+
+                        <div class="row g-3">
+
+                            <!-- Marca -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="MarcaId"
+                                       class="form-label fw-semibold">
+                                    Marca
+                                </label>
+
+                                <select asp-for="MarcaId"
+                                        asp-items="ViewBag.MarcaId"
+                                        class="form-select">
+                                </select>
+
+                            </div>
+
+                            <!-- Categoria -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="CategoriaId"
+                                       class="form-label fw-semibold">
+                                    Categoria
+                                </label>
+
+                                <select asp-for="CategoriaId"
+                                        asp-items="ViewBag.CategoriaId"
+                                        class="form-select">
+                                </select>
+
+                            </div>
+
+                            <!-- Nome -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Nome"
+                                       class="form-label fw-semibold">
+                                    Nome da Modelagem
+                                </label>
+
+                                <input asp-for="Nome"
+                                       class="form-control" />
+
+                            </div>
+
+                            <!-- Descrição -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Descricao"
+                                       class="form-label fw-semibold">
+                                    Descrição
+                                </label>
+
+                                <textarea asp-for="Descricao"
+                                          rows="4"
+                                          class="form-control">
+                                </textarea>
+
+                            </div>
+
+                            <!-- Tipo -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="ModoIlustracao"
+                                       class="form-label fw-semibold">
+                                    Tipo de Ilustração
+                                </label>
+
+                                <select asp-for="ModoIlustracao"
+                                        class="form-select">
+
+                                    <option value="Svg">
+                                        SVG Inteligente
+                                    </option>
+
+                                    <option value="Imagem">
+                                        Imagem Oficial
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Nova imagem -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    Nova Imagem
+                                </label>
+
+                                <input type="file"
+                                       name="imagemArquivo"
+                                       class="form-control"
+                                       accept=".jpg,.jpeg,.png,.webp,.svg" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer bg-white border-0 rounded-bottom-4">
+
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-action="Medidas"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-outline-info">
+
+                                <i class="bi bi-rulers"></i>
+                                Editar Medidas
+
+                            </a>
+
+                            <div class="d-flex gap-2">
+
+                                <a asp-action="Index"
+                                   class="btn btn-outline-secondary">
+
+                                    Cancelar
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-success">
+
+                                    <i class="bi bi-check-circle"></i>
+                                    Salvar Alterações
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/svg-modelagem.js"></script>
+
+}

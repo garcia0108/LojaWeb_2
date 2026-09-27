@@ -1,0 +1,36 @@
+﻿@model LojaWeb_2.Models.Modelagem
+
+@{
+    var categoria = Model.Categoria.Nome.ToLower();
+}
+
+<div id="svgModelagemContainer">
+
+    @switch (categoria)
+    {
+        case "polo":
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgPolo.cshtml")
+            break;
+
+        case "camisa malha":
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgMalha.cshtml")
+            break;
+
+        case "camisa social":
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgSocial.cshtml")
+            break;
+
+        case "moletom":
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgMoletom.cshtml")
+            break;
+
+        case "regata":
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgRegata.cshtml")
+            break;
+
+        default:
+            @await Html.PartialAsync("~/Views/Shared/Modelagens/_SvgCamiseta.cshtml")
+            break;
+    }
+
+</div>
