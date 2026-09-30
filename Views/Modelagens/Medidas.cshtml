@@ -1,4 +1,5 @@
 ﻿@model LojaWeb_2.Models.Modelagem
+@using System.Globalization
 
 @{
     ViewData["Title"] = "Medidas da Modelagem";
@@ -30,7 +31,8 @@
 
     </div>
 
-    <form asp-action="SalvarMedidas" method="post">
+   <form action="/Modelagens/SalvarMedidas" method="post">
+    @Html.AntiForgeryToken()
 
         <input asp-for="Id" type="hidden" />
 
@@ -120,7 +122,18 @@
                         <!-- Tabela -->
                         <div class="table-responsive">
 
-                            <table class="table table-bordered align-middle text-center">
+                            <table class="table table-bordered align-middle text-center"
+                                           style="table-layout: fixed;">
+
+                                        <colgroup>
+                                            <col style="width:13%">
+                                            <col style="width:12.4%">
+                                            <col style="width:16%">
+                                            <col style="width:12.4%">
+                                            <col style="width:12.4%">
+                                            <col style="width:17%">
+                                            <col style="width:17%">
+                                        </colgroup>
 
                                 <thead class="table-dark">
 
@@ -144,64 +157,68 @@
 
                                 <tbody>
 
-                                    @for (int i = 0; i < medidas.Count; i++)
-                                    {
-                                        <tr>
+                                   @for (int i = 0; i < Model.Medidas.Count; i++)
+{
+    <tr>
 
-                                            <td class="fw-semibold">
+        <td class="fw-semibold">
+            @Model.Medidas[i].Tamanho
 
-                                                @medidas[i].Tamanho
+            <input asp-for="Medidas[i].Id" type="hidden" />
+            <input asp-for="Medidas[i].ModelagemId" type="hidden" />
+            <input asp-for="Medidas[i].Tamanho" type="hidden" />
+        </td>
 
-                                                <input type="hidden" name="Medidas[@i].Id" value="@medidas[i].Id" />
-                                                <input type="hidden" name="Medidas[@i].ModelagemId" value="@medidas[i].ModelagemId" />
-                                                <input type="hidden" name="Medidas[@i].Tamanho" value="@medidas[i].Tamanho" />
+        <td>
+            <input asp-for="Medidas[i].Torax"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            </td>
+        <td>
+            <input asp-for="Medidas[i].Comprimento"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].Torax"
-                                                       value="@medidas[i].Torax" />
-                                            </td>
+        <td>
+            <input asp-for="Medidas[i].Barra"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].Comprimento"
-                                                       value="@medidas[i].Comprimento" />
-                                            </td>
+        <td>
+            <input asp-for="Medidas[i].Ombro"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].Barra"
-                                                       value="@medidas[i].Barra" />
-                                            </td>
+        <td>
+            <input asp-for="Medidas[i].ComprimentoManga"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].Ombro"
-                                                       value="@medidas[i].Ombro" />
-                                            </td>
+        <td>
+            <input asp-for="Medidas[i].AberturaManga"
+                   type="number"
+                   step="0.01"
+                   lang="en"
+                   class="form-control form-control-sm text-center" />
+        </td>
 
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].ComprimentoManga"
-                                                       value="@medidas[i].ComprimentoManga" />
-                                            </td>
-
-                                            <td>
-                                                <input type="number" step="0.1"
-                                                       class="form-control text-center"
-                                                       name="Medidas[@i].AberturaManga"
-                                                       value="@medidas[i].AberturaManga" />
-                                            </td>
-
-                                        </tr>
-                                    }
+    </tr>
+}
 
                                 </tbody>
 
@@ -222,6 +239,13 @@
 
                     <a asp-action="Index" class="btn btn-outline-secondary">
                         Cancelar
+                    </a>
+
+                    <a asp-action="CopiarMedidas"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-secondary">
+                        <i class="bi bi-copy"></i>
+                        Copiar Medidas
                     </a>
 
                     <button type="submit" class="btn btn-success">

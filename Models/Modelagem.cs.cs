@@ -34,5 +34,7 @@ namespace LojaWeb_2.Models
         public string ModoIlustracao { get; set; } = "Svg";
 
         public List<MedidaModelagem> Medidas { get; set; } = new();
+
+        public virtual ICollection<Produto> Produtos { get; set; } = new List<Produto>();
     }
 }

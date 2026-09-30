@@ -38,7 +38,9 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 
-		<PackageReference Include="QuestPDF" Version="2026.7.3" />
+		<PackageReference Include="QRCoder" Version="1.8.0" />
+
+		<PackageReference Include="QuestPDF" Version="2026.9.1" />
 
 	</ItemGroup>
 

@@ -25,7 +25,10 @@ namespace LojaWeb_2.Data
         public DbSet<Marca> Marcas { get; set; }
 
         public DbSet<Modelagem> Modelagens { get; set; }
+
         public DbSet<MedidaModelagem> MedidasModelagem { get; set; }
+
+        public DbSet<PerfilImportacao> PerfisImportacao { get; set; }
 
         public DbSet<Combo> Combos { get; set; }
 
@@ -348,7 +351,7 @@ namespace LojaWeb_2.Data
             // =========================================
             modelBuilder.Entity<Produto>()
                 .HasOne(p => p.Modelagem)
-                .WithMany()
+                .WithMany(m => m.Produtos)
                 .HasForeignKey(p => p.ModelagemId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,0 +1,95 @@
+﻿@model LojaWeb_2.ViewModels.ImportacaoModelagemViewModel
+
+@{
+    ViewData["Title"] = "Importar Excel";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-file-earmark-excel me-2"></i>
+                Importar Modelagem
+            </h2>
+
+            <small class="text-muted">
+                Importe uma tabela de medidas diretamente do fornecedor.
+            </small>
+
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            Voltar
+
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body">
+
+           <form asp-action="ImportarExcel"
+      method="post"
+      enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <div class="mb-4">
+
+        <label class="form-label fw-semibold">
+            Modelagem de Destino
+        </label>
+
+        <select asp-for="ModelagemId"
+                asp-items="Model.Modelagens"
+                class="form-select">
+
+            <option value="">
+                Selecione uma modelagem
+            </option>
+
+        </select>
+
+        <span asp-validation-for="ModelagemId"
+              class="text-danger"></span>
+
+    </div>
+
+    <div class="mb-4">
+
+        <label class="form-label fw-semibold">
+            Arquivo Excel
+        </label>
+
+        <input asp-for="ArquivoExcel"
+               type="file"
+               class="form-control"
+               accept=".xlsx" />
+
+        <span asp-validation-for="ArquivoExcel"
+              class="text-danger"></span>
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-success">
+
+        <i class="bi bi-upload"></i>
+
+        Ler Planilha
+
+    </button>
+
+</form>
+
+        </div>
+
+    </div>
+
+</div>

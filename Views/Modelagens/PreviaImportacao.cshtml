@@ -1,0 +1,130 @@
+﻿@model LojaWeb_2.ViewModels.ImportacaoModelagemViewModel
+
+@{
+    ViewData["Title"] = "Prévia da Importação";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-table me-2"></i>
+                Prévia da Planilha
+            </h2>
+
+            <small class="text-muted">
+                Confira as medidas antes de importar.
+            </small>
+
+        </div>
+
+        <a asp-action="ImportarExcel"
+           class="btn btn-outline-secondary">
+
+            Voltar
+
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered align-middle text-center mb-0">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Tamanho</th>
+                        <th>Tórax</th>
+                        <th>Comprimento</th>
+                        <th>Barra</th>
+                        <th>Ombro</th>
+                        <th>Manga</th>
+                        <th>Abertura</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Linhas)
+                    {
+                        bool possuiMedidas =
+                            item.Torax > 0 ||
+                            item.Comprimento > 0 ||
+                            item.Barra > 0 ||
+                            item.Ombro > 0 ||
+                            item.ComprimentoManga > 0 ||
+                            item.AberturaManga > 0;
+
+                        <tr class="@(possuiMedidas ? "" : "table-danger")">
+
+                            <td><strong>@item.Tamanho</strong></td>
+                            <td>@item.Torax</td>
+                            <td>@item.Comprimento</td>
+                            <td>@item.Barra</td>
+                            <td>@item.Ombro</td>
+                            <td>@item.ComprimentoManga</td>
+                            <td>@item.AberturaManga</td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+            <div class="card-footer bg-white border-0 rounded-bottom-4">
+
+    <div class="d-flex justify-content-end gap-2">
+
+        <a asp-action="ImportarExcel"
+           class="btn btn-outline-secondary">
+
+            Cancelar
+
+        </a>
+
+        <form asp-action="ConfirmarImportacao" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="ModelagemId" value="@Model.ModelagemId" />
+
+            @for (int i = 0; i < Model.Linhas.Count; i++)
+            {
+                <input type="hidden" name="Linhas[@i].Tamanho" value="@Model.Linhas[i].Tamanho" />
+                <input type="hidden" name="Linhas[@i].Torax" value="@Model.Linhas[i].Torax" />
+                <input type="hidden" name="Linhas[@i].Comprimento" value="@Model.Linhas[i].Comprimento" />
+                <input type="hidden" name="Linhas[@i].Barra" value="@Model.Linhas[i].Barra" />
+                <input type="hidden" name="Linhas[@i].Ombro" value="@Model.Linhas[i].Ombro" />
+                <input type="hidden" name="Linhas[@i].ComprimentoManga" value="@Model.Linhas[i].ComprimentoManga" />
+                <input type="hidden" name="Linhas[@i].AberturaManga" value="@Model.Linhas[i].AberturaManga" />
+            }
+
+            <button type="submit" class="btn btn-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                Importar Medidas
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Copiar Medidas";
+    var destino = ViewBag.Destino as LojaWeb_2.Models.Modelagem;
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-copy me-2"></i>
+                Copiar Medidas
+            </h2>
+
+            <small class="text-muted">
+                Escolha uma modelagem existente para copiar as medidas.
+            </small>
+        </div>
+
+        <a asp-action="Medidas"
+           asp-route-id="@destino.Id"
+           class="btn btn-outline-secondary">
+            Voltar
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body">
+
+            <div class="alert alert-info">
+
+                <strong>Destino:</strong>
+
+                @destino.Marca.Nome •
+                @destino.Categoria.Nome •
+                @destino.Nome
+
+            </div>
+
+            <form asp-action="CopiarMedidas" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="destinoId"
+                       value="@destino.Id"/>
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Modelagem de Origem
+                    </label>
+
+                    <select name="origemId"
+                            asp-items="ViewBag.ModelagensOrigem"
+                            class="form-select">
+
+                        <option value="">
+                            Selecione uma modelagem
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-check mb-2">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="substituir"
+                           value="true"
+                           checked/>
+
+                    <label class="form-check-label">
+                        Substituir medidas existentes
+                    </label>
+
+                </div>
+
+                <div class="form-check mb-4">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="apenasPreenchidos"
+                           value="true"
+                           checked/>
+
+                    <label class="form-check-label">
+                        Copiar apenas tamanhos preenchidos
+                    </label>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    <i class="bi bi-copy"></i>
+
+                    Copiar Medidas
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

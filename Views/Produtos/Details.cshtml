@@ -398,6 +398,46 @@
 
                     </table>
 
+                    <!--MODELAGEM-->
+                    @if (Model.Modelagem != null)
+                    {
+                        <div class="card shadow-sm border-0 rounded-4 mt-4">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <h5 class="fw-bold mb-1">
+                                            <i class="bi bi-rulers me-2"></i>
+                                            Modelagem Vinculada
+                                        </h5>
+
+                                        <p class="text-muted mb-0">
+                                            @Model.Modelagem.Marca?.Nome •
+                                            @Model.Modelagem.Categoria?.Nome •
+                                            @Model.Modelagem.Nome
+                                        </p>
+
+                                    </div>
+
+                                    <a asp-controller="Modelagens"
+                                       asp-action="Details"
+                                       asp-route-id="@Model.Modelagem.Id"
+                                       class="btn btn-outline-primary btn-sm">
+
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                        Ver Modelagem
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
 
                     <!-- BOTÕES -->
                     <div class="d-flex gap-2 mt-4">

@@ -1,8 +1,9 @@
 using LojaWeb_2.Data;
 using LojaWeb_2.Services;
-using Microsoft.EntityFrameworkCore;
+using LojaWeb_2.Services.Importacao;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,15 @@ builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddControllersWithViews()
     .AddSessionStateTempDataProvider();
+
+builder.Services.AddScoped<GeradorSvgService>();
+
+builder.Services.AddScoped<TradutorMedidasService>();
+
+builder.Services.AddScoped<DetectorFormatoService>();
+
+builder.Services.AddScoped<ImportacaoExcelService>();
+
 
 // Banco de dados
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -113,5 +123,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();// <-- Necessário para renderizar as telas do Identity UI
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DbInitializer.InicializarAsync(context);
+}
 
 app.Run();

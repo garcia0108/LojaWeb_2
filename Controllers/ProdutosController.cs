@@ -154,6 +154,8 @@ namespace LojaWeb_2.Controllers
                  .Include(p => p.Imagens)
                  .Include(p => p.Cores)
                      .ThenInclude(c => c.Imagens)
+                 .Include(p => p.Modelagem)
+                      .ThenInclude(m => m.Medidas)
                  .FirstOrDefaultAsync(p => p.Id == id);
 
             if (produto == null)
@@ -180,6 +182,21 @@ namespace LojaWeb_2.Controllers
                 _context.Fornecedores.OrderBy(f => f.Nome),
                 "Id",
                 "Nome");
+
+            ViewBag.ModelagemId = new SelectList(
+                 _context.Modelagens
+                .Include(m => m.Marca)
+                .Include(m => m.Categoria)
+                .OrderBy(m => m.Marca.Nome)
+                .ThenBy(m => m.Categoria.Nome)
+                .ThenBy(m => m.Nome)
+                .Select(m => new
+                {
+                    m.Id,
+                    Nome = m.Marca.Nome + " • " + m.Categoria.Nome + " • " + m.Nome
+                }),
+            "Id",
+            "Nome");
 
             return View();
         }
@@ -436,6 +453,22 @@ namespace LojaWeb_2.Controllers
                 "Nome",
                 produto.FornecedorId);
 
+            ViewBag.ModelagemId = new SelectList(
+                _context.Modelagens
+                .Include(m => m.Marca)
+                .Include(m => m.Categoria)
+                .OrderBy(m => m.Marca.Nome)
+                .ThenBy(m => m.Categoria.Nome)
+                .ThenBy(m => m.Nome)
+                .Select(m => new
+                {
+                    m.Id,
+                    Nome = m.Marca.Nome + " • " + m.Categoria.Nome + " • " + m.Nome
+                }),
+            "Id",
+            "Nome",
+            produto.ModelagemId);
+
             return View(produto);
         }
 
@@ -472,6 +505,22 @@ namespace LojaWeb_2.Controllers
                 "Id",
                 "Nome",
                 produto.FornecedorId);
+
+            ViewBag.ModelagemId = new SelectList(
+                _context.Modelagens
+                    .Include(m => m.Marca)
+                    .Include(m => m.Categoria)
+                    .OrderBy(m => m.Marca.Nome)
+                    .ThenBy(m => m.Categoria.Nome)
+                    .ThenBy(m => m.Nome)
+                    .Select(m => new
+                    {
+                        m.Id,
+                        Nome = m.Marca.Nome + " • " + m.Categoria.Nome + " • " + m.Nome
+                    }),
+                "Id",
+                "Nome",
+                produto.ModelagemId);
 
             await CarregarCategorias();
             await CarregarMarcas(
@@ -679,6 +728,22 @@ namespace LojaWeb_2.Controllers
                     "Id",
                     "Nome",
                     produto.FornecedorId);
+
+            ViewBag.ModelagemId = new SelectList(
+                _context.Modelagens
+                    .Include(m => m.Marca)
+                    .Include(m => m.Categoria)
+                    .OrderBy(m => m.Marca.Nome)
+                    .ThenBy(m => m.Categoria.Nome)
+                    .ThenBy(m => m.Nome)
+                    .Select(m => new
+                    {
+                        m.Id,
+                        Nome = m.Marca.Nome + " • " + m.Categoria.Nome + " • " + m.Nome
+                    }),
+                "Id",
+                "Nome",
+                produto.ModelagemId);
 
             return View(produto);
         }
@@ -1324,7 +1389,6 @@ namespace LojaWeb_2.Controllers
         // =========================================
         // VALIDAR IMAGEM
         // =========================================
-
         private bool ImagemValida(
             IFormFile imagem,
             out string mensagemErro)

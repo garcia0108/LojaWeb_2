@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LojaWeb_2.Models
 {
@@ -20,5 +21,14 @@ namespace LojaWeb_2.Models
         public decimal Ombro { get; set; }
         public decimal ComprimentoManga { get; set; }
         public decimal AberturaManga { get; set; }
+
+        [NotMapped]
+        public bool PossuiMedidas =>
+            Torax > 0 ||
+            Comprimento > 0 ||
+            Barra > 0 ||
+            Ombro > 0 ||
+            ComprimentoManga > 0 ||
+            AberturaManga > 0;
     }
 }

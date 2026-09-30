@@ -57,8 +57,6 @@
 
                 </div>
 
-
-                <!-- CATEGORIA, MARCA E FORNECEDOR-->
                 <div class="row">
 
                     <!-- CATEGORIA -->
@@ -82,6 +80,21 @@
                               class="text-danger">
                         </span>
 
+                    </div>
+
+                    <!-- MODELAGEM -->
+                    <div class="col-md-6">
+                        <label asp-for="ModelagemId" class="form-label fw-semibold">
+                            Modelagem
+                        </label>
+
+                        <select asp-for="ModelagemId"
+                                asp-items="ViewBag.ModelagemId"
+                                class="form-select">
+                            <option value="">Selecione uma modelagem</option>
+                        </select>
+
+                        <span asp-validation-for="ModelagemId" class="text-danger"></span>
                     </div>
 
                     <!--PÚBLICO-->
