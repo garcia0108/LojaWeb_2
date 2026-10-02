@@ -131,6 +131,36 @@ tooltip.classList.remove("ativo");
 });
 
 // ==========================================
+// DADOS DO PROVADOR
+// ==========================================
+
+const dadosProvador = {
+
+    sexo: null,
+
+    altura: null,
+
+    peso: null,
+
+    idade: null,
+
+    imc: null,
+
+    torax: 0,
+
+    cintura: 0,
+
+    quadril: 0,
+
+    tamanhoSugerido: null
+
+};
+
+window.dadosProvador = dadosProvador;
+
+console.log("Dados do provador inicializados:", dadosProvador);
+
+// ==========================================
 // Habilitar Próximo
 // ==========================================
 const altura =
@@ -176,13 +206,136 @@ document.getElementById("modalAvatar");
 const btnVoltarCadastro =
 document.getElementById("btnVoltarCadastro");
 
-btnProximo?.addEventListener("click",()=>{
+// ==========================================
+// PRÓXIMO - SALVAR DADOS DO CLIENTE
+// ==========================================
+
+btnProximo?.addEventListener("click", () => {
+
+    // --------------------------------------
+    // SEXO
+    // --------------------------------------
+
+    if (btnMasc?.classList.contains("ativo")) {
+
+        dadosProvador.sexo = "masculino";
+
+    }
+    else if (btnFem?.classList.contains("ativo")) {
+
+        dadosProvador.sexo = "feminino";
+
+    }
+    else {
+
+        dadosProvador.sexo = null;
+
+    }
+
+
+    // --------------------------------------
+    // ALTURA
+    // --------------------------------------
+
+    dadosProvador.altura =
+        Number(altura.value);
+
+
+    // --------------------------------------
+    // PESO
+    // --------------------------------------
+
+    dadosProvador.peso =
+        Number(peso.value);
+
+
+    // --------------------------------------
+    // IDADE
+    // --------------------------------------
+
+    dadosProvador.idade =
+        Number(idade.value);
+
+
+    // --------------------------------------
+    // IMC
+    // --------------------------------------
+
+    if (
+        dadosProvador.altura > 0 &&
+        dadosProvador.peso > 0
+    ) {
+
+        const alturaMetros =
+            dadosProvador.altura / 100;
+
+        dadosProvador.imc =
+            dadosProvador.peso /
+            (alturaMetros * alturaMetros);
+
+        dadosProvador.imc =
+            Number(
+                dadosProvador.imc.toFixed(2)
+            );
+
+    }
+
+
+    // --------------------------------------
+    // MOSTRAR NO CONSOLE
+    // --------------------------------------
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "DADOS DO PROVADOR"
+    );
+
+    console.log(
+        "Sexo:",
+        dadosProvador.sexo
+    );
+
+    console.log(
+        "Altura:",
+        dadosProvador.altura,
+        "cm"
+    );
+
+    console.log(
+        "Peso:",
+        dadosProvador.peso,
+        "kg"
+    );
+
+    console.log(
+        "Idade:",
+        dadosProvador.idade,
+        "anos"
+    );
+
+    console.log(
+        "IMC:",
+        dadosProvador.imc
+    );
+
+    console.log(
+        "================================"
+    );
+
+
+    // --------------------------------------
+    // ABRIR AVATAR
+    // --------------------------------------
 
     modalCadastro.classList.remove("ativo");
 
     modalAvatar.classList.add("ativo");
 
-     window.inicializarAvatar?.();
+    window.inicializarAvatar?.();
+
 });
 
 // ==========================================
@@ -211,13 +364,7 @@ document
 // RÉGUAS PERSONALIZADAS
 // ==========================================
 
-const valoresCorpo = {
-
-    torax:0,
-    cintura:0,
-    quadril:0
-
-};
+const valoresCorpo = dadosProvador;
 
 function atualizarRegua(nome){
 

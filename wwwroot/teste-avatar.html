@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Avatar 3D</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #eeeeee;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="info">
+        Teste do Avatar Shot Generator
+    </div>
+
+    <div id="container"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const container = document.getElementById("container");
+
+if (!container) {
+    throw new Error("Container do avatar não encontrado.");
+}
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xeeeeee);
+
+const camera = new THREE.PerspectiveCamera(
+    35,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    100
+);
+
+camera.position.set(0, 1.2, 4);
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: true
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(
+    container.clientWidth,
+    container.clientHeight
+);
+
+container.appendChild(renderer.domElement);
+
+
+// ILUMINAÇÃO
+
+scene.add(
+    new THREE.AmbientLight(0xffffff, 1.5)
+);
+
+const luz = new THREE.DirectionalLight(
+    0xffffff,
+    2
+);
+
+luz.position.set(2, 4, 3);
+
+scene.add(luz);
+
+
+// CARREGAR AVATAR
+
+const loader = new GLTFLoader();
+
+loader.load(
+    "/assets/avatar/teste/avatarforge.glb",
+
+    function (gltf) {
+
+        const avatar = gltf.scene;
+        window.avatarTeste = avatar;
+
+        scene.add(avatar);
+
+        avatar.position.set(0, 0, 0);
+
+        avatar.scale.set(1, 1, 1);
+
+        console.log("================================");
+        console.log("AVATAR CARREGADO");
+        console.log("================================");
+
+        avatar.traverse(function (obj) {
+
+            if (!obj.isMesh) {
+                return;
+            }
+
+            console.log(
+                "MESH:",
+                obj.name
+            );
+
+            if (obj.morphTargetDictionary) {
+                console.log(
+                    "NOMES DOS MORPHS:",
+                    Object.keys(obj.morphTargetDictionary)
+                );
+
+            } else {
+
+                console.log(
+                    "MORPH TARGETS: SEM MORPHS"
+                );
+
+            }
+
+        });
+
+        console.log(
+            "================================"
+        );
+
+    },
+
+    function (progresso) {
+
+        if (progresso.total) {
+
+            console.log(
+                "Carregando:",
+                Math.round(
+                    progresso.loaded /
+                    progresso.total *
+                    100
+                ) + "%"
+            );
+
+        }
+
+    },
+
+    function (erro) {
+
+        console.error(
+            "ERRO AO CARREGAR AVATAR:",
+            erro
+        );
+
+    }
+);
+
+
+// ANIMAÇÃO
+
+function animar() {
+
+    requestAnimationFrame(animar);
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+animar();
+
+
+// RESPONSIVO
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        camera.aspect =
+            container.clientWidth /
+            container.clientHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            container.clientWidth,
+            container.clientHeight
+        );
+
+    }
+);
+
+    </script>
+
+</body>
+</html>

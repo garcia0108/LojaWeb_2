@@ -118,37 +118,32 @@ export function inicializarAvatar() {
                 });
 
             });
+
             // ==========================================
-            // GUARDARMALHAS DE PELE
-            /* ==========================================
-            avatar.traverse((obj) => {
-
-                if (!obj.isMesh) return;
-
-                const nome = obj.name.toLowerCase();
-
-                const material = obj.material?.name?.toLowerCase() || "";
-
-                if (
-                    nome.includes("body") ||
-                    nome.includes("skin") ||
-                    nome.includes("head") ||
-                    material.includes("skin") ||
-                    material.includes("body")
-                ) {
-                    malhasPele.push(obj);
-                    mesh.material = mesh.material.clone();
-                    console.log({
-                        mesh: obj.name,
-                        material: obj.material.name
-                    });
-                }
-
-            });*/
-
+            // APLICAR CONFIGURAÇÕES DO AVATAR
+            // =========================================
             aplicarPoseProvador(avatar);
             ligarCoresPele();
             alterarTomPele(3);
+
+            // ==========================================
+            // APLICAR DADOS DO PROVADOR AO AVATAR
+            // ==========================================
+            if (window.dadosProvador) {
+
+    console.log("DADOS RECEBIDOS PELO AVATAR:", {
+        altura: window.dadosProvador.altura,
+        peso: window.dadosProvador.peso,
+        imc: window.dadosProvador.imc
+    });
+
+    window.aplicarPesoAvatar?.(
+        window.dadosProvador.altura,
+        window.dadosProvador.peso,
+        window.dadosProvador.imc
+    );
+
+}
 
             console.log("Avatar carregado!");
 
@@ -216,6 +211,153 @@ function aplicarPoseProvador(avatar) {
     });
 
 }
+
+// ==========================================
+// APLICAR PESO CORPORAL AO AVATAR
+// ==========================================
+function aplicarPesoAvatar(altura, peso, imc) {
+
+    console.log("APLICANDO PESO NO AVATAR:", {
+        altura,
+        peso,
+        imc
+    });
+
+    if (!avatar) {
+        console.error("Avatar ainda não existe!");
+        return;
+    }
+
+
+    if (!avatar) return;
+
+    // ------------------------------------------
+    // Normalização do IMC
+    // ------------------------------------------
+    // IMC abaixo de 18.5  -> corpo mais fino
+    // 18.5 - 24.9         -> normal
+    // 25 - 29.9           -> aumento moderado
+    // 30+                 -> aumento maior
+
+    let fatorPeso = THREE.MathUtils.clamp(
+        (imc - 18) / 17,
+        0,
+        1
+    );
+
+    avatar.traverse((obj) => {
+
+        if (!obj.isMesh) return;
+
+        if (!obj.morphTargetDictionary) return;
+
+        if (!obj.morphTargetInfluences) return;
+
+        const morphs = obj.morphTargetDictionary;
+        const influences = obj.morphTargetInfluences;
+
+        // ------------------------------------------
+        // FUNÇÃO AUXILIAR
+        // ------------------------------------------
+        function aplicarMorph(nome, valor) {
+
+            const indice = morphs[nome];
+
+            if (indice === undefined) return;
+
+            influences[indice] = THREE.MathUtils.clamp(
+                valor,
+                0,
+                1
+            );
+        }
+
+        // ------------------------------------------
+        // LIMPAR MORPHS RELACIONADOS AO PESO
+        // ------------------------------------------
+
+        aplicarMorph("bellyBigger", 0);
+        aplicarMorph("bellySmaller", 0);
+        aplicarMorph("bellySoft", 0);
+
+        aplicarMorph("waistWider", 0);
+        aplicarMorph("waistNarrower", 0);
+
+        aplicarMorph("torsoLatsWider", 0);
+        aplicarMorph("torsoLatsNarrower", 0);
+
+        aplicarMorph("torsoUnderbustWider", 0);
+        aplicarMorph("torsoUnderbustNarrower", 0);
+
+        // ------------------------------------------
+        // BARRIGA
+        // ------------------------------------------
+
+        const barriga = fatorPeso * 1.00;
+
+        aplicarMorph(
+            "bellyBigger",
+            barriga
+        );
+
+        // ------------------------------------------
+        // MACIEZ DA BARRIGA
+        // ------------------------------------------
+
+        const maciez = fatorPeso * 0.80;
+
+        aplicarMorph(
+            "bellySoft",
+            maciez
+        );
+
+        // ------------------------------------------
+        // CINTURA
+        // ------------------------------------------
+
+        const cintura = fatorPeso * 0.70;
+
+        aplicarMorph(
+            "waistWider",
+            cintura
+        );
+
+        // ------------------------------------------
+        // LATERAIS DO TRONCO
+        // ------------------------------------------
+
+        const laterais = fatorPeso * 0.55;
+
+        aplicarMorph(
+            "torsoLatsWider",
+            laterais
+        );
+
+        // ------------------------------------------
+        // PARTE INFERIOR DO TÓRAX
+        // ------------------------------------------
+
+        const toraxInferior = fatorPeso * 0.45;
+
+        aplicarMorph(
+            "torsoUnderbustWider",
+            toraxInferior
+        );
+
+    });
+
+    console.log(
+        "Peso aplicado ao avatar:",
+        {
+            altura,
+            peso,
+            imc: imc.toFixed(2),
+            fatorPeso: fatorPeso.toFixed(2)
+        }
+    );
+}
+
+window.aplicarPesoAvatar = aplicarPesoAvatar;
 
 // ==========================================
 // Ligar às bolinhas
